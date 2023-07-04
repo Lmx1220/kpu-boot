@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cn.lmx.kpu</groupId>
+        <artifactId>kpu-public</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>kpu-file-sdk</artifactId>
+    <name>${project.artifactId}</name>
+    <description>业务文件sdk</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-mvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-common</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-databases</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-boot-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-websocket</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cn.lmx.kpu</groupId>
+    <artifactId>kpu-boot</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>kpu-boot</description>
+    <developers>
+        <!--        <developer>-->
+        <!--            <name>lmx</name>-->
+        <!--            <email>2538381255@qq.com</email>-->
+        <!--        </developer>-->
+    </developers>
+
+    <modules>
+        <module>kpu-dependencies-parent</module>
+        <module>kpu-public</module>
+        <module>kpu-oauth</module>
+        <module>kpu-authority</module>
+        <module>kpu-tenant</module>
+        <!--        <module>kpu-msg</module>-->
+        <!--        <module>kpu-file</module>-->
+        <module>kpu-boot-server</module>
+    </modules>
+
+</project>
