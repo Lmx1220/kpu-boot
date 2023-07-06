@@ -24,5 +24,14 @@
         </field>
 
     </mapping>
+    <mapping date-format="yyyy-MM-dd HH:mm:ss">
+        <class-a>cn.lmx.kpu.authority.entity.auth.Menu</class-a>
+        <class-b>cn.lmx.kpu.authority.dto.auth.MenuViewTreeVO</class-b>
+        <field custom-converter="cn.lmx.kpu.boot.dozer.JsonToRouterMetaCustomConverter">
+            <a>metaJson</a>
+            <b>meta</b>
+        </field>
+
+    </mapping>
 
 </mappings>

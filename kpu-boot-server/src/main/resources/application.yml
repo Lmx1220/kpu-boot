@@ -117,12 +117,12 @@ kpu:
         modelRef: String
         parameterType: header
         required: true
-        defaultValue: "Basic bGFtcF93ZWI6bGFtcF93ZWJfc2VjcmV0"
+        defaultValue: "Basic a3B1X3dlYjprcHVfd2ViX3NlY3JldA=="
       - name: tenant
         description: 租户编码
         modelRef: String
         parameterType: header
-        required: true
+        required: false
         defaultValue: "MDAwMA=="
     docket:
       oauth:

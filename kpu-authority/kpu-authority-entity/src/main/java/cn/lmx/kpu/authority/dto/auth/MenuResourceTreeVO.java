@@ -2,6 +2,7 @@ package cn.lmx.kpu.authority.dto.auth;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.lmx.basic.base.entity.TreeEntity;
+import cn.lmx.kpu.authority.enumeration.auth.AuthorizeType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,8 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
 @Data
 @ToString(callSuper = true)
 public class MenuResourceTreeVO extends TreeEntity<MenuResourceTreeVO, Long> {
+    private AuthorizeType type;
+    private String label;
     private String code;
     private String icon;
     private Boolean isDef;

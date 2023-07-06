@@ -70,7 +70,7 @@ public class SysMenu extends TreeEntity<SysMenu, Long> {
     @TableField(value = "describe_", condition = LIKE)
     private String describe;
     /**
-     * 类型;[20-菜单 60-数据]
+     * 类型;[10-菜单 20-视图 30-按钮 40-字段 50-数据]
      */
     @ApiModelProperty(value = "类型")
     @Size(max = 2, message = "类型长度不能超过{max}")

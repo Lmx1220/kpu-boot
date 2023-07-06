@@ -1,7 +1,10 @@
 package cn.lmx.kpu.authority.service.auth.impl;
 
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.Pair;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.base.service.SuperCacheServiceImpl;
@@ -12,6 +15,7 @@ import cn.lmx.basic.utils.*;
 import cn.lmx.kpu.authority.dao.auth.MenuMapper;
 import cn.lmx.kpu.authority.dto.auth.MenuResourceTreeVO;
 import cn.lmx.kpu.authority.entity.auth.Menu;
+import cn.lmx.kpu.authority.enumeration.auth.AuthorizeType;
 import cn.lmx.kpu.authority.enumeration.auth.ResourceTypeEnum;
 import cn.lmx.kpu.authority.service.auth.MenuService;
 import cn.lmx.kpu.authority.service.auth.UserService;
@@ -217,11 +221,18 @@ public class MenuServiceImpl extends SuperCacheServiceImpl<MenuMapper, Menu> imp
 
     @Override
     public List<MenuResourceTreeVO> findMenuResourceTree() {
-        List<Menu> menus = super.list(Wraps.<Menu>lbQ().eq(Menu::getResourceType, ResourceTypeEnum.MENU.getCode()));
+        List<Menu> menus = super.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(),ResourceTypeEnum.VIEW.getCode(),ResourceTypeEnum.FUNCTION.getCode()));
 
         List<MenuResourceTreeVO> list = menus.stream().map(item -> {
             MenuResourceTreeVO menu = new MenuResourceTreeVO();
-            BeanPlusUtil.copyProperties(item, menu);
+            CopyOptions copyOptions = new CopyOptions();
+            copyOptions.setFieldMapping(MapUtil.of(Pair.of("title", "label")));
+            BeanPlusUtil.copyProperties(item, menu, copyOptions);
+            if (StrUtil.equalsAny(item.getResourceType(), ResourceTypeEnum.MENU.getCode(),ResourceTypeEnum.VIEW.getCode())) {
+                menu.setType(AuthorizeType.MENU);
+            }else {
+                menu.setType(AuthorizeType.RESOURCE);
+            }
             return menu;
         }).collect(Collectors.toList());
         return TreeUtil.buildTree(list);

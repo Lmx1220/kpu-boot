@@ -19,6 +19,10 @@
             <artifactId>kpu-authority-biz</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-dozer-starter</artifactId>
+        </dependency>
 
     </dependencies>
 

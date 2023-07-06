@@ -5,15 +5,16 @@ import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperCacheController;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
+import cn.lmx.basic.dozer.DozerUtils;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.TreeUtil;
-import cn.lmx.kpu.authority.dto.auth.MenuResourceTreeVO;
-import cn.lmx.kpu.authority.dto.auth.MenuSaveDTO;
-import cn.lmx.kpu.authority.dto.auth.MenuUpdateDTO;
+import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.Menu;
+import cn.lmx.kpu.authority.enumeration.auth.ResourceTypeEnum;
 import cn.lmx.kpu.authority.service.auth.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,11 +35,13 @@ import java.util.List;
  */
 @Slf4j
 @Validated
+@AllArgsConstructor
 @RestController
 @RequestMapping("/menu")
 @Api(value = "Menu", tags = "菜单")
 @PreAuth(replace = "authority:menu:")
 public class MenuController extends SuperCacheController<MenuService, Long, Menu, Menu, MenuSaveDTO, MenuUpdateDTO> {
+    private final DozerUtils dozer;
 
     @Override
     public R<Menu> handlerSave(MenuSaveDTO menuSaveDTO) {
@@ -64,12 +67,13 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
      * 查询系统中所有的的菜单树结构， 不用缓存，因为该接口很少会使用，就算使用，也会管理员维护菜单时使用
      *
      */
-    @ApiOperation(value = "查询系统所有的菜单", notes = "查询系统所有的菜单")
-    @PostMapping("/tree")
-    @SysLog("查询系统所有的菜单")
-    public R<List<Menu>> allTree() {
-        List<Menu> list = baseService.list(Wraps.<Menu>lbQ().orderByAsc(Menu::getSortValue));
-        return success(TreeUtil.buildTree(list));
+    @ApiOperation(value = "查询系统所有的菜单和视图", notes = "查询系统所有的菜单和视图")
+    @PostMapping("/treeMenuAndView")
+    @SysLog("查询系统所有的菜单和视图")
+    public R<List<MenuViewTreeVO>> allTree() {
+        List<Menu> list = baseService.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
+        List<MenuViewTreeVO> viewTreeVOList= dozer.mapList(list, MenuViewTreeVO.class);
+        return success(TreeUtil.buildTree(viewTreeVOList));
     }
 
     /**
