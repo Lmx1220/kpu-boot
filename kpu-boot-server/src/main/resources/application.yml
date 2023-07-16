@@ -59,7 +59,7 @@ kpu:
     refreshExpire: 86400        # 刷新token有效期为24小时
   security:
     # 是否开启URI权限校验
-    enabled: true
+    enabled: false
     type: SERVICE
     caseSensitive: false
   log:

@@ -45,7 +45,7 @@ public class OnlineController {
     @PostMapping(value = "/page")
     @PreAuth("hasAnyPermission('{}view')")
     public R<IPage<Online>> page(@RequestBody @Validated PageParams<Online> params) {
-        List<Online> list = onlineService.list(params.getModel().getName());
+        List<Online> list = onlineService.list(params.getModel().getNickName());
         IPage<Online> page = new Page<>(1, list.size(), list.size());
         page.setRecords(list);
         return R.success(page);

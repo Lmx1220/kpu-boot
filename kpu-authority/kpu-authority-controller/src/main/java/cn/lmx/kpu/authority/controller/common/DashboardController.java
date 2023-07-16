@@ -68,7 +68,7 @@ public class DashboardController {
     public R<Map<String, Object>> chart(@ApiIgnore @LoginUser SysUser user) {
         Map<String, Object> data = new HashMap<>(11);
         data.put("lastTenVisitCount", loginLogService.findLastTenDaysVisitCount(null));
-        data.put("lastTenUserVisitCount", loginLogService.findLastTenDaysVisitCount(user.getAccount()));
+        data.put("lastTenUserVisitCount", loginLogService.findLastTenDaysVisitCount(user.getUsername()));
 
         data.put("browserCount", loginLogService.findByBrowser());
         data.put("operatingSystemCount", loginLogService.findByOperatingSystem());

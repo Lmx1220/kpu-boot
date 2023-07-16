@@ -1,10 +1,11 @@
 package cn.lmx.kpu.authority.entity.core;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.hutool.core.map.MapUtil;
 import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.TreeEntity;
 import cn.lmx.basic.interfaces.echo.EchoVO;
-import cn.lmx.kpu.model.constant.EchoDictType;
+import cn.lmx.kpu.model.constant.EchoDictItem;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -15,11 +16,10 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
-import static cn.lmx.kpu.model.constant.EchoApi.DICTIONARY_ITEM_CLASS;
+import static cn.lmx.kpu.model.constant.EchoApi.DICT_ITEM_CLASS;
 
 
 /**
@@ -43,7 +43,7 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
     @TableField(exist = false)
-    private Map<String, Object> echoMap = new HashMap<>();
+    private Map<String, Object> echoMap = MapUtil.newHashMap();
 
     /**
      * 名称
@@ -58,12 +58,12 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
     /**
      * 类型
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.ORG_TYPE)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.ORG_TYPE)
      */
     @ApiModelProperty(value = "类型")
     @Size(max = 2, message = "类型长度不能超过2")
     @TableField(value = "type_", condition = LIKE)
-    @Echo(api = DICTIONARY_ITEM_CLASS, dictType = EchoDictType.ORG_TYPE)
+    @Echo(api = DICT_ITEM_CLASS, dictType = EchoDictItem.ORG_TYPE)
     @Excel(name = "类型")
     private String type;
 

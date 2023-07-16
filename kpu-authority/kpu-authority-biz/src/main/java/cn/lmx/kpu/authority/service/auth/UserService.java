@@ -4,7 +4,7 @@ import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.basic.database.mybatis.conditions.query.LbqWrapper;
 import cn.lmx.basic.interfaces.echo.LoadService;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserPageDTO;
+import cn.lmx.kpu.authority.dto.auth.GlobalUserPageQuery;
 import cn.lmx.kpu.authority.dto.auth.UserUpdateAvatarDTO;
 import cn.lmx.kpu.authority.dto.auth.UserUpdatePasswordDTO;
 import cn.lmx.kpu.authority.entity.auth.User;
@@ -58,11 +58,11 @@ public interface UserService extends SuperCacheService<User>, LoadService {
     /**
      * 检测账号是否存在
      *
-     * @param id      id
-     * @param account 账号
+     * @param id       id
+     * @param username 账号
      * @return true 表示存在
      */
-    boolean check(Long id, String account);
+    boolean check(Long id, String username);
 
     /**
      * 修改输错密码的次数
@@ -74,10 +74,10 @@ public interface UserService extends SuperCacheService<User>, LoadService {
     /**
      * 根据账号查询用户
      *
-     * @param account 账号
+     * @param username 账号
      * @return 用户
      */
-    User getByAccount(String account);
+    User getByAccount(String username);
 
 
     /**
@@ -175,7 +175,7 @@ public interface UserService extends SuperCacheService<User>, LoadService {
      * @param params 查询参数
      * @return 分页数据
      */
-    IPage<User> pageByRole(IPage<User> page, PageParams<GlobalUserPageDTO> params);
+    IPage<User> pageByRole(IPage<User> page, PageParams<GlobalUserPageQuery> params);
 
     /**
      * 今天注册的用户数

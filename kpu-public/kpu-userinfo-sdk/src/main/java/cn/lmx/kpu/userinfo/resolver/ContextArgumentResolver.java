@@ -49,13 +49,13 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
                                   @NonNull NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
         Long userId = ContextUtil.getUserId();
-        String account = ContextUtil.getAccount();
-        String name = ContextUtil.getName();
+        String username = ContextUtil.getUsername();
+        String nickName = ContextUtil.getNickName();
 
         //以下代码为 根据 @LoginUser 注解来注入 SysUser 对象
         SysUser user = SysUser.builder()
-                .account(account)
-                .name(name)
+                .username(username)
+                .nickName(nickName)
                 .build();
         user.setId(userId);
         if (userId == null) {

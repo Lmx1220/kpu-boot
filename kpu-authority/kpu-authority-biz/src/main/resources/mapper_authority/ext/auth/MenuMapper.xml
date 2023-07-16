@@ -35,6 +35,10 @@
         )
         ) tmp ORDER BY sort_value asc
     </select>
-
+    <select id="selectMaxSortValue" resultType="java.lang.Integer">
+        SELECT max(sort_value)
+        FROM c_menu
+        where (resource_type IN ('10', '20') and parent_id = #{id, jdbcType=BIGINT})
+    </select>
 
 </mapper>

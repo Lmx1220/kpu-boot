@@ -27,4 +27,5 @@ public interface MenuMapper extends SuperMapper<Menu> {
      */
     List<Menu> findVisibleMenu(@Param("userId") Long userId);
 
+    Integer selectMaxSortValue(Long id);
 }

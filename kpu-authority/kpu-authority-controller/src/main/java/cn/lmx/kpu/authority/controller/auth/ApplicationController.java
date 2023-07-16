@@ -6,8 +6,9 @@ import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperCacheController;
 import cn.lmx.kpu.authority.dto.auth.ApplicationPageQuery;
-import cn.lmx.kpu.authority.dto.auth.ApplicationSaveDTO;
-import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateDTO;
+import cn.lmx.kpu.authority.dto.auth.ApplicationResultVO;
+import cn.lmx.kpu.authority.dto.auth.ApplicationSaveVO;
+import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateVo;
 import cn.lmx.kpu.authority.entity.auth.Application;
 import cn.lmx.kpu.authority.service.auth.ApplicationService;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
@@ -33,13 +34,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Application", tags = "应用")
 @ApiSupport(author = "lmx")
 @PreAuth(replace = "authority:application:")
-public class ApplicationController extends SuperCacheController<ApplicationService, Long, Application, ApplicationPageQuery, ApplicationSaveDTO, ApplicationUpdateDTO> {
+public class ApplicationController extends SuperCacheController<ApplicationService, Long, Application, ApplicationSaveVO, ApplicationUpdateVo, ApplicationPageQuery, ApplicationResultVO> {
 
     @Override
-    public R<Application> handlerSave(ApplicationSaveDTO applicationSaveDTO) {
-        applicationSaveDTO.setClientId(RandomUtil.randomString(24));
-        applicationSaveDTO.setClientSecret(RandomUtil.randomString(32));
-        return super.handlerSave(applicationSaveDTO);
+    public R<Application> handlerSave(ApplicationSaveVO applicationSaveVO) {
+        applicationSaveVO.setClientId(RandomUtil.randomString(24));
+        applicationSaveVO.setClientSecret(RandomUtil.randomString(32));
+        return super.handlerSave(applicationSaveVO);
     }
 
 }

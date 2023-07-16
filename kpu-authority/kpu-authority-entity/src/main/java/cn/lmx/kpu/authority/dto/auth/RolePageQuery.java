@@ -43,12 +43,12 @@ public class RolePageQuery implements Serializable {
      * 描述
      */
     @ApiModelProperty(value = "描述")
-    private String describe;
+    private String remarks;
     /**
      * 状态
      */
     @ApiModelProperty(value = "状态")
-    private List<Boolean> state;
+    private Boolean state;
     /**
      * 内置角色
      */
@@ -58,6 +58,6 @@ public class RolePageQuery implements Serializable {
      * 角色类别;[10-功能角色 20-桌面角色 30-数据角色]
      */
     @ApiModelProperty(value = "角色类别")
-    private List<String> category;
+    private String category;
 
 }

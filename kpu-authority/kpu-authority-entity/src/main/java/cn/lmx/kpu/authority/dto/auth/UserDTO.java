@@ -1,6 +1,7 @@
 package cn.lmx.kpu.authority.dto.auth;
 
-import cn.lmx.kpu.model.enumeration.Sex;
+import cn.lmx.basic.annotation.echo.Echo;
+import cn.lmx.kpu.model.constant.EchoDictItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -10,6 +11,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import static cn.lmx.kpu.model.constant.EchoApi.DICT_ITEM_CLASS;
 
 /**
  * 用户
@@ -37,7 +40,7 @@ public class UserDTO implements Serializable {
     @ApiModelProperty(value = "账号")
     @NotEmpty(message = "账号不能为空")
     @Size(max = 30, message = "账号长度不能超过30")
-    private String account;
+    private String username;
 
     /**
      * 姓名
@@ -45,7 +48,7 @@ public class UserDTO implements Serializable {
     @ApiModelProperty(value = "姓名")
     @NotEmpty(message = "姓名不能为空")
     @Size(max = 50, message = "姓名长度不能超过50")
-    private String name;
+    private String nickName;
 
     /**
      * 组织ID
@@ -77,10 +80,12 @@ public class UserDTO implements Serializable {
 
     /**
      * 性别
-     * #Sex{W:女;M:男;N:未知}
+     *
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
-    private Sex sex;
+    @Echo(api = DICT_ITEM_CLASS, dictType = EchoDictItem.SEX)
+    private String sex;
 
     /**
      * 启用状态 1启用 0禁用

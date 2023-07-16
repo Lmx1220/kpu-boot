@@ -1,5 +1,6 @@
 package cn.lmx.kpu.model.entity.base;
 
+import cn.hutool.core.map.MapUtil;
 import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.basic.interfaces.echo.EchoVO;
@@ -10,7 +11,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.HashMap;
 import java.util.Map;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
@@ -35,7 +35,7 @@ public class SysStation extends Entity<Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
     @TableField(exist = false)
-    private Map<String, Object> echoMap = new HashMap<>();
+    private Map<String, Object> echoMap = MapUtil.newHashMap();
     /**
      * 名称
      */

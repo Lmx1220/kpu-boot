@@ -27,7 +27,7 @@ public interface OnlineService {
      * @param name 姓名
      * @return
      */
-    List<Online> list(String name);
+    List<Online> list(String nickName);
 
     /**
      * 保存在线用户

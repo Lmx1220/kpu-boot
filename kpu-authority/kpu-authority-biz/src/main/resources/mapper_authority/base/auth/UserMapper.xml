@@ -10,8 +10,8 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="account" jdbcType="VARCHAR" property="account"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
         <result column="org_id" jdbcType="BIGINT" property="orgId"/>
         <result column="station_id" jdbcType="BIGINT" property="stationId"/>
         <result column="readonly" jdbcType="BIT" property="readonly"/>
@@ -36,7 +36,7 @@
     <sql id="Base_Column_List">
         id
         ,created_by,create_time,updated_by,update_time, created_org_id,
-        account, name, org_id, station_id, readonly, email, mobile, sex, state, avatar, nation, education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time, password, salt, last_login_time
+        username, nickName, org_id, station_id, readonly, email, mobile, sex, state, avatar, nation, education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time, password, salt, last_login_time
     </sql>
 
 </mapper>

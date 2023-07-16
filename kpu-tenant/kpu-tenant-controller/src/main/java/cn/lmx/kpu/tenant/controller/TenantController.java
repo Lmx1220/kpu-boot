@@ -7,10 +7,7 @@ import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperCacheController;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
-import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
-import cn.lmx.kpu.tenant.dto.TenantPageQuery;
-import cn.lmx.kpu.tenant.dto.TenantSaveDTO;
-import cn.lmx.kpu.tenant.dto.TenantUpdateDTO;
+import cn.lmx.kpu.tenant.dto.*;
 import cn.lmx.kpu.tenant.entity.Tenant;
 import cn.lmx.kpu.tenant.service.TenantService;
 import io.swagger.annotations.Api;
@@ -56,7 +53,8 @@ import static cn.lmx.kpu.model.enumeration.system.TenantStatusEnum.NORMAL;
 @RequestMapping("/tenant")
 @Api(value = "Tenant", tags = "企业")
 @SysLog(enabled = false)
-public class TenantController extends SuperCacheController<TenantService, Long, Tenant, TenantPageQuery, TenantSaveDTO, TenantUpdateDTO> {
+public class TenantController extends SuperCacheController<TenantService, Long, Tenant, TenantSaveVO,
+        TenantUpdateVo, TenantPageQuery, TenantResultVO> {
 
     @ApiOperation(value = "查询所有企业", notes = "查询所有企业")
     @GetMapping("/all")
@@ -65,13 +63,13 @@ public class TenantController extends SuperCacheController<TenantService, Long, 
     }
 
     @Override
-    public R<Tenant> handlerSave(TenantSaveDTO model) {
+    public R<Tenant> handlerSave(TenantSaveVO model) {
         Tenant tenant = baseService.save(model);
         return success(tenant);
     }
 
     @Override
-    public R<Tenant> handlerUpdate(TenantUpdateDTO model) {
+    public R<Tenant> handlerUpdate(TenantUpdateVo model) {
         Tenant tenant = baseService.update(model);
         return success(tenant);
     }

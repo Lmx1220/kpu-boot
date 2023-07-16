@@ -8,8 +8,9 @@ import cn.lmx.basic.base.controller.SuperCacheController;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.LbqWrapper;
 import cn.lmx.kpu.authority.dto.common.AreaPageQuery;
-import cn.lmx.kpu.authority.dto.common.AreaSaveDTO;
-import cn.lmx.kpu.authority.dto.common.AreaUpdateDTO;
+import cn.lmx.kpu.authority.dto.common.AreaResultVO;
+import cn.lmx.kpu.authority.dto.common.AreaSaveVO;
+import cn.lmx.kpu.authority.dto.common.AreaUpdateVo;
 import cn.lmx.kpu.authority.entity.common.Area;
 import cn.lmx.kpu.authority.service.common.AreaService;
 import io.swagger.annotations.Api;
@@ -35,7 +36,7 @@ import java.util.List;
 @RequestMapping("/area")
 @Api(value = "Area", tags = "地区表")
 @PreAuth(replace = "authority:area:")
-public class AreaController extends SuperCacheController<AreaService, Long, Area, AreaPageQuery, AreaSaveDTO, AreaUpdateDTO> {
+public class AreaController extends SuperCacheController<AreaService, Long, Area, AreaSaveVO, AreaUpdateVo, AreaPageQuery, AreaResultVO> {
 
     @ApiOperation(value = "检测地区编码是否重复", notes = "检测地区编码是否重复")
     @GetMapping("/check/{code}")

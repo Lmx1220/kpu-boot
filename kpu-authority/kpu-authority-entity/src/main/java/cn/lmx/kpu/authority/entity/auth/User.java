@@ -1,35 +1,27 @@
 package cn.lmx.kpu.authority.entity.auth;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import cn.hutool.core.map.MapUtil;
 import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.basic.interfaces.echo.EchoVO;
 import cn.lmx.kpu.authority.entity.core.Org;
-import cn.lmx.kpu.model.constant.EchoDictType;
-import cn.lmx.kpu.model.enumeration.Sex;
+import cn.lmx.kpu.model.constant.EchoDictItem;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
-import static cn.lmx.kpu.model.constant.EchoApi.DICTIONARY_ITEM_CLASS;
-import static cn.lmx.kpu.model.constant.EchoApi.ORG_ID_CLASS;
-import static cn.lmx.kpu.model.constant.EchoApi.STATION_ID_CLASS;
+import static cn.lmx.kpu.model.constant.EchoApi.*;
 
 /**
  * <p>
@@ -42,26 +34,26 @@ import static cn.lmx.kpu.model.constant.EchoApi.STATION_ID_CLASS;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @TableName("c_user")
 @ApiModel(value = "User", description = "用户")
-@AllArgsConstructor
 public class User extends Entity<Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
     @TableField(exist = false)
-    private Map<String, Object> echoMap = new HashMap<>();
+    private Map<String, Object> echoMap = MapUtil.newHashMap();
     /**
      * 账号
      */
     @ApiModelProperty(value = "账号")
     @NotEmpty(message = "账号不能为空")
     @Size(max = 30, message = "账号长度不能超过30")
-    @TableField(value = "account", condition = LIKE)
+    @TableField(value = "username", condition = LIKE)
     @Excel(name = "账号")
-    private String account;
+    private String username;
 
     /**
      * 姓名
@@ -69,9 +61,9 @@ public class User extends Entity<Long> implements EchoVO {
     @ApiModelProperty(value = "姓名")
     @NotEmpty(message = "姓名不能为空")
     @Size(max = 50, message = "姓名长度不能超过50")
-    @TableField(value = "name", condition = LIKE)
+    @TableField(value = "nick_name", condition = LIKE)
     @Excel(name = "姓名")
-    private String name;
+    private String nickName;
 
     /**
      * 组织
@@ -125,12 +117,13 @@ public class User extends Entity<Long> implements EchoVO {
 
     /**
      * 性别
-     * #Sex{W:女;M:男;N:未知}
+     *
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
     @TableField("sex")
     @Excel(name = "性别", replace = {"女_W", "男_M", "未知_N", "_null"})
-    private Sex sex;
+    private String sex;
 
     /**
      * 状态
@@ -152,36 +145,36 @@ public class User extends Entity<Long> implements EchoVO {
     /**
      * 民族
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.NATION)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.NATION)
      */
     @ApiModelProperty(value = "民族")
     @Size(max = 2, message = "民族长度不能超过2")
     @TableField(value = "nation", condition = LIKE)
-    @Echo(api = DICTIONARY_ITEM_CLASS, dictType = EchoDictType.NATION)
+    @Echo(api = DICT_ITEM_CLASS, dictType = EchoDictItem.NATION)
     @Excel(name = "民族")
     private String nation;
 
     /**
      * 学历
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.EDUCATION)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.EDUCATION)
      */
     @ApiModelProperty(value = "学历")
     @Size(max = 2, message = "学历长度不能超过2")
     @TableField(value = "education", condition = LIKE)
-    @Echo(api = DICTIONARY_ITEM_CLASS, dictType = EchoDictType.EDUCATION)
+    @Echo(api = DICT_ITEM_CLASS, dictType = EchoDictItem.EDUCATION)
     @Excel(name = "学历")
     private String education;
 
     /**
      * 职位状态
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.POSITION_STATUS)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.POSITION_STATUS)
      */
     @ApiModelProperty(value = "职位状态")
     @Size(max = 2, message = "职位状态长度不能超过2")
     @TableField(value = "position_status", condition = LIKE)
-    @Echo(api = DICTIONARY_ITEM_CLASS, dictType = EchoDictType.POSITION_STATUS)
+    @Echo(api = DICT_ITEM_CLASS, dictType = EchoDictItem.POSITION_STATUS)
     @Excel(name = "职位状态")
     private String positionStatus;
 
@@ -243,11 +236,10 @@ public class User extends Entity<Long> implements EchoVO {
     @ApiModelProperty(value = "创建者所属机构")
     @TableField(value = "created_org_id", condition = LIKE)
     private Long createdOrgId;
-
     @Builder
     public User(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
-                String account, String name, Long orgId, Long stationId, Boolean readonly,
-                String email, String mobile, Sex sex, Boolean state, String avatar, String nation,
+                String username, String nickName, Long orgId, Long stationId, Boolean readonly,
+                String email, String mobile, String sex, Boolean state, String avatar, String nation,
                 String education, String positionStatus, String workDescribe, LocalDateTime passwordErrorLastTime, Integer passwordErrorNum, LocalDateTime passwordExpireTime,
                 String password, String salt, LocalDateTime lastLoginTime, Long createdOrgId) {
         this.id = id;
@@ -255,8 +247,8 @@ public class User extends Entity<Long> implements EchoVO {
         this.createTime = createTime;
         this.updatedBy = updatedBy;
         this.updateTime = updateTime;
-        this.account = account;
-        this.name = name;
+        this.username = username;
+        this.nickName = nickName;
         this.orgId = orgId;
         this.stationId = stationId;
         this.readonly = readonly;

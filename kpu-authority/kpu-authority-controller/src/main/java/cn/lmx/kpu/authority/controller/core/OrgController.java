@@ -11,8 +11,9 @@ import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.TreeUtil;
 import cn.lmx.kpu.authority.dto.core.OrgPageQuery;
-import cn.lmx.kpu.authority.dto.core.OrgSaveDTO;
-import cn.lmx.kpu.authority.dto.core.OrgUpdateDTO;
+import cn.lmx.kpu.authority.dto.core.OrgPageResultVO;
+import cn.lmx.kpu.authority.dto.core.OrgSaveVO;
+import cn.lmx.kpu.authority.dto.core.OrgUpdateVo;
 import cn.lmx.kpu.authority.entity.core.Org;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.common.constant.DefValConstants;
@@ -51,8 +52,9 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.*;
 @Api(value = "Org", tags = "组织")
 @PreAuth(replace = "authority:org:")
 @RequiredArgsConstructor
-public class OrgController extends SuperCacheController<OrgService, Long, Org, OrgPageQuery, OrgSaveDTO, OrgUpdateDTO> {
+public class OrgController extends SuperCacheController<OrgService, Long, Org, OrgSaveVO, OrgUpdateVo, OrgPageQuery, OrgPageResultVO> {
     private final EchoService echoService;
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
             @ApiImplicitParam(name = "name", value = "名称", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
@@ -65,7 +67,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
 
 
     @Override
-    public R<Org> handlerSave(OrgSaveDTO model) {
+    public R<Org> handlerSave(OrgSaveVO model) {
         Org org = BeanPlusUtil.toBean(model, Org.class);
         fillOrg(org);
         this.baseService.save(org);
@@ -73,7 +75,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     }
 
     @Override
-    public R<Org> handlerUpdate(OrgUpdateDTO model) {
+    public R<Org> handlerUpdate(OrgUpdateVo model) {
         Org org = BeanPlusUtil.toBean(model, Org.class);
         fillOrg(org);
         this.baseService.updateAllById(org);

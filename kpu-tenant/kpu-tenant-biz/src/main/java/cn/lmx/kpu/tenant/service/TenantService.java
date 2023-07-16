@@ -3,8 +3,8 @@ package cn.lmx.kpu.tenant.service;
 import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
 import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
-import cn.lmx.kpu.tenant.dto.TenantSaveDTO;
-import cn.lmx.kpu.tenant.dto.TenantUpdateDTO;
+import cn.lmx.kpu.tenant.dto.TenantSaveVO;
+import cn.lmx.kpu.tenant.dto.TenantUpdateVo;
 import cn.lmx.kpu.tenant.entity.Tenant;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public interface TenantService extends SuperCacheService<Tenant> {
      * @param data 租户保存数据
      * @return 租户
      */
-    Tenant save(TenantSaveDTO data);
+    Tenant save(TenantSaveVO data);
 
     /**
      * 修改
@@ -41,7 +41,7 @@ public interface TenantService extends SuperCacheService<Tenant> {
      * @param model 租户保存数据
      * @return 租户
      */
-    Tenant update(TenantUpdateDTO model);
+    Tenant update(TenantUpdateVo model);
 
     /**
      * 根据编码获取

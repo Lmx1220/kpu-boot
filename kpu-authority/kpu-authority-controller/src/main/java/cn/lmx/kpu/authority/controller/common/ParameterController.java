@@ -4,8 +4,9 @@ package cn.lmx.kpu.authority.controller.common;
 import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.controller.SuperController;
 import cn.lmx.kpu.authority.dto.common.ParameterPageQuery;
-import cn.lmx.kpu.authority.dto.common.ParameterSaveDTO;
-import cn.lmx.kpu.authority.dto.common.ParameterUpdateDTO;
+import cn.lmx.kpu.authority.dto.common.ParameterResultVO;
+import cn.lmx.kpu.authority.dto.common.ParameterSaveVO;
+import cn.lmx.kpu.authority.dto.common.ParameterUpdateVo;
 import cn.lmx.kpu.authority.entity.common.Parameter;
 import cn.lmx.kpu.authority.service.common.ParameterService;
 import io.swagger.annotations.Api;
@@ -29,6 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/parameter")
 @Api(value = "Parameter", tags = "参数配置")
 @PreAuth(replace = "authority:parameter:")
-public class ParameterController extends SuperController<ParameterService, Long, Parameter, ParameterPageQuery, ParameterSaveDTO, ParameterUpdateDTO> {
+public class ParameterController extends SuperController<ParameterService, Long, Parameter, ParameterSaveVO, ParameterUpdateVo, ParameterPageQuery, ParameterResultVO> {
 
 }

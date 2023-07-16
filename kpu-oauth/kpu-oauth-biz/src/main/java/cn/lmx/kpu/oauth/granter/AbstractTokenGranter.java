@@ -76,7 +76,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
      * @return 认证信息
      */
     protected R<AuthInfo> login(LoginParamDTO loginParam) {
-        if (StrHelper.isAnyBlank(loginParam.getAccount(), loginParam.getPassword())) {
+        if (StrHelper.isAnyBlank(loginParam.getUsername(), loginParam.getPassword())) {
             return R.fail("请输入用户名或密码");
         }
         // 1，检测租户是否可用
@@ -96,7 +96,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
         }
 
         // 3. 验证登录
-        R<User> result = this.getUser(loginParam.getAccount(), loginParam.getPassword());
+        R<User> result = this.getUser(loginParam.getUsername(), loginParam.getPassword());
         if (!result.getIsSuccess()) {
             return R.fail(result.getCode(), result.getMsg());
         }
@@ -146,12 +146,12 @@ public abstract class AbstractTokenGranter implements TokenGranter {
     /**
      * 检测用户密码是否正确
      *
-     * @param account  账号
+     * @param username 账号
      * @param password 密码
      * @return 用户信息
      */
-    protected R<User> getUser(String account, String password) {
-        User user = this.userService.getByAccount(account);
+    protected R<User> getUser(String username, String password) {
+        User user = this.userService.getByAccount(username);
         // 密码错误
         if (user == null) {
             return R.fail(ExceptionCode.JWT_USER_INVALID);
@@ -187,7 +187,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
         Integer maxPasswordErrorNum = systemProperties.getMaxPasswordErrorNum();
         Integer passwordErrorNum = Convert.toInt(user.getPasswordErrorNum(), 0);
         if (maxPasswordErrorNum > 0 && passwordErrorNum >= maxPasswordErrorNum) {
-            log.info("[{}][{}], 输错密码次数：{}, 最大限制次数:{}", user.getName(), user.getId(), passwordErrorNum, maxPasswordErrorNum);
+            log.info("[{}][{}], 输错密码次数：{}, 最大限制次数:{}", user.getNickName(), user.getId(), passwordErrorNum, maxPasswordErrorNum);
 
             /*
              * (最后一次输错密码的时间 + 锁定时间) 与 (当前时间) 比较
@@ -215,7 +215,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
      * @return token
      */
     protected AuthInfo createToken(User user) {
-        JwtUserInfo userInfo = new JwtUserInfo(user.getId(), user.getAccount(), user.getName());
+        JwtUserInfo userInfo = new JwtUserInfo(user.getId(), user.getUsername(), user.getNickName());
         AuthInfo authInfo = tokenUtil.createAuthInfo(userInfo, null);
         AppendixResultVO appendixResultVO = appendixService.getByBiz(user.getId(), AppendixType.Authority.BASE_USER_AVATAR);
         authInfo.setAvatarId(appendixResultVO != null ? appendixResultVO.getId() : null);

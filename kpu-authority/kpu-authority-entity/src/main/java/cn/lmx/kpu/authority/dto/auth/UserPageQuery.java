@@ -35,12 +35,12 @@ public class UserPageQuery implements Serializable {
      * 账号
      */
     @ApiModelProperty(value = "账号")
-    private String account;
+    private String username;
     /**
      * 姓名
      */
     @ApiModelProperty(value = "姓名")
-    private String name;
+    private String nickName;
     /**
      * 组织
      * #c_org
@@ -74,7 +74,8 @@ public class UserPageQuery implements Serializable {
     private String mobile;
     /**
      * 性别
-     * #Sex{W:女;M:男;N:未知}
+     *
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
     private List<Sex> sex;
@@ -91,21 +92,21 @@ public class UserPageQuery implements Serializable {
     /**
      * 民族
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.NATION)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.NATION)
      */
     @ApiModelProperty(value = "民族")
     private List<String> nation;
     /**
      * 学历
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.EDUCATION)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.EDUCATION)
      */
     @ApiModelProperty(value = "学历")
     private List<String> education;
     /**
      * 职位状态
      *
-     * @Echo(api = DICTIONARY_ITEM_CLASS,  dictType = EchoDictType.POSITION_STATUS)
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.POSITION_STATUS)
      */
     @ApiModelProperty(value = "职位状态")
     private List<String> positionStatus;

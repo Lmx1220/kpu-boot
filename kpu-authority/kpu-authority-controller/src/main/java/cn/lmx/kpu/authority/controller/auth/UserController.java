@@ -69,13 +69,14 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.*;
 @Api(value = "User", tags = "用户")
 @PreAuth(replace = "authority:user:")
 @RequiredArgsConstructor
-public class UserController extends SuperCacheController<UserService, Long, User, UserPageQuery, UserSaveDTO, UserUpdateDTO> {
+public class UserController extends SuperCacheController<UserService, Long, User, UserSaveVO, UserUpdateVo, UserPageQuery, UserResultVO> {
     private final OrgService orgService;
     private final EchoService echoService;
     private final AppendixService appendixService;
     private final ExcelUserVerifyHandlerImpl excelUserVerifyHandler;
     private final UserExcelDictHandlerImpl userExcelDictHandlerIImpl;
     private final UserHelperService userHelperService;
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
             @ApiImplicitParam(name = "name", value = "名称", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
@@ -93,11 +94,11 @@ public class UserController extends SuperCacheController<UserService, Long, User
      * @return 数据
      */
     @Override
-    public R<User> handlerSave(UserSaveDTO data) {
+    public R<User> handlerSave(UserSaveVO data) {
         User user = BeanUtil.toBean(data, User.class);
         user.setReadonly(false);
         SysUser sysUser = userHelperService.getUserByIdCache(ContextUtil.getUserId());
-        if (sysUser!= null) {
+        if (sysUser != null) {
             data.setCreatedOrgId(sysUser.getOrgId());
         }
         baseService.saveUser(user);
@@ -123,7 +124,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
      * @return 用户
      */
     @Override
-    public R<User> handlerUpdate(UserUpdateDTO data) {
+    public R<User> handlerUpdate(UserUpdateVo data) {
         User user = BeanUtil.toBean(data, User.class);
         baseService.updateUser(user);
         return success(user);
@@ -263,11 +264,11 @@ public class UserController extends SuperCacheController<UserService, Long, User
             return this.validFail("导入数据不能为空");
         }
 
-        Set<String> accounts = new HashSet<>();
+        Set<String> usernames = new HashSet<>();
         List<User> userList = list.stream().map(item -> {
-            ArgumentAssert.notContain(accounts, item.getAccount(), "Excel中存在重复的账号: {}", item.getAccount());
+            ArgumentAssert.notContain(usernames, item.getUsername(), "Excel中存在重复的账号: {}", item.getUsername());
 
-            accounts.add(item.getAccount());
+            usernames.add(item.getUsername());
             User user = new User();
             BeanUtil.copyProperties(item, user);
             user.setSalt(RandomUtil.randomString(20));
@@ -296,9 +297,8 @@ public class UserController extends SuperCacheController<UserService, Long, User
             List<Org> children = orgService.findChildren(Arrays.asList(userPage.getOrgId()));
             wrapper.in(User::getOrgId, children.stream().map(Org::getId).collect(Collectors.toList()));
         }
-        wrapper.like(User::getName, userPage.getName())
-                .like(User::getAccount, userPage.getAccount())
-                .eq(User::getReadonly, false)
+        wrapper.like(User::getNickName, userPage.getNickName())
+                .like(User::getUsername, userPage.getUsername())
                 .like(User::getEmail, userPage.getEmail())
                 .like(User::getMobile, userPage.getMobile())
                 .eq(User::getStationId, userPage.getStationId())
@@ -309,7 +309,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
                 .eq(User::getState, userPage.getState());
 
         if (StrUtil.equalsAny(userPage.getScope(), BizConstant.SCOPE_BIND, BizConstant.SCOPE_UN_BIND) && userPage.getRoleId() != null) {
-            String sql = " select ur.employee_id from c_user_role ura where ura.user_id = s.id \n" +
+            String sql = " select ura.user_id from c_user_role ura where ura.user_id = s.id \n" +
                     "  and ura.role_id =   " + userPage.getRoleId();
             if (BizConstant.SCOPE_BIND.equals(userPage.getScope())) {
                 wrapper.inSql(User::getId, sql);
@@ -346,9 +346,8 @@ public class UserController extends SuperCacheController<UserService, Long, User
             List<Org> children = orgService.findChildren(Arrays.asList(userPage.getOrgId()));
             wrapper.in(User::getOrgId, children.stream().map(Org::getId).collect(Collectors.toList()));
         }
-        wrapper.like(User::getName, userPage.getName())
-                .like(User::getAccount, userPage.getAccount())
-                .eq(User::getReadonly, false)
+        wrapper.like(User::getNickName, userPage.getNickName())
+                .like(User::getUsername, userPage.getUsername())
                 .like(User::getEmail, userPage.getEmail())
                 .like(User::getMobile, userPage.getMobile())
                 .eq(User::getStationId, userPage.getStationId())
@@ -356,10 +355,10 @@ public class UserController extends SuperCacheController<UserService, Long, User
                 .in(User::getEducation, userPage.getEducation())
                 .in(User::getNation, userPage.getNation())
                 .in(User::getSex, userPage.getSex())
-                .eq(User::getState, userPage.getState());
+                .eq(userPage.getState() != null, User::getState, userPage.getState());
 
         if (StrUtil.equalsAny(userPage.getScope(), BizConstant.SCOPE_BIND, BizConstant.SCOPE_UN_BIND) && userPage.getRoleId() != null) {
-            String sql = " select ur.user_id from c_user_role ura where ura.user_id = s.id \n" +
+            String sql = " select ura.user_id from c_user_role ura where ura.user_id = s.id \n" +
                     "  and ura.role_id =   " + userPage.getRoleId();
             if (BizConstant.SCOPE_BIND.equals(userPage.getScope())) {
                 wrapper.inSql(User::getId, sql);

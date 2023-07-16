@@ -11,8 +11,8 @@ import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.StrHelper;
 import cn.lmx.kpu.authority.dao.auth.RoleMapper;
-import cn.lmx.kpu.authority.dto.auth.RoleSaveDTO;
-import cn.lmx.kpu.authority.dto.auth.RoleUpdateDTO;
+import cn.lmx.kpu.authority.dto.auth.RoleSaveVO;
+import cn.lmx.kpu.authority.dto.auth.RoleUpdateVo;
 import cn.lmx.kpu.authority.entity.auth.Role;
 import cn.lmx.kpu.authority.entity.auth.RoleAuthority;
 import cn.lmx.kpu.authority.entity.auth.UserRole;
@@ -126,7 +126,7 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveRole(RoleSaveDTO data, Long userId) {
+    public void saveRole(RoleSaveVO data, Long userId) {
         ArgumentAssert.isFalse(StrUtil.isNotBlank(data.getCode()) && check(data.getCode()), "角色编码{}已存在", data.getCode());
         Role role = BeanPlusUtil.toBean(data, Role.class);
         role.setCode(StrHelper.getOrDef(data.getCode(), RandomUtil.randomString(8)));
@@ -136,7 +136,8 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateRole(RoleUpdateDTO data, Long userId) {
+    public void updateRole(RoleUpdateVo data, Long userId) {
+        ArgumentAssert.isFalse(StrUtil.isNotBlank(data.getCode()) && check(data.getCode(), data.getId()), "角色编码{}已存在", data.getCode());
         Role role = BeanPlusUtil.toBean(data, Role.class);
         updateById(role);
 
@@ -150,5 +151,9 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
     @Override
     public Boolean check(String code) {
         return super.count(Wraps.<Role>lbQ().eq(Role::getCode, code)) > 0;
+    }
+
+    private Boolean check(String code, Long id) {
+        return super.count(Wraps.<Role>lbQ().eq(Role::getCode, code).ne(Role::getId, id)) > 0;
     }
 }

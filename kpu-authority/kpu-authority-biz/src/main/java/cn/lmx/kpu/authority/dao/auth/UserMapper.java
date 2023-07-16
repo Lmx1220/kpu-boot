@@ -2,7 +2,7 @@ package cn.lmx.kpu.authority.dao.auth;
 
 import cn.lmx.basic.base.mapper.SuperMapper;
 import cn.lmx.basic.base.request.PageParams;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserPageDTO;
+import cn.lmx.kpu.authority.dto.auth.GlobalUserPageQuery;
 import cn.lmx.kpu.authority.entity.auth.User;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -67,5 +67,5 @@ public interface UserMapper extends SuperMapper<User> {
      * @param params 查询参数
      * @return 分页数据
      */
-    IPage<User> pageByRole(IPage<User> page, @Param("param") PageParams<GlobalUserPageDTO> params);
+    IPage<User> pageByRole(IPage<User> page, @Param("param") PageParams<GlobalUserPageQuery> params);
 }

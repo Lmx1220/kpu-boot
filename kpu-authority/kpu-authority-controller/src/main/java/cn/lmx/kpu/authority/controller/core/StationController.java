@@ -8,8 +8,9 @@ import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.kpu.authority.dto.core.StationPageQuery;
-import cn.lmx.kpu.authority.dto.core.StationSaveDTO;
-import cn.lmx.kpu.authority.dto.core.StationUpdateDTO;
+import cn.lmx.kpu.authority.dto.core.StationResultVO;
+import cn.lmx.kpu.authority.dto.core.StationSaveVO;
+import cn.lmx.kpu.authority.dto.core.StationUpdateVo;
 import cn.lmx.kpu.authority.entity.core.Station;
 import cn.lmx.kpu.authority.service.core.StationService;
 import cn.lmx.kpu.model.entity.base.SysUser;
@@ -47,8 +48,9 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.*;
 @Api(value = "Station", tags = "岗位")
 @PreAuth(replace = "authority:station:")
 @RequiredArgsConstructor
-public class StationController extends SuperCacheController<StationService, Long, Station, StationPageQuery, StationSaveDTO, StationUpdateDTO> {
+public class StationController extends SuperCacheController<StationService, Long, Station, StationSaveVO, StationUpdateVo, StationPageQuery, StationResultVO> {
     private final UserHelperService userHelperService;
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
             @ApiImplicitParam(name = "name", value = "名称", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
@@ -60,9 +62,9 @@ public class StationController extends SuperCacheController<StationService, Long
     }
 
     @Override
-    public R<Station> handlerSave(StationSaveDTO model) {
+    public R<Station> handlerSave(StationSaveVO model) {
         SysUser sysUser = userHelperService.getUserByIdCache(ContextUtil.getUserId());
-        if (sysUser!= null) {
+        if (sysUser != null) {
             model.setCreatedOrgId(sysUser.getOrgId());
         }
         return super.handlerSave(model);

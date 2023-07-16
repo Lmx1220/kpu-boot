@@ -14,11 +14,11 @@ public interface EchoApi {
     /**
      * 数据字典项 feign查询类 全类名
      */
-    String DICTIONARY_ITEM_FEIGN_CLASS = "cn.lmx.kpu.common.api.DictionaryApi";
+    String DICTIONARY_ITEM_FEIGN_CLASS = "cn.lmx.kpu.common.api.DictApi";
     /**
      * 数据字典项 service查询类
      */
-    String DICTIONARY_ITEM_CLASS = "dictionaryServiceImpl";
+    String DICT_ITEM_CLASS = "dictServiceImpl";
 
     /**
      * 组织 service查询类

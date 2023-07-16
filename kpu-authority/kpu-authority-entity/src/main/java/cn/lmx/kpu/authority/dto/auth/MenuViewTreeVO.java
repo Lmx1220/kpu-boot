@@ -1,21 +1,9 @@
 package cn.lmx.kpu.authority.dto.auth;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.TreeEntity;
-import cn.lmx.kpu.authority.enumeration.auth.AuthorizeType;
-import cn.lmx.kpu.model.constant.EchoDictType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
-import static cn.lmx.kpu.model.constant.Condition.LIKE;
-import static cn.lmx.kpu.model.constant.EchoApi.DICTIONARY_ITEM_FEIGN_CLASS;
-import static com.baomidou.mybatisplus.annotation.SqlCondition.EQUAL;
 
 /**
  * menuList

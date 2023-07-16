@@ -48,7 +48,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter implements TokenGr
             R<Boolean> check = validateCodeService.check(loginParam.getKey(), loginParam.getCode());
             if (!check.getIsSuccess()) {
                 String msg = check.getMsg();
-                SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(loginParam.getAccount(), msg)));
+                SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(loginParam.getUsername(), msg)));
                 throw BizException.validFail(check.getMsg());
             }
         }

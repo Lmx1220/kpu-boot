@@ -3,16 +3,15 @@ package cn.lmx.kpu.tenant.strategy.impl;
 import cn.hutool.core.map.MapUtil;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.kpu.authority.entity.auth.*;
-import cn.lmx.kpu.authority.entity.common.Dictionary;
+import cn.lmx.kpu.authority.entity.common.Dict;
 import cn.lmx.kpu.authority.entity.common.Parameter;
 import cn.lmx.kpu.authority.enumeration.auth.ApplicationAppTypeEnum;
 import cn.lmx.kpu.authority.enumeration.auth.ResourceTypeEnum;
 import cn.lmx.kpu.authority.service.auth.*;
-import cn.lmx.kpu.authority.service.common.DictionaryService;
+import cn.lmx.kpu.authority.service.common.DictService;
 import cn.lmx.kpu.authority.service.common.ParameterService;
 import cn.lmx.kpu.common.constant.ParameterKey;
-import cn.lmx.kpu.model.constant.EchoDictType;
-import cn.lmx.kpu.model.enumeration.Sex;
+import cn.lmx.kpu.model.constant.EchoDictItem;
 import cn.lmx.kpu.model.enumeration.base.RoleCategoryEnum;
 import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
 import cn.lmx.kpu.tenant.strategy.InitSystemStrategy;
@@ -61,7 +60,7 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     private final RoleService roleService;
     private final RoleAuthorityService roleAuthorityService;
     private final ApplicationService applicationService;
-    private final DictionaryService dictionaryService;
+    private final DictService dictionaryService;
     private final ParameterService parameterService;
     private final UidGenerator uidGenerator;
     private final UserService userService;
@@ -99,7 +98,7 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
         boolean roleAuthorityFlag = initRoleAuthority(menuList, resourceList, roleId);
 
         // 字典
-        initDictionary();
+        initDict();
 
         //参数
         initParameter();
@@ -121,8 +120,8 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
 
     private boolean initSuperUser() {
         User user = User.builder()
-                .account("kpuAdmin").name("内置超级管理员").password("kpu")
-                .readonly(true).sex(Sex.M).avatar("cnrhVkzwxjPwAaCfPbdc.png")
+                .username("kpuAdmin").nickName("内置超级管理员").password("kpu")
+                .readonly(true).sex("1").avatar("cnrhVkzwxjPwAaCfPbdc.png")
                 .state(true).passwordErrorNum(0)
                 .build();
         return userService.initUser(user);
@@ -146,122 +145,202 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     }
 
     private boolean initRole(Long roleId) {
-        Role role = Role.builder().id(roleId).name("超级管理员").code("SUPER_ADMIN").describe("内置超级管理员").category(RoleCategoryEnum.FUNCTION.getCode()).readonly(true).build();
+        Role role = Role.builder().id(roleId).name("超级管理员").code
+                ("SUPER_ADMIN").remarks("内置超级管理员").category(RoleCategoryEnum.FUNCTION.getCode()).readonly(true).build();
         return roleService.save(role);
     }
 
     private boolean initResourc(List<Menu> resourceList, Map<String, Long> menuMap) {
         Long orgId = menuMap.get(ORG);
-        resourceList.add(Menu.builder().code("authority:org:add").name("新增").id(orgId).build());
-        resourceList.add(Menu.builder().code("authority:org:delete").name("删除").id(orgId).build());
-        resourceList.add(Menu.builder().code("authority:org:edit").name("编辑").id(orgId).build());
-        resourceList.add(Menu.builder().code("authority:org:view").name("查看").id(orgId).build());
-        resourceList.add(Menu.builder().code("authority:org:import").name("导入").id(orgId).build());
-        resourceList.add(Menu.builder().code("authority:org:export").name("导出").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:add").name("新增").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:delete").name("删除").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:edit").name("编辑").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:view").name("查看").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:import").name("导入").id(orgId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:org:export").name("导出").id(orgId).build());
 
         Long stationId = menuMap.get(STATION);
-        resourceList.add(Menu.builder().code("authority:station:add").name("新增").id(stationId).build());
-        resourceList.add(Menu.builder().code("authority:station:delete").name("删除").id(stationId).build());
-        resourceList.add(Menu.builder().code("authority:station:edit").name("编辑").id(stationId).build());
-        resourceList.add(Menu.builder().code("authority:station:view;authority:org:view").name("查看").id(stationId).build());
-        resourceList.add(Menu.builder().code("authority:station:import").name("导入").id(stationId).build());
-        resourceList.add(Menu.builder().code("authority:station:export").name("导出").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:add").name("新增").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:delete").name("删除").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:edit").name("编辑").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:view;authority:org:view").name("查看").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:import").name("导入").id(stationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:station:export").name("导出").id(stationId).build());
 
         Long userId = menuMap.get(USER);
-        resourceList.add(Menu.builder().code("authority:user:add").name("新增").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:delete").name("删除").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:edit").name("编辑").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:view;authority:station:view;authority:org:view").name("查看").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:updateState").name("修改状态").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:resetPassword").name("重置密码").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:import").name("导入").id(userId).build());
-        resourceList.add(Menu.builder().code("authority:user:export").name("导出").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:add").name("新增").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:delete").name("删除").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:edit").name("编辑").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:view;authority:station:view;authority:org:view").name("查看").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:updateState").name("修改状态").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:resetPassword").name("重置密码").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:import").name("导入").id(userId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:user:export").name("导出").id(userId).build());
 
         Long msgId = menuMap.get(MSG);
-        resourceList.add(Menu.builder().code("msg:msg:add;authority:user:view;authority:role:view").name("新增").id(msgId).build());
-        resourceList.add(Menu.builder().code("msg:msg:delete").name("删除").id(msgId).build());
-        resourceList.add(Menu.builder().code("msg:msg:edit;authority:user:view;authority:role:view").name("编辑").id(msgId).build());
-        resourceList.add(Menu.builder().code("msg:msg:view").name("查看").id(msgId).build());
-        resourceList.add(Menu.builder().code("msg:msg:mark").name("标记已读").id(msgId).build());
-        resourceList.add(Menu.builder().code("msg:msg:export").name("导出").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:add;authority:user:view;authority:role:view").name("新增").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:delete").name("删除").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:edit;authority:user:view;authority:role:view").name("编辑").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:view").name("查看").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:mark").name("标记已读").id(msgId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:msg:export").name("导出").id(msgId).build());
 
         Long smsTemplateId = menuMap.get(SMS_TEMPLATE);
-        resourceList.add(Menu.builder().code("msg:smsTemplate:add").name("新增").id(smsTemplateId).build());
-        resourceList.add(Menu.builder().code("msg:smsTemplate:delete").name("删除").id(smsTemplateId).build());
-        resourceList.add(Menu.builder().code("msg:smsTemplate:edit").name("编辑").id(smsTemplateId).build());
-        resourceList.add(Menu.builder().code("msg:smsTemplate:view").name("查看").id(smsTemplateId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:smsTemplate:add").name("新增").id(smsTemplateId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:smsTemplate:delete").name("删除").id(smsTemplateId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:smsTemplate:edit").name("编辑").id(smsTemplateId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:smsTemplate:view").name("查看").id(smsTemplateId).build());
 
         Long smsManageId = menuMap.get(SMS);
-        resourceList.add(Menu.builder().code("msg:sms:add").name("新增").id(smsManageId).build());
-        resourceList.add(Menu.builder().code("msg:sms:delete").name("删除").id(smsManageId).build());
-        resourceList.add(Menu.builder().code("msg:sms:edit").name("编辑").id(smsManageId).build());
-        resourceList.add(Menu.builder().code("msg:sms:view;msg:smsTemplate:view").name("查看").id(smsManageId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:sms:add").name("新增").id(smsManageId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:sms:delete").name("删除").id(smsManageId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:sms:edit").name("编辑").id(smsManageId).build());
+        resourceList.add(Menu.builder().code
+                ("msg:sms:view;msg:smsTemplate:view").name("查看").id(smsManageId).build());
 
         Long fileId = menuMap.get(ATTACHMENT);
-        resourceList.add(Menu.builder().code("file:attachment:add").name("新增").id(fileId).build());
-        resourceList.add(Menu.builder().code("file:attachment:delete").name("删除").id(fileId).build());
-        resourceList.add(Menu.builder().code("file:attachment:edit").name("编辑").id(fileId).build());
-        resourceList.add(Menu.builder().code("file:attachment:view").name("查看").id(fileId).build());
-        resourceList.add(Menu.builder().code("file:attachment:download").name("下载").id(fileId).build());
+        resourceList.add(Menu.builder().code
+                ("file:attachment:add").name("新增").id(fileId).build());
+        resourceList.add(Menu.builder().code
+                ("file:attachment:delete").name("删除").id(fileId).build());
+        resourceList.add(Menu.builder().code
+                ("file:attachment:edit").name("编辑").id(fileId).build());
+        resourceList.add(Menu.builder().code
+                ("file:attachment:view").name("查看").id(fileId).build());
+        resourceList.add(Menu.builder().code
+                ("file:attachment:download").name("下载").id(fileId).build());
 
         Long id = menuMap.get(MENU);
-        resourceList.add(Menu.builder().code("authority:menu:add").name("新增").id(id).build());
-        resourceList.add(Menu.builder().code("authority:menu:delete").name("删除").id(id).build());
-        resourceList.add(Menu.builder().code("authority:menu:edit").name("编辑").id(id).build());
-        resourceList.add(Menu.builder().code("authority:menu:view;authority:resource:view").name("查看").id(id).build());
-        resourceList.add(Menu.builder().code("authority:menu:import").name("导入").id(id).build());
-        resourceList.add(Menu.builder().code("authority:menu:export").name("导出").id(id).build());
-        resourceList.add(Menu.builder().code("authority:resource:add").name("添加").id(id).build());
-        resourceList.add(Menu.builder().code("authority:resource:delete").name("删除").id(id).build());
-        resourceList.add(Menu.builder().code("authority:resource:edit").name("编辑").id(id).build());
-        resourceList.add(Menu.builder().code("authority:resource:view").name("查看").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:add").name("新增").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:delete").name("删除").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:edit").name("编辑").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:view;authority:resource:view").name("查看").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:import").name("导入").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:menu:export").name("导出").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:resource:add").name("添加").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:resource:delete").name("删除").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:resource:edit").name("编辑").id(id).build());
+        resourceList.add(Menu.builder().code
+                ("authority:resource:view").name("查看").id(id).build());
 
         Long roleId = menuMap.get(ROLE);
-        resourceList.add(Menu.builder().code("authority:role:add;authority:org:view").name("新增").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:delete").name("删除").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:edit;authority:org:view").name("编辑").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:view").name("查看").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:config;authority:user:view").name("配置").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:auth;authority:menu:view;authority:resource:view").name("授权").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:import").name("导入").id(roleId).build());
-        resourceList.add(Menu.builder().code("authority:role:export").name("导出").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:add;authority:org:view").name("新增").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:delete").name("删除").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:edit;authority:org:view").name("编辑").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:view").name("查看").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:config;authority:user:view").name("配置").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:auth;authority:menu:view;authority:resource:view").name("授权").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:import").name("导入").id(roleId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:role:export").name("导出").id(roleId).build());
 
 
         Long dictionaryId = menuMap.get(DICTIONARY);
-        resourceList.add(Menu.builder().code("authority:dictionary:add").name("新增").id(dictionaryId).build());
-        resourceList.add(Menu.builder().code("authority:dictionary:delete").name("删除").id(dictionaryId).build());
-        resourceList.add(Menu.builder().code("authority:dictionary:edit").name("编辑").id(dictionaryId).build());
-        resourceList.add(Menu.builder().code("authority:dictionary:view").name("查看").id(dictionaryId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:dictionary:add").name("新增").id(dictionaryId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:dictionary:delete").name("删除").id(dictionaryId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:dictionary:edit").name("编辑").id(dictionaryId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:dictionary:view").name("查看").id(dictionaryId).build());
 
         Long areaId = menuMap.get(AREA);
-        resourceList.add(Menu.builder().code("authority:area:add").name("新增").id(areaId).build());
-        resourceList.add(Menu.builder().code("authority:area:delete").name("删除").id(areaId).build());
-        resourceList.add(Menu.builder().code("authority:area:edit").name("编辑").id(areaId).build());
-        resourceList.add(Menu.builder().code("authority:area:view").name("查看").id(areaId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:area:add").name("新增").id(areaId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:area:delete").name("删除").id(areaId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:area:edit").name("编辑").id(areaId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:area:view").name("查看").id(areaId).build());
 
         Long parameterId = menuMap.get(PARAMETER);
-        resourceList.add(Menu.builder().code("authority:parameter:add").name("新增").id(parameterId).build());
-        resourceList.add(Menu.builder().code("authority:parameter:delete").name("删除").id(parameterId).build());
-        resourceList.add(Menu.builder().code("authority:parameter:edit").name("编辑").id(parameterId).build());
-        resourceList.add(Menu.builder().code("authority:parameter:view").name("查看").id(parameterId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:parameter:add").name("新增").id(parameterId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:parameter:delete").name("删除").id(parameterId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:parameter:edit").name("编辑").id(parameterId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:parameter:view").name("查看").id(parameterId).build());
 
         Long optLogId = menuMap.get(OPT_LOG);
-        resourceList.add(Menu.builder().code("authority:optLog:delete").name("删除").id(optLogId).build());
-        resourceList.add(Menu.builder().code("authority:optLog:view").name("查看").id(optLogId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:optLog:delete").name("删除").id(optLogId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:optLog:view").name("查看").id(optLogId).build());
 
         Long loginLogId = menuMap.get(LOGIN_LOG);
-        resourceList.add(Menu.builder().code("authority:loginLog:delete").name("删除").id(loginLogId).build());
-        resourceList.add(Menu.builder().code("authority:loginLog:view").name("查看").id(loginLogId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:loginLog:delete").name("删除").id(loginLogId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:loginLog:view").name("查看").id(loginLogId).build());
 
         Long onlineId = menuMap.get(ONLINE);
-        resourceList.add(Menu.builder().code("authority:online:delete").name("删除").id(onlineId).build());
-        resourceList.add(Menu.builder().code("authority:online:view").name("查看").id(onlineId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:online:delete").name("删除").id(onlineId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:online:view").name("查看").id(onlineId).build());
 
         Long applicationId = menuMap.get(APPLICATION);
-        resourceList.add(Menu.builder().code("authority:application:add").name("新增").id(applicationId).build());
-        resourceList.add(Menu.builder().code("authority:application:delete").name("删除").id(applicationId).build());
-        resourceList.add(Menu.builder().code("authority:application:edit").name("编辑").id(applicationId).build());
-        resourceList.add(Menu.builder().code("authority:application:view").name("查看").id(applicationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:application:add").name("新增").id(applicationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:application:delete").name("删除").id(applicationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:application:edit").name("编辑").id(applicationId).build());
+        resourceList.add(Menu.builder().code
+                ("authority:application:view").name("查看").id(applicationId).build());
 
         return menuService.saveBatch(resourceList);
     }
@@ -368,170 +447,245 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     }
 
 
-    private boolean initDictionary() {
-        List<Dictionary> dictionaryList = new ArrayList<>();
+    private boolean initDict() {
+        List<Dict> dictionaryList = new ArrayList<>();
         Integer nationSort = 1;
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("01").name("汉族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("02").name("壮族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("03").name("满族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("04").name("回族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("05").name("苗族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("06").name("维吾尔族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("07").name("土家族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("08").name("彝族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("09").name("蒙古族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("10").name("藏族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("11").name("布依族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("12").name("侗族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("13").name("瑶族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("14").name("朝鲜族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("15").name("白族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("16").name("哈尼族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("17").name("哈萨克族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("18").name("黎族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("19").name("傣族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("20").name("畲族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("21").name("傈僳族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("22").name("仡佬族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("23").name("东乡族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("24").name("高山族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("25").name("拉祜族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("26").name("水族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("27").name("佤族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("28").name("纳西族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("29").name("羌族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("30").name("土族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("31").name("仫佬族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("32").name("锡伯族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("33").name("柯尔克孜族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("34").name("达斡尔族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("35").name("景颇族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("36").name("毛南族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("37").name("撒拉族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("38").name("塔吉克族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("39").name("阿昌族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("40").name("普米族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("41").name("鄂温克族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("42").name("怒族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("43").name("京族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("44").name("基诺族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("45").name("德昂族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("46").name("保安族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("47").name("俄罗斯族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("48").name("裕固族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("49").name("乌兹别克族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("50").name("门巴族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("51").name("鄂伦春族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("52").name("独龙族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("53").name("塔塔尔族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("54").name("赫哲族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("55").name("珞巴族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("56").name("布朗族").sortValue(nationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.NATION).label("民族")
-                .code("57").name("其他").sortValue(nationSort++).readonly(true).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("01").name("汉族").sortValue(nationSort++).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("02").name("壮族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("03").name("满族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("04").name("回族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("05").name("苗族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("06").name("维吾尔族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("07").name("土家族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("08").name("彝族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("09").name("蒙古族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("10").name("藏族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("11").name("布依族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("12").name("侗族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("13").name("瑶族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("14").name("朝鲜族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("15").name("白族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("16").name("哈尼族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("17").name("哈萨克族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("18").name("黎族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("19").name("傣族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("20").name("畲族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("21").name("傈僳族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("22").name("仡佬族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("23").name("东乡族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("24").name("高山族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("25").name("拉祜族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("26").name("水族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("27").name("佤族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("28").name("纳西族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("29").name("羌族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("30").name("土族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("31").name("仫佬族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("32").name("锡伯族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("33").name("柯尔克孜族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("34").name("达斡尔族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("35").name("景颇族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("36").name("毛南族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("37").name("撒拉族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("38").name("塔吉克族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("39").name("阿昌族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("40").name("普米族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("41").name("鄂温克族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("42").name("怒族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("43").name("京族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("44").name("基诺族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("45").name("德昂族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("46").name("保安族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("47").name("俄罗斯族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("48").name("裕固族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("49").name("乌兹别克族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("50").name("门巴族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("51").name("鄂伦春族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("52").name("独龙族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("53").name("塔塔尔族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("54").name("赫哲族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("55").name("珞巴族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("56").name("布朗族").sortValue(nationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.NATION).name("民族")
+                .key("57").name("其他").sortValue(nationSort++)
+                .build());
 
         Integer positionStatusSort = 1;
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.POSITION_STATUS).label("职位状态")
-                .code("01").name("在职").sortValue(positionStatusSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.POSITION_STATUS).label("职位状态")
-                .code("02").name("请假").sortValue(positionStatusSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.POSITION_STATUS).label("职位状态")
-                .code("03").name("离职").sortValue(positionStatusSort++).readonly(true).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.POSITION_STATUS).name("职位状态")
+                .key("01").name("在职").sortValue(positionStatusSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.POSITION_STATUS).name("职位状态")
+                .key("02").name("请假").sortValue(positionStatusSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.POSITION_STATUS).name("职位状态")
+                .key("03").name("离职").sortValue(positionStatusSort++)
+                .build());
 
         Integer educationSort = 1;
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("01").name("小学").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("02").name("中学").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("03").name("高中").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("04").name("专科").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("05").name("本科").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("06").name("硕士").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("07").name("博士").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("08").name("博士后").sortValue(educationSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.EDUCATION).label("学历")
-                .code("20").name("其他").sortValue(educationSort++).readonly(true).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("01").name("小学").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("02").name("中学").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("03").name("高中").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("04").name("专科").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("05").name("本科").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("06").name("硕士").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("07").name("博士").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("08").name("博士后").sortValue(educationSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.EDUCATION).name("学历")
+                .key("20").name("其他").sortValue(educationSort++)
+                .build());
 
         Integer areaLevelSort = 1;
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.AREA_LEVEL).label("行政区划")
-                .code("01").name("国家").sortValue(areaLevelSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.AREA_LEVEL).label("行政区划")
-                .code("02").name("省份/直辖市").sortValue(areaLevelSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.AREA_LEVEL).label("行政区划")
-                .code("03").name("地市").sortValue(areaLevelSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.AREA_LEVEL).label("行政区划")
-                .code("04").name("区县").sortValue(areaLevelSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.AREA_LEVEL).label("行政区划")
-                .code("05").name("乡镇").sortValue(areaLevelSort++).readonly(true).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.AREA_LEVEL).name("行政区划")
+                .key("01").name("国家").sortValue(areaLevelSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.AREA_LEVEL).name("行政区划")
+                .key("02").name("省份/直辖市").sortValue(areaLevelSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.AREA_LEVEL).name("行政区划")
+                .key("03").name("地市").sortValue(areaLevelSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.AREA_LEVEL).name("行政区划")
+                .key("04").name("区县").sortValue(areaLevelSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.AREA_LEVEL).name("行政区划")
+                .key("05").name("乡镇").sortValue(areaLevelSort++)
+                .build());
 
 
         Integer orgTypeSort = 1;
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.ORG_TYPE).label("机构类型")
-                .code("01").name("单位").sortValue(orgTypeSort++).readonly(true).build());
-        dictionaryList.add(Dictionary.builder().type(EchoDictType.ORG_TYPE).label("机构类型")
-                .code("02").name("部门").sortValue(orgTypeSort++).readonly(true).build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.ORG_TYPE).name("机构类型")
+                .key("01").name("单位").sortValue(orgTypeSort++)
+                .build());
+        dictionaryList.add(Dict.builder().parentKey(EchoDictItem.ORG_TYPE).name("机构类型")
+                .key("02").name("部门").sortValue(orgTypeSort++)
+                .build());
         return dictionaryService.saveBatch(dictionaryList);
     }
 

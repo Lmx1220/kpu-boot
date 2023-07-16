@@ -65,7 +65,7 @@ public class TenantSaveInitDTO implements Serializable {
     @ApiModelProperty(value = "账号")
     @Size(max = 30, message = "账号长度不能超过30")
     @NotEmpty(message = "账号不能为空")
-    private String account;
+    private String username;
 
     /**
      * 密码

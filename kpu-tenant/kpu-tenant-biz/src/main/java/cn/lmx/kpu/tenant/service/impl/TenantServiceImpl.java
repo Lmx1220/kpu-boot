@@ -15,8 +15,8 @@ import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
 import cn.lmx.kpu.model.enumeration.system.TenantTypeEnum;
 import cn.lmx.kpu.tenant.dao.TenantMapper;
 import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
-import cn.lmx.kpu.tenant.dto.TenantSaveDTO;
-import cn.lmx.kpu.tenant.dto.TenantUpdateDTO;
+import cn.lmx.kpu.tenant.dto.TenantSaveVO;
+import cn.lmx.kpu.tenant.dto.TenantUpdateVo;
 import cn.lmx.kpu.tenant.entity.Tenant;
 import cn.lmx.kpu.tenant.service.TenantService;
 import cn.lmx.kpu.tenant.strategy.InitSystemContext;
@@ -68,7 +68,7 @@ public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenan
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Tenant save(TenantSaveDTO data) {
+    public Tenant save(TenantSaveVO data) {
         // defaults 库
         ArgumentAssert.isFalse(check(data.getCode()), "编码重复，请重新输入");
 
@@ -88,7 +88,7 @@ public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenan
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Tenant update(TenantUpdateDTO model) {
+    public Tenant update(TenantUpdateVo model) {
         Tenant tenant = BeanPlusUtil.toBean(model, Tenant.class);
         super.updateById(tenant);
         appendixService.save(tenant.getId(), model.getLogos());

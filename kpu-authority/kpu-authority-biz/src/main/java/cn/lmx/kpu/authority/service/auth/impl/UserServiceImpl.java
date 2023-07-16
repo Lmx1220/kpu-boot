@@ -15,7 +15,7 @@ import cn.lmx.basic.model.cache.CacheKeyBuilder;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.CollHelper;
 import cn.lmx.kpu.authority.dao.auth.UserMapper;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserPageDTO;
+import cn.lmx.kpu.authority.dto.auth.GlobalUserPageQuery;
 import cn.lmx.kpu.authority.dto.auth.UserUpdateAvatarDTO;
 import cn.lmx.kpu.authority.dto.auth.UserUpdatePasswordDTO;
 import cn.lmx.kpu.authority.entity.auth.Role;
@@ -77,7 +77,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     }
 
     @Override
-    public IPage<User> pageByRole(IPage<User> page, PageParams<GlobalUserPageDTO> params) {
+    public IPage<User> pageByRole(IPage<User> page, PageParams<GlobalUserPageQuery> params) {
         params.put("roleCode", BizConstant.INIT_ROLE_CODE);
         PageUtil.timeRange(params);
         return baseMapper.pageByRole(page, params);
@@ -121,10 +121,10 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     }
 
     @Override
-    public User getByAccount(String account) {
-        Function<CacheKey, Object> loader = k -> getObj(Wraps.<User>lbQ().select(User::getId).eq(User::getAccount, account), Convert::toLong);
+    public User getByAccount(String username) {
+        Function<CacheKey, Object> loader = k -> getObj(Wraps.<User>lbQ().select(User::getId).eq(User::getUsername, username), Convert::toLong);
         CacheKeyBuilder builder = new UserAccountCacheKeyBuilder();
-        return getByKey(builder.key(account), loader);
+        return getByKey(builder.key(username), loader);
     }
 
     @Override
@@ -174,9 +174,9 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     }
 
     @Override
-    public boolean check(Long id, String account) {
+    public boolean check(Long id, String username) {
         //这里不能用缓存，否则会导致用户无法登录
-        return count(Wraps.<User>lbQ().eq(User::getAccount, account).ne(User::getId, id)) > 0;
+        return count(Wraps.<User>lbQ().eq(User::getUsername, username).ne(User::getId, id)) > 0;
     }
 
     @Override
@@ -197,7 +197,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User saveUser(User user) {
-        ArgumentAssert.isFalse(check(null, user.getAccount()), "账号{}已经存在", user.getAccount());
+        ArgumentAssert.isFalse(check(null, user.getUsername()), "账号{}已经存在", user.getUsername());
         user.setSalt(RandomUtil.randomString(20));
         if (StrUtil.isEmpty(user.getPassword())) {
             user.setPassword(DEF_PASSWORD);
@@ -233,7 +233,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
 
     @Override
     public Map<Serializable, Object> findByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findUser(ids), User::getId, User::getName);
+        return CollHelper.uniqueIndex(findUser(ids), User::getId, User::getNickName);
     }
 
     @Override
@@ -258,7 +258,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean initUser(User user) {
-        ArgumentAssert.isFalse(check(null, user.getAccount()), "账号{}已经存在", user.getAccount());
+        ArgumentAssert.isFalse(check(null, user.getUsername()), "账号{}已经存在", user.getUsername());
         this.saveUser(user);
         return userRoleService.initAdmin(user.getId());
     }

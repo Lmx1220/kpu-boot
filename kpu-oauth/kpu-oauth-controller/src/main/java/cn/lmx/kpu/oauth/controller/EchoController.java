@@ -2,7 +2,7 @@ package cn.lmx.kpu.oauth.controller;
 
 import cn.lmx.basic.annotation.base.IgnoreResponseBodyAdvice;
 import cn.lmx.kpu.authority.service.auth.UserService;
-import cn.lmx.kpu.authority.service.common.DictionaryService;
+import cn.lmx.kpu.authority.service.common.DictService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.authority.service.core.StationService;
 import io.swagger.annotations.Api;
@@ -31,7 +31,7 @@ import java.util.Set;
 @Api(value = "数据注入查询接口", tags = "数据注入查询接口， 不建议前端调用")
 @ApiIgnore
 public class EchoController {
-    private final DictionaryService dictionaryService;
+    private final DictService dictionaryService;
     private final OrgService orgService;
     private final StationService stationService;
     private final UserService userService;

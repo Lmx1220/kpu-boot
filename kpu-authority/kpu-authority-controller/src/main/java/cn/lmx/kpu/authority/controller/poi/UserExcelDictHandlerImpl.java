@@ -4,10 +4,10 @@ import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
-import cn.lmx.kpu.authority.entity.common.Dictionary;
+import cn.lmx.kpu.authority.entity.common.Dict;
 import cn.lmx.kpu.authority.entity.core.Org;
 import cn.lmx.kpu.authority.entity.core.Station;
-import cn.lmx.kpu.authority.service.common.DictionaryService;
+import cn.lmx.kpu.authority.service.common.DictService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.authority.service.core.StationService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserExcelDictHandlerImpl implements IExcelDictHandler {
     public static final String DICT_POSITION_STATUS = "POSITION_STATUS";
     private final OrgService orgService;
     private final StationService stationService;
-    private final DictionaryService dictionaryService;
+    private final DictService dictionaryService;
 
     @Override
     public String toName(String dict, Object obj, String name, Object value) {
@@ -47,9 +47,9 @@ public class UserExcelDictHandlerImpl implements IExcelDictHandler {
             return station != null ? station.getName() : value.toString();
         }
         if (StrUtil.equalsAny(dict, DICT_NATION, DICT_EDUCATION, DICT_POSITION_STATUS)) {
-            Dictionary dictionary = dictionaryService.getOne(Wraps.<Dictionary>lbQ()
-                    .eq(Dictionary::getType, dict)
-                    .eq(Dictionary::getCode, String.valueOf(value)), false);
+            Dict dictionary = dictionaryService.getOne(Wraps.<Dict>lbQ()
+                    .eq(Dict::getParentKey, dict)
+                    .eq(Dict::getKey, String.valueOf(value)), false);
             return dictionary != null ? dictionary.getName() : String.valueOf(value);
         }
         return String.valueOf(value);
@@ -69,10 +69,10 @@ public class UserExcelDictHandlerImpl implements IExcelDictHandler {
             return org != null ? String.valueOf(org.getId()) : "";
         }
         if (StrUtil.equalsAny(dict, DICT_NATION, DICT_EDUCATION, DICT_POSITION_STATUS)) {
-            Dictionary dictionary = dictionaryService.getOne(Wraps.<Dictionary>lbQ()
-                    .eq(Dictionary::getType, dict)
-                    .eq(Dictionary::getName, String.valueOf(value)), false);
-            return dictionary != null ? dictionary.getCode() : String.valueOf(value);
+            Dict dictionary = dictionaryService.getOne(Wraps.<Dict>lbQ()
+                    .eq(Dict::getParentKey, dict)
+                    .eq(Dict::getName, String.valueOf(value)), false);
+            return dictionary != null ? dictionary.getKey() : String.valueOf(value);
         }
         return value.toString();
     }

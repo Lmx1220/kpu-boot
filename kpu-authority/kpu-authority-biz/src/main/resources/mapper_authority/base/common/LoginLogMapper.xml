@@ -9,8 +9,8 @@
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
         <result column="request_ip" jdbcType="VARCHAR" property="requestIp"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="login_date" jdbcType="CHAR" property="loginDate"/>
         <result column="ua" jdbcType="VARCHAR" property="ua"/>
@@ -23,7 +23,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,create_time,created_by,
-        request_ip, user_id, user_name, account, description, login_date, ua, browser, browser_version, operating_system, location
+        request_ip, user_id, nick_name, username, description, login_date, ua, browser, browser_version, operating_system, location
     </sql>
 
 </mapper>

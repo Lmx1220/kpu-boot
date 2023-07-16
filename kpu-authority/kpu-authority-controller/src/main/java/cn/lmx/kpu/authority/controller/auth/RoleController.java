@@ -44,15 +44,15 @@ import java.util.stream.Collectors;
 @Api(value = "Role", tags = "角色")
 @PreAuth(replace = "authority:role:")
 @RequiredArgsConstructor
-public class RoleController extends SuperCacheController<RoleService, Long, Role, RolePageQuery, RoleSaveDTO, RoleUpdateDTO> {
+public class RoleController extends SuperCacheController<RoleService, Long, Role, RoleSaveVO, RoleUpdateVo, RolePageQuery, RoleResultVO> {
 
     private final RoleAuthorityService roleAuthorityService;
     private final EchoService echoService;
     private final UserRoleService userRoleService;
 
     @Override
-    public void handlerResult(IPage<Role> page) {
-        echoService.action(page);
+    public EchoService getEchoService() {
+        return echoService;
     }
 
     @Override
@@ -66,11 +66,12 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
 
         wrapper.like(Role::getName, roleQuery.getName())
                 .like(Role::getCode, roleQuery.getCode())
-                .in(Role::getState, roleQuery.getState())
+                .eq(Role::getState, roleQuery.getState())
                 .in(Role::getReadonly, roleQuery.getReadonly())
-                .in(Role::getCategory, roleQuery.getCategory());
+                .eq(Role::getCategory, roleQuery.getCategory());
         baseService.page(page, wrapper);
-        handlerResult(page);
+        IPage<RoleResultVO> voPage = BeanPlusUtil.toBeanPage(page, getResultVOClass());
+        handlerResult(voPage);
         return page;
     }
 
@@ -98,13 +99,13 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
 
 
     @Override
-    public R<Role> handlerSave(RoleSaveDTO data) {
+    public R<Role> handlerSave(RoleSaveVO data) {
         baseService.saveRole(data, getUserId());
         return success(BeanPlusUtil.toBean(data, Role.class));
     }
 
     @Override
-    public R<Role> handlerUpdate(RoleUpdateDTO data) {
+    public R<Role> handlerUpdate(RoleUpdateVo data) {
         baseService.updateRole(data, getUserId());
         return success(BeanPlusUtil.toBean(data, Role.class));
     }
@@ -125,7 +126,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @SysLog("给角色分配用户")
     @PreAuth("hasAnyPermission('{}config')")
     @Deprecated
-    public R<Boolean> saveUserRole(@RequestBody UserRoleSaveDTO userRole) {
+    public R<Boolean> saveUserRole(@RequestBody UserRoleSaveVO userRole) {
         return success(roleAuthorityService.saveUserRole(userRole));
     }
 
@@ -168,28 +169,26 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @GetMapping("/resourceList")
     @SysLog("查询角色拥有的资源")
     @PreAuth("hasAnyPermission('{}view')")
-    public R<RoleAuthoritySaveDTO> findResourceListByRoleId(@RequestParam Long roleId) {
+    public R<List<Long>> findResourceListByRoleId(@RequestParam Long roleId) {
         List<RoleAuthority> list = roleAuthorityService.list(Wraps.<RoleAuthority>lbQ().eq(RoleAuthority::getRoleId, roleId));
         List<Long> menuIdList = list.stream().mapToLong(RoleAuthority::getAuthorityId).boxed().collect(Collectors.toList());
-        RoleAuthoritySaveDTO roleAuthority = RoleAuthoritySaveDTO.builder()
-                .menuIdList(menuIdList)
-                .build();
-        return success(roleAuthority);
+
+        return success(menuIdList);
     }
 
 
     /**
      * 给角色配置权限
      *
-     * @param roleAuthoritySaveDTO 角色权限授权对象
+     * @param roleResourceSaveVO 角色权限授权对象
      * @return 新增结果
      */
     @ApiOperation(value = "给角色配置权限", notes = "给角色配置权限")
     @PostMapping("/saveResource")
     @SysLog("给角色配置权限")
     @PreAuth("hasAnyPermission('{}auth')")
-    public R<Boolean> saveRoleAuthority(@RequestBody RoleAuthoritySaveDTO roleAuthoritySaveDTO) {
-        return success(roleAuthorityService.saveRoleAuthority(roleAuthoritySaveDTO));
+    public R<Boolean> saveRoleAuthority(@RequestBody RoleResourceSaveVO roleResourceSaveVO) {
+        return success(roleAuthorityService.saveRoleAuthority(roleResourceSaveVO));
     }
 
 

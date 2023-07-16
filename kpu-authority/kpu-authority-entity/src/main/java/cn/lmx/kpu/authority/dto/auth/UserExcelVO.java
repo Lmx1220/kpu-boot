@@ -3,7 +3,6 @@ package cn.lmx.kpu.authority.dto.auth;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.handler.inter.IExcelDataModel;
 import cn.afterturn.easypoi.handler.inter.IExcelModel;
-import cn.lmx.kpu.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -39,7 +38,7 @@ public class UserExcelVO implements Serializable, IExcelModel, IExcelDataModel {
     @NotEmpty(message = "账号不能为空")
     @Size(max = 30, message = "账号长度不能超过30")
     @Excel(name = "账号")
-    private String account;
+    private String username;
     /**
      * 姓名
      */
@@ -47,7 +46,7 @@ public class UserExcelVO implements Serializable, IExcelModel, IExcelDataModel {
     @NotEmpty(message = "姓名不能为空")
     @Size(max = 50, message = "姓名长度不能超过50")
     @Excel(name = "姓名")
-    private String name;
+    private String nickName;
     /**
      * 组织
      * #c_org
@@ -78,11 +77,12 @@ public class UserExcelVO implements Serializable, IExcelModel, IExcelDataModel {
     private String mobile;
     /**
      * 性别
-     * #Sex{W:女;M:男;N:未知}
+     *
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
     @Excel(name = "性别", replace = {"男_M", "女_W", "未知_N", "_null"}, enumImportMethod = "get")
-    private Sex sex;
+    private String sex;
     /**
      * 状态
      * 1启用 0禁用

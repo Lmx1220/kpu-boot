@@ -7,7 +7,7 @@ import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperController;
 import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.database.mybatis.conditions.query.QueryWrap;
-import cn.lmx.kpu.authority.dto.common.LoginLogUpdateDTO;
+import cn.lmx.kpu.authority.dto.common.LoginLogUpdateVo;
 import cn.lmx.kpu.authority.entity.common.LoginLog;
 import cn.lmx.kpu.authority.service.common.LoginLogService;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/loginLog")
 @Api(value = "LoginLog", tags = "登录日志")
 @PreAuth(replace = "authority:loginLog:")
-public class LoginLogController extends SuperController<LoginLogService, Long, LoginLog, LoginLog, LoginLog, LoginLogUpdateDTO> {
+public class LoginLogController extends SuperController<LoginLogService, Long, LoginLog, LoginLog, LoginLogUpdateVo, LoginLog, LoginLog> {
 
     /**
      * 分页查询登录日志
@@ -50,11 +50,11 @@ public class LoginLogController extends SuperController<LoginLogService, Long, L
         QueryWrap<LoginLog> wrapper = super.handlerWrapper(model, params);
 
         wrapper.lambda()
-                // 忽略 Wraps.q(model); 时， account  和 requestIp 字段的默认查询规则，
-                .ignore(LoginLog::setAccount)
+                // 忽略 Wraps.q(model); 时， username  和 requestIp 字段的默认查询规则，
+                .ignore(LoginLog::setUsername)
                 .ignore(LoginLog::setRequestIp)
                 // 使用 自定义的查询规则
-                .likeRight(LoginLog::getAccount, model.getAccount())
+                .likeRight(LoginLog::getUsername, model.getUsername())
                 .likeRight(LoginLog::getRequestIp, model.getRequestIp());
         return wrapper;
     }

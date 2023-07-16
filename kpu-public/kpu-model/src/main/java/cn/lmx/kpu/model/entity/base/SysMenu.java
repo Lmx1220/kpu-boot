@@ -2,7 +2,7 @@ package cn.lmx.kpu.model.entity.base;
 
 import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.TreeEntity;
-import cn.lmx.kpu.model.constant.EchoDictType;
+import cn.lmx.kpu.model.constant.EchoDictItem;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -75,7 +75,7 @@ public class SysMenu extends TreeEntity<SysMenu, Long> {
     @ApiModelProperty(value = "类型")
     @Size(max = 2, message = "类型长度不能超过{max}")
     @TableField(value = "resource_type", condition = LIKE)
-    @Echo(api = DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.RESOURCE_TYPE)
+    @Echo(api = DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictItem.RESOURCE_TYPE)
     private String resourceType;
 
     /**

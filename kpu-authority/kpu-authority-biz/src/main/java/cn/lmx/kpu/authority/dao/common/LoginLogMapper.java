@@ -53,11 +53,11 @@ public interface LoginLogMapper extends SuperMapper<LoginLog> {
     /**
      * 获取系统近十天来的访问记录
      *
-     * @param tenDays 10天前
-     * @param account 用户账号
+     * @param tenDays  10天前
+     * @param username 用户账号
      * @return 系统近十天来的访问记录
      */
-    List<Map<String, String>> findLastTenDaysVisitCount(@Param("tenDays") LocalDateTime tenDays, @Param("account") String account);
+    List<Map<String, String>> findLastTenDaysVisitCount(@Param("tenDays") LocalDateTime tenDays, @Param("username") String username);
 
     /**
      * 按浏览器来统计数量

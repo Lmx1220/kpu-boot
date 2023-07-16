@@ -24,14 +24,14 @@ public interface LoginLogService extends SuperService<LoginLog> {
      * 记录登录日志
      *
      * @param userId      用户id
-     * @param account     账号
+     * @param username    账号
      * @param ua          浏览器
      * @param ip          客户端IP
      * @param location    客户端地址
      * @param description 登陆描述消息
      * @return 登录日志
      */
-    LoginLog save(Long userId, String account, String ua, String ip, String location, String description);
+    LoginLog save(Long userId, String username, String ua, String ip, String location, String description);
 
     /**
      * 获取系统总 登录次数
@@ -65,10 +65,10 @@ public interface LoginLogService extends SuperService<LoginLog> {
     /**
      * 获取系统近十天来的访问记录
      *
-     * @param account 账号
+     * @param username 账号
      * @return 系统近十天来的访问记录
      */
-    List<Map<String, String>> findLastTenDaysVisitCount(String account);
+    List<Map<String, String>> findLastTenDaysVisitCount(String username);
 
 
     /**

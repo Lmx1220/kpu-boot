@@ -9,9 +9,9 @@ import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.kpu.authority.dao.auth.MenuMapper;
 import cn.lmx.kpu.authority.dao.auth.RoleAuthorityMapper;
-import cn.lmx.kpu.authority.dto.auth.RoleAuthoritySaveDTO;
+import cn.lmx.kpu.authority.dto.auth.RoleResourceSaveVO;
 import cn.lmx.kpu.authority.dto.auth.RoleUserSaveVO;
-import cn.lmx.kpu.authority.dto.auth.UserRoleSaveDTO;
+import cn.lmx.kpu.authority.dto.auth.UserRoleSaveVO;
 import cn.lmx.kpu.authority.entity.auth.RoleAuthority;
 import cn.lmx.kpu.authority.entity.auth.UserRole;
 import cn.lmx.kpu.authority.service.auth.RoleAuthorityService;
@@ -78,7 +78,7 @@ public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveUserRole(UserRoleSaveDTO userRole) {
+    public boolean saveUserRole(UserRoleSaveVO userRole) {
         List<UserRole> oldUserRoleList = userRoleService.list(Wraps.<UserRole>lbQ().eq(UserRole::getRoleId, userRole.getRoleId()));
         userRoleService.remove(Wraps.<UserRole>lbQ().eq(UserRole::getRoleId, userRole.getRoleId()));
 
@@ -110,7 +110,7 @@ public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveRoleAuthority(RoleAuthoritySaveDTO dto) {
+    public boolean saveRoleAuthority(RoleResourceSaveVO dto) {
         ArgumentAssert.notNull(dto.getRoleId(), "请选择角色");
 
         //删除角色和资源的关联

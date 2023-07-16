@@ -64,12 +64,12 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
     }
 
     @Override
-    public LoginLog save(Long userId, String account, String ua, String ip, String location, String description) {
+    public LoginLog save(Long userId, String username, String ua, String ip, String location, String description) {
         User user;
         if (userId != null) {
             user = this.userService.getByIdCache(userId);
         } else {
-            user = this.userService.getByAccount(account);
+            user = this.userService.getByAccount(username);
         }
 
         LoginLog loginLog = LoginLog.builder()
@@ -93,7 +93,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
             loginLog.setOperatingSystem(simplifyOperatingSystem(operatingSystem.getName()));
         }
         if (user != null) {
-            loginLog.setAccount(user.getAccount()).setUserId(user.getId()).setUserName(user.getName())
+            loginLog.setUsername(user.getUsername()).setUserId(user.getId()).setNickName(user.getNickName())
                     .setCreatedBy(user.getId());
         }
 
@@ -118,7 +118,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
         cacheOps.del(loginLogBrowserKey);
         cacheOps.del(loginLogSystemKey);
         if (user != null) {
-            CacheKey loginLogTenDayUserKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgo, user.getAccount());
+            CacheKey loginLogTenDayUserKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgo, user.getUsername());
             cacheOps.del(loginLogTenDayUserKey);
         }
         return loginLog;
@@ -172,12 +172,12 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
     }
 
     @Override
-    public List<Map<String, String>> findLastTenDaysVisitCount(String account) {
+    public List<Map<String, String>> findLastTenDaysVisitCount(String username) {
         LocalDateTime tenDaysAgo = LocalDateTime.of(LocalDate.now().plusDays(-9), LocalTime.MIN);
         String tenDaysAgoStr = DateUtils.formatAsDate(tenDaysAgo);
-        CacheKey loginLogTenDayKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgoStr, account);
+        CacheKey loginLogTenDayKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgoStr, username);
         return cacheOps.get(loginLogTenDayKey, k -> {
-            List<Map<String, String>> map = baseMapper.findLastTenDaysVisitCount(tenDaysAgo, account);
+            List<Map<String, String>> map = baseMapper.findLastTenDaysVisitCount(tenDaysAgo, username);
             return map.stream().map(item -> {
                 Map<String, String> kv = new HashMap<>(CollHelper.initialCapacity(map.size()));
                 kv.put("login_date", item.get("LOGIN_DATE"));

@@ -4,8 +4,9 @@ import cn.lmx.basic.annotation.log.SysLog;
 import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.controller.SuperController;
 import cn.lmx.kpu.tenant.dto.DatasourceConfigPageQuery;
-import cn.lmx.kpu.tenant.dto.DatasourceConfigSaveDTO;
-import cn.lmx.kpu.tenant.dto.DatasourceConfigUpdateDTO;
+import cn.lmx.kpu.tenant.dto.DatasourceConfigResultVO;
+import cn.lmx.kpu.tenant.dto.DatasourceConfigSaveVO;
+import cn.lmx.kpu.tenant.dto.DatasourceConfigUpdateVo;
 import cn.lmx.kpu.tenant.entity.DatasourceConfig;
 import cn.lmx.kpu.tenant.service.DatasourceConfigService;
 import io.swagger.annotations.Api;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "DatasourceConfig", tags = "数据源")
 @PreAuth(enabled = false)
 @SysLog(enabled = false)
-public class DatasourceConfigController extends SuperController<DatasourceConfigService, Long, DatasourceConfig, DatasourceConfigPageQuery, DatasourceConfigSaveDTO, DatasourceConfigUpdateDTO> {
+public class DatasourceConfigController extends SuperController<DatasourceConfigService, Long, DatasourceConfig, DatasourceConfigSaveVO,
+        DatasourceConfigUpdateVo, DatasourceConfigPageQuery, DatasourceConfigResultVO> {
 
 }

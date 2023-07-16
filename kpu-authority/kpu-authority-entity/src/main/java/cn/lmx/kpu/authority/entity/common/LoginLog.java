@@ -1,21 +1,15 @@
 package cn.lmx.kpu.authority.entity.common;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.lmx.basic.base.entity.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.lmx.basic.base.entity.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
 
@@ -36,6 +30,7 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
 @TableName("c_login_log")
 @ApiModel(value = "LoginLog", description = "登录日志")
 @AllArgsConstructor
+@Builder
 public class LoginLog extends SuperEntity<Long> {
 
     private static final long serialVersionUID = 1L;
@@ -64,16 +59,16 @@ public class LoginLog extends SuperEntity<Long> {
     @Size(max = 50, message = "登录人姓名长度不能超过50")
     @TableField(value = "user_name", condition = LIKE)
     @Excel(name = "登录人姓名")
-    private String userName;
+    private String nickName;
 
     /**
      * 登录人账号
      */
     @ApiModelProperty(value = "登录人账号")
     @Size(max = 30, message = "登录人账号长度不能超过30")
-    @TableField(value = "account", condition = LIKE)
+    @TableField(value = "username", condition = LIKE)
     @Excel(name = "登录人账号")
-    private String account;
+    private String username;
 
     /**
      * 登录描述
@@ -138,25 +133,5 @@ public class LoginLog extends SuperEntity<Long> {
     @Excel(name = "登录地点")
     private String location;
 
-
-    @Builder
-    public LoginLog(Long id, LocalDateTime createTime, Long createdBy,
-                    String requestIp, Long userId, String userName, String account, String description,
-                    String loginDate, String ua, String browser, String browserVersion, String operatingSystem, String location) {
-        this.id = id;
-        this.createTime = createTime;
-        this.createdBy = createdBy;
-        this.requestIp = requestIp;
-        this.userId = userId;
-        this.userName = userName;
-        this.account = account;
-        this.description = description;
-        this.loginDate = loginDate;
-        this.ua = ua;
-        this.browser = browser;
-        this.browserVersion = browserVersion;
-        this.operatingSystem = operatingSystem;
-        this.location = location;
-    }
 
 }

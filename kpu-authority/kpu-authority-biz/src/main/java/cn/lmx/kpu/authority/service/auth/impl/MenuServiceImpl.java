@@ -9,24 +9,27 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.base.service.SuperCacheServiceImpl;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
+import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.model.cache.CacheKeyBuilder;
 import cn.lmx.basic.utils.*;
 import cn.lmx.kpu.authority.dao.auth.MenuMapper;
+import cn.lmx.kpu.authority.dto.auth.AuthsDto;
 import cn.lmx.kpu.authority.dto.auth.MenuResourceTreeVO;
 import cn.lmx.kpu.authority.entity.auth.Menu;
-import cn.lmx.kpu.authority.enumeration.auth.AuthorizeType;
 import cn.lmx.kpu.authority.enumeration.auth.ResourceTypeEnum;
 import cn.lmx.kpu.authority.service.auth.MenuService;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.common.cache.auth.MenuCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserMenuCacheKeyBuilder;
+import cn.lmx.kpu.common.cache.auth.UserResourceCacheKeyBuilder;
 import cn.lmx.kpu.common.constant.DefValConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -220,22 +223,28 @@ public class MenuServiceImpl extends SuperCacheServiceImpl<MenuMapper, Menu> imp
     }
 
     @Override
-    public List<MenuResourceTreeVO> findMenuResourceTree() {
-        List<Menu> menus = super.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(),ResourceTypeEnum.VIEW.getCode(),ResourceTypeEnum.FUNCTION.getCode()));
+    public List<MenuResourceTreeVO> findMenuResource(Boolean menuOnly) {
+        if (menuOnly == null) {
+            menuOnly = false;
+        }
+        List<Menu> menus;
+        if (menuOnly) {
+            // 只查询菜单
+            menus = super.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()));
+        } else {
+            // 查询所有
+            menus = super.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode(), ResourceTypeEnum.FUNCTION.getCode()));
+        }
 
         List<MenuResourceTreeVO> list = menus.stream().map(item -> {
             MenuResourceTreeVO menu = new MenuResourceTreeVO();
             CopyOptions copyOptions = new CopyOptions();
             copyOptions.setFieldMapping(MapUtil.of(Pair.of("title", "label")));
             BeanPlusUtil.copyProperties(item, menu, copyOptions);
-            if (StrUtil.equalsAny(item.getResourceType(), ResourceTypeEnum.MENU.getCode(),ResourceTypeEnum.VIEW.getCode())) {
-                menu.setType(AuthorizeType.MENU);
-            }else {
-                menu.setType(AuthorizeType.RESOURCE);
-            }
             return menu;
         }).collect(Collectors.toList());
-        return TreeUtil.buildTree(list);
+
+        return list;
     }
 
     @Override
@@ -264,6 +273,217 @@ public class MenuServiceImpl extends SuperCacheServiceImpl<MenuMapper, Menu> imp
         }).collect(Collectors.toList());
 
         return TreeUtil.buildTree(menuList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveBatchWithCache(List<Menu> list) {
+        if (CollUtil.isEmpty(list)) {
+            return;
+        }
+        list.forEach(this::fill);
+        saveBatch(list);
+        List<Long> userIds = userService.findAllUserId();
+        list.forEach(item -> {
+            if (item.getResourceType().equals(ResourceTypeEnum.MENU.getCode()) || item.getResourceType().equals(ResourceTypeEnum.VIEW.getCode())) {
+                cacheOps.del(userIds.stream().map(new UserMenuCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+            } else {
+                cacheOps.del(userIds.stream().map(new UserResourceCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+            }
+        });
+        cacheOps.del(userIds.stream().map(new MenuCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+    }
+
+    @Override
+    public List<AuthsDto> findAuthByParentId(Serializable parentId) {
+        List<Menu> menuList = list(Wraps.<Menu>lbQ().eq(Menu::getParentId, parentId).eq(Menu::getResourceType, ResourceTypeEnum.FUNCTION.getCode()).orderByAsc(Menu::getSortValue));
+        List<AuthsDto> list = menuList.stream().map(item -> {
+            AuthsDto authsDto = new AuthsDto();
+            CopyOptions copyOptions = new CopyOptions();
+            copyOptions.setFieldMapping(MapUtil.of(Pair.of("title", "name")));
+            BeanPlusUtil.copyProperties(item, authsDto, copyOptions);
+            authsDto.setName(item.getTitle());
+            return authsDto;
+        }).collect(Collectors.toList());
+        return list;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveOrUpdateBatchWithCache(List<Menu> list) {
+        if (CollUtil.isEmpty(list)) {
+            return;
+        }
+        list.forEach(this::fill);
+        saveOrUpdateBatch(list);
+        List<Long> userIds = userService.findAllUserId();
+        list.forEach(item -> {
+            if (item.getResourceType().equals(ResourceTypeEnum.MENU.getCode()) || item.getResourceType().equals(ResourceTypeEnum.VIEW.getCode())) {
+                cacheOps.del(userIds.stream().map(new UserMenuCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+            } else {
+                cacheOps.del(userIds.stream().map(new UserResourceCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+            }
+        });
+        cacheOps.del(userIds.stream().map(new MenuCacheKeyBuilder()::key).toArray(CacheKey[]::new));
+    }
+
+    @Override
+    public Boolean moveUp(Long id) {
+        // 查询菜单是否能上移 不上移的情况：1.没有父节点 2.已经是第一个 否则就报错
+        Menu menu = getById(id);
+        ArgumentAssert.notNull(menu, "菜单不存在");
+        if (menu.getParentId() == null) {
+            throw BizException.wrap("根节点不能移动");
+        }
+        Menu parent = getById(menu.getParentId());
+        ArgumentAssert.notNull(parent, "请正确填写父级");
+        List<Menu> list = list(Wraps.<Menu>lbQ().eq(Menu::getParentId, parent.getId()).in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
+        if (list.size() <= 1) {
+            throw BizException.wrap("已经是第一个了");
+        }
+        // 交换位置
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Menu item = list.get(i);
+            if (item.getId().equals(id)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == 0) {
+            throw BizException.wrap("已经是第一个了");
+        }
+        Menu pre = list.get(index - 1);
+        Menu current = list.get(index);
+        Integer temp = pre.getSortValue();
+        pre.setSortValue(current.getSortValue());
+        current.setSortValue(temp);
+        updateById(pre);
+        updateById(current);
+        return true;
+    }
+
+    @Override
+    public Boolean moveDown(Long id) {
+        // 查询菜单是否能下移 不下移的情况：1.没有父节点 2.已经是最后一个 否则就报错
+        Menu menu = getById(id);
+        ArgumentAssert.notNull(menu, "菜单不存在");
+        if (menu.getParentId() == null) {
+            throw BizException.wrap("根节点不能移动");
+        }
+        Menu parent = getById(menu.getParentId());
+        ArgumentAssert.notNull(parent, "请正确填写父级");
+        List<Menu> list = list(Wraps.<Menu>lbQ().eq(Menu::getParentId, parent.getId()).in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
+        if (list.size() <= 1) {
+            throw BizException.wrap("已经是最后一个了");
+        }
+        // 交换位置
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Menu item = list.get(i);
+            if (item.getId().equals(id)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == list.size() - 1) {
+            throw BizException.wrap("已经是最后一个了");
+        }
+        Menu next = list.get(index + 1);
+        Menu current = list.get(index);
+        Integer temp = next.getSortValue();
+        next.setSortValue(current.getSortValue());
+        current.setSortValue(temp);
+        updateById(next);
+        updateById(current);
+        return true;
+    }
+
+    @Override
+    public Boolean move(Long currentId, Long targetId) {
+        if (targetId.equals(DefValConstants.PARENT_ID)) {
+            //移动到根节点
+            return moveRoot(currentId);
+        }
+        // 不能移动到当前节点的所有子和孙节点下 不能移动到自己的父节点下 sort_value 当前节点和目标节点重新排序 重新计算层级 重新计算路径
+        Menu current = getById(currentId);
+        ArgumentAssert.notNull(current, "当前菜单不存在");
+        Menu target = getById(targetId);
+        ArgumentAssert.notNull(target, "目前菜单不存在");
+        if (current.getParentId() == null) {
+            throw BizException.wrap("根节点不能移动");
+        }
+        if (current.getId().equals(target.getId())) {
+            throw BizException.wrap("不能移动到自己下面");
+        }
+        if (current.getParentId().equals(target.getId())) {
+            throw BizException.wrap("不能移动到自己的子节点下");
+        }
+        // 查询当前节点的所有子节点
+        List<Menu> list = list(Wraps.<Menu>lbQ().likeLeft(Menu::getTreePath, TreeUtil.getTreePath(current.getTreePath(), current.getId())).orderByAsc(Menu::getResourceType, Menu::getSortValue));
+        List<Long> ids = list.stream().map(Menu::getId).collect(Collectors.toList());
+        if (ids.contains(target.getId())) {
+            throw BizException.wrap("不能移动到自己的子节点下");
+        }
+        //重排当前父节点下的所有子节点 sort_value 如果是最大sort_value 就不用重排
+        List<Menu> parentList = list(Wraps.<Menu>lbQ().eq(Menu::getParentId, current.getParentId()).in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
+        if (parentList.size() > 1 && !parentList.get(parentList.size() - 1).getId().equals(current.getId())) {
+            // 删除要移除的节点
+            parentList.removeIf(item -> item.getId().equals(current.getId()));
+            for (int i = 0; i < parentList.size(); i++) {
+                Menu item = parentList.get(i);
+                item.setSortValue(i + 1);
+            }
+            updateBatchById(parentList);
+        }
+
+        // 移动到目标节点下
+        current.setParentId(target.getId());
+        //查询目标节点下当前最大的sort_value
+        Integer sortValue = getBaseMapper().selectMaxSortValue(target.getId());
+        current.setSortValue(sortValue == null ? 1 : sortValue + 1);
+        // 重新计算层级
+        ArgumentAssert.notNull(target, "请正确填写父级");
+        current.setTreeGrade(target.getTreeGrade() + 1);
+        current.setTreePath(TreeUtil.getTreePath(target.getTreePath(), target.getId()));
+        updateById(current);
+        // 重新计算路径
+        for (Menu menu : list) {
+            fill(menu);
+            updateById(menu);
+        }
+
+
+        return true;
+    }
+
+    private Boolean moveRoot(Long currentId) {
+        Menu current = getById(currentId);
+        List<Menu> parentList = list(Wraps.<Menu>lbQ().eq(Menu::getParentId, current.getParentId()).in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
+        if (parentList.size() > 1 && !parentList.get(parentList.size() - 1).getId().equals(current.getId())) {
+            // 删除要移除的节点
+            parentList.removeIf(item -> item.getId().equals(current.getId()));
+            for (int i = 0; i < parentList.size(); i++) {
+                Menu item = parentList.get(i);
+                item.setSortValue(i + 1);
+            }
+            updateBatchById(parentList);
+        }
+        List<Menu> list = list(Wraps.<Menu>lbQ().likeLeft(Menu::getTreePath, TreeUtil.getTreePath(current.getTreePath(), current.getId())).orderByAsc(Menu::getResourceType, Menu::getSortValue));
+        // 移动到目标节点下
+        current.setParentId(DefValConstants.PARENT_ID);
+        Integer sortValue = getBaseMapper().selectMaxSortValue(DefValConstants.PARENT_ID);
+        current.setSortValue(sortValue == null ? 1 : sortValue + 1);
+        current.setTreePath(DefValConstants.ROOT_PATH);
+        current.setTreeGrade(DefValConstants.TREE_GRADE);
+
+        updateById(current);
+        // 重新计算路径
+        for (Menu menu : list) {
+            fill(menu);
+            updateById(menu);
+        }
+        return true;
     }
 
 }

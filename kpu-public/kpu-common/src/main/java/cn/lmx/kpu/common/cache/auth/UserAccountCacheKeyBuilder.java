@@ -14,6 +14,6 @@ import cn.lmx.kpu.common.cache.CacheKeyDefinition;
 public class UserAccountCacheKeyBuilder implements CacheKeyBuilder {
     @Override
     public String getPrefix() {
-        return CacheKeyDefinition.USER_ACCOUNT;
+        return CacheKeyDefinition.USER_USERNAME;
     }
 }

@@ -40,14 +40,14 @@ public class OnlineServiceImpl implements OnlineService {
     private final CachePlusOps cacheOps;
 
     @Override
-    public List<Online> list(String name) {
+    public List<Online> list(String nickName) {
         String pattern = new OnlineCacheKeyBuilder().getPattern();
         List<String> keys = cacheOps.scan(pattern);
 
         return keys.stream()
                 .map(key -> (Online) cacheOps.get(key))
                 .filter(ObjectUtil::isNotEmpty).filter(item ->
-                        StrUtil.isEmpty(name) || StrUtil.contains(item.getName(), name)
+                        StrUtil.isEmpty(nickName) || StrUtil.contains(item.getNickName(), nickName)
                 ).collect(Collectors.toList());
     }
 

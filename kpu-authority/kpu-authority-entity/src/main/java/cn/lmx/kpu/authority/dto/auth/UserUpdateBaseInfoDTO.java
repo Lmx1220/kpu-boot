@@ -1,7 +1,6 @@
 package cn.lmx.kpu.authority.dto.auth;
 
 import cn.lmx.basic.base.entity.SuperEntity;
-import cn.lmx.kpu.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -58,10 +57,11 @@ public class UserUpdateBaseInfoDTO implements Serializable {
     private String mobile;
     /**
      * 性别
-     * #Sex{W:女;M:男;N:未知}
+     *
+     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
-    private Sex sex;
+    private String sex;
     /**
      * 民族
      */

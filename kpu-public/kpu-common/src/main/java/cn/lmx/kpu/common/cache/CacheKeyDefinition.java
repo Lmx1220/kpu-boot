@@ -73,9 +73,9 @@ public interface CacheKeyDefinition {
     String USER = "user";
     /**
      * 用户 前缀
-     * 完整key: user_account:{account} -> id
+     * 完整key: user_username:{username} -> id
      */
-    String USER_ACCOUNT = "user_account";
+    String USER_USERNAME = "user_username";
 
     /**
      * 用户拥有那些角色 前缀
@@ -136,7 +136,7 @@ public interface CacheKeyDefinition {
 
     /**
      * 最近10访问记录
-     * login_log_tenday:{TENANT}:{today}:{account} -> Map
+     * login_log_tenday:{TENANT}:{today}:{username} -> Map
      */
     String LOGIN_LOG_TEN_DAY = "login_log_tenday";
     /**

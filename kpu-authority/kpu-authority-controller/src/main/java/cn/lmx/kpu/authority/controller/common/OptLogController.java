@@ -7,11 +7,9 @@ import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.DeleteController;
 import cn.lmx.basic.base.controller.PoiController;
 import cn.lmx.basic.base.controller.SuperSimpleController;
-import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.kpu.authority.dto.common.OptLogResult;
 import cn.lmx.kpu.authority.entity.common.OptLog;
 import cn.lmx.kpu.authority.service.common.OptLogService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -40,16 +38,8 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.PARAM_TYPE_QUERY;
 @RequestMapping("/optLog")
 @Api(value = "OptLog", tags = "系统日志")
 @PreAuth(replace = "authority:optLog:")
-public class OptLogController extends SuperSimpleController<OptLogService, OptLog>
-        implements DeleteController<OptLog, Long>, PoiController<OptLog, OptLog> {
-
-    @ApiOperation(value = "分页列表查询")
-    @PostMapping(value = "/page")
-    @PreAuth("hasAnyPermission('{}view')")
-    public R<IPage<OptLog>> page(@RequestBody @Validated PageParams<OptLog> params) {
-        IPage<OptLog> page = query(params);
-        return R.success(page);
-    }
+public class OptLogController extends SuperSimpleController<OptLogService, Long, OptLog, OptLog, OptLog, OptLog, OptLog>
+        implements DeleteController<Long, OptLog, OptLog, OptLog, OptLog, OptLog>, PoiController<Long, OptLog, OptLog, OptLog, OptLog, OptLog> {
 
     /**
      * 查询

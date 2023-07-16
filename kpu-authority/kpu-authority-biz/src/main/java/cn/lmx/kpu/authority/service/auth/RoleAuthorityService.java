@@ -1,9 +1,9 @@
 package cn.lmx.kpu.authority.service.auth;
 
 import cn.lmx.basic.base.service.SuperService;
-import cn.lmx.kpu.authority.dto.auth.RoleAuthoritySaveDTO;
+import cn.lmx.kpu.authority.dto.auth.RoleResourceSaveVO;
 import cn.lmx.kpu.authority.dto.auth.RoleUserSaveVO;
-import cn.lmx.kpu.authority.dto.auth.UserRoleSaveDTO;
+import cn.lmx.kpu.authority.dto.auth.UserRoleSaveVO;
 import cn.lmx.kpu.authority.entity.auth.RoleAuthority;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public interface RoleAuthorityService extends SuperService<RoleAuthority> {
      * @param userRole 用于角色
      * @return 是否成功
      */
-    boolean saveUserRole(UserRoleSaveDTO userRole);
+    boolean saveUserRole(UserRoleSaveVO userRole);
 
     /**
      * 给角色绑定用户
@@ -56,10 +56,10 @@ public interface RoleAuthorityService extends SuperService<RoleAuthority> {
     /**
      * 给角色重新分配 权限（资源/菜单）
      *
-     * @param roleAuthoritySaveDTO 角色授权信息
+     * @param roleResourceSaveVO 角色授权信息
      * @return 是否成功
      */
-    boolean saveRoleAuthority(RoleAuthoritySaveDTO roleAuthoritySaveDTO);
+    boolean saveRoleAuthority(RoleResourceSaveVO roleResourceSaveVO);
 
     /**
      * 根据权限id 删除

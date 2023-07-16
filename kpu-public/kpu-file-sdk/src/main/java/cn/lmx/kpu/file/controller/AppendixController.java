@@ -5,7 +5,10 @@ import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperSimpleController;
 import cn.lmx.kpu.file.entity.Appendix;
 import cn.lmx.kpu.file.service.AppendixService;
+import cn.lmx.kpu.model.vo.query.AppendixPageQuery;
 import cn.lmx.kpu.model.vo.result.AppendixResultVO;
+import cn.lmx.kpu.model.vo.save.AppendixSaveVO;
+import cn.lmx.kpu.model.vo.save.AppendixUpdateVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/anyone/appendix")
 @Api(value = "AppendixController", tags = "业务附件")
-public class AppendixController extends SuperSimpleController<AppendixService, Appendix> {
+public class AppendixController extends SuperSimpleController<AppendixService, Long, Appendix, AppendixSaveVO, AppendixUpdateVO, AppendixPageQuery, AppendixResultVO> {
 
 
     /**

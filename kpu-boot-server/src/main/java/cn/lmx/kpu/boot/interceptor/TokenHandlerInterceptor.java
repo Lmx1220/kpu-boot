@@ -104,7 +104,7 @@ public class TokenHandlerInterceptor implements AsyncHandlerInterceptor {
         AuthInfo authInfo;
         //添加测试环境的特殊token
         if (isDev(token)) {
-            authInfo = new AuthInfo().setAccount("kpu").setUserId(2L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
+            authInfo = new AuthInfo().setUsername("kpu").setUserId(2L).setTokenType(BEARER_HEADER_KEY).setNickName("平台管理员");
         } else {
             authInfo = tokenUtil.getAuthInfo(token);
 
@@ -125,8 +125,8 @@ public class TokenHandlerInterceptor implements AsyncHandlerInterceptor {
         //6, 转换，将 token 解析出来的用户身份 和 解码后的tenant、Authorization 重新封装到请求头
         if (authInfo != null) {
             ContextUtil.setUserId(authInfo.getUserId());
-            ContextUtil.setAccount(authInfo.getAccount());
-            ContextUtil.setName(authInfo.getName());
+            ContextUtil.setUsername(authInfo.getUsername());
+            ContextUtil.setNickName(authInfo.getNickName());
             MDC.put(JWT_KEY_USER_ID, String.valueOf(authInfo.getUserId()));
         }
         return false;

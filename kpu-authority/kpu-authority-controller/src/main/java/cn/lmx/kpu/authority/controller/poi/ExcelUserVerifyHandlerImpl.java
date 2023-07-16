@@ -24,13 +24,13 @@ public class ExcelUserVerifyHandlerImpl implements IExcelVerifyHandler<UserExcel
     public ExcelVerifyHandlerResult verifyHandler(UserExcelVO obj) {
         StringBuilder builder = new StringBuilder();
         boolean bool = true;
-        if (StrUtil.isEmpty(obj.getAccount())) {
+        if (StrUtil.isEmpty(obj.getUsername())) {
             builder.append("账号不能为空");
             bool = false;
         } else {
-            boolean check = userService.check(null, obj.getAccount());
+            boolean check = userService.check(null, obj.getUsername());
             if (check) {
-                builder.append(String.format("账号%s重复", obj.getAccount()));
+                builder.append(String.format("账号%s重复", obj.getUsername()));
                 bool = false;
             }
         }

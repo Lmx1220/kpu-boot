@@ -1,9 +1,11 @@
 package cn.lmx.kpu.authority.service.auth;
 
 import cn.lmx.basic.base.service.SuperCacheService;
+import cn.lmx.kpu.authority.dto.auth.AuthsDto;
 import cn.lmx.kpu.authority.dto.auth.MenuResourceTreeVO;
 import cn.lmx.kpu.authority.entity.auth.Menu;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -58,7 +60,7 @@ public interface MenuService extends SuperCacheService<Menu> {
      * @date 2023/7/4 14:27
      * @create [2023/7/4 14:27 ] [lmx] [初始创建]
      */
-    List<MenuResourceTreeVO> findMenuResourceTree();
+    List<MenuResourceTreeVO> findMenuResource(Boolean menuOnly);
 
     /**
      * 查询系统所有的数据权限
@@ -69,4 +71,35 @@ public interface MenuService extends SuperCacheService<Menu> {
      * @create [2023/7/4 14:27 ] [lmx] [初始创建]
      */
     List<MenuResourceTreeVO> findMenuDataScopeTree();
+
+    void saveBatchWithCache(List<Menu> list);
+
+    List<AuthsDto> findAuthByParentId(Serializable parentId);
+
+    void saveOrUpdateBatchWithCache(List<Menu> list);
+
+    /**
+     * 菜单上移
+     *
+     * @param id
+     * @return java.lang.Boolean
+     */
+    Boolean moveUp(Long id);
+
+    /**
+     * 菜单下移
+     *
+     * @param id
+     * @return java.lang.Boolean
+     */
+    Boolean moveDown(Long id);
+
+    /**
+     * 菜单移动
+     *
+     * @param currentId 当前菜单ID
+     * @param targetId  目标菜单ID
+     * @return java.lang.Boolean
+     */
+    Boolean move(Long currentId, Long targetId);
 }

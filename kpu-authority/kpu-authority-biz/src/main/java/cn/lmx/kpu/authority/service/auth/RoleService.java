@@ -1,8 +1,8 @@
 package cn.lmx.kpu.authority.service.auth;
 
 import cn.lmx.basic.base.service.SuperCacheService;
-import cn.lmx.kpu.authority.dto.auth.RoleSaveDTO;
-import cn.lmx.kpu.authority.dto.auth.RoleUpdateDTO;
+import cn.lmx.kpu.authority.dto.auth.RoleSaveVO;
+import cn.lmx.kpu.authority.dto.auth.RoleUpdateVo;
 import cn.lmx.kpu.authority.entity.auth.Role;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public interface RoleService extends SuperCacheService<Role> {
      * @param data   角色
      * @param userId 用户id
      */
-    void saveRole(RoleSaveDTO data, Long userId);
+    void saveRole(RoleSaveVO data, Long userId);
 
     /**
      * 修改
@@ -57,7 +57,7 @@ public interface RoleService extends SuperCacheService<Role> {
      * @param role   角色
      * @param userId 用户id
      */
-    void updateRole(RoleUpdateDTO role, Long userId);
+    void updateRole(RoleUpdateVo role, Long userId);
 
     /**
      * 根据角色编码查询用户ID

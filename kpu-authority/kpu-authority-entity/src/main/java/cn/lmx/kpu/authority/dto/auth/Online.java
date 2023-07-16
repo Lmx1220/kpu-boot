@@ -73,7 +73,7 @@ public class Online implements Serializable {
     @ApiModelProperty(value = "姓名")
     @Size(max = 50, message = "姓名长度不能超过50")
     @Excel(name = "姓名")
-    private String name;
+    private String nickName;
 
     /**
      * 过期时间
@@ -92,7 +92,7 @@ public class Online implements Serializable {
     @ApiModelProperty(value = "账号")
     @Size(max = 30, message = "账号长度不能超过30")
     @Excel(name = "账号")
-    private String account;
+    private String username;
 
     @ApiModelProperty(value = "有效期")
     private Long expireMillis;

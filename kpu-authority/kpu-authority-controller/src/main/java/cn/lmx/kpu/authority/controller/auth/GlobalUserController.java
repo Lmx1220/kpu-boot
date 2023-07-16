@@ -10,10 +10,7 @@ import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.StrHelper;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserPageDTO;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserSaveDTO;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserUpdateDTO;
-import cn.lmx.kpu.authority.dto.auth.UserUpdatePasswordDTO;
+import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.User;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.common.constant.BizConstant;
@@ -48,13 +45,13 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.PARAM_TYPE_QUERY;
 @Api(value = "GlobalUser", tags = "全局账号")
 @SysLog(enabled = false)
 @RequiredArgsConstructor
-public class GlobalUserController extends SuperController<UserService, Long, User, GlobalUserPageDTO, GlobalUserSaveDTO, GlobalUserUpdateDTO> {
+public class GlobalUserController extends SuperController<UserService, Long, User, GlobalUserSaveVO, GlobalUserUpdateVo, GlobalUserPageQuery, GlobalUserResultVO> {
 
     @Override
-    public R<User> handlerSave(GlobalUserSaveDTO model) {
+    public R<User> handlerSave(GlobalUserSaveVO model) {
         ContextUtil.setTenant(model.getTenantCode());
         User user = BeanPlusUtil.toBean(model, User.class);
-        user.setName(StrHelper.getOrDef(model.getName(), model.getAccount()));
+        user.setNickName(StrHelper.getOrDef(model.getNickName(), model.getUsername()));
         if (StrUtil.isEmpty(user.getPassword())) {
             user.setPassword(BizConstant.DEF_PASSWORD);
         }
@@ -64,7 +61,7 @@ public class GlobalUserController extends SuperController<UserService, Long, Use
     }
 
     @Override
-    public R<User> handlerUpdate(GlobalUserUpdateDTO model) {
+    public R<User> handlerUpdate(GlobalUserUpdateVo model) {
         ContextUtil.setTenant(model.getTenantCode());
         User user = BeanPlusUtil.toBean(model, User.class);
         baseService.updateUser(user);
@@ -73,19 +70,19 @@ public class GlobalUserController extends SuperController<UserService, Long, Use
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "tenantCode", value = "企业编码", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
-            @ApiImplicitParam(name = "account", value = "账号", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
+            @ApiImplicitParam(name = "username", value = "账号", dataType = DATA_TYPE_STRING, paramType = PARAM_TYPE_QUERY),
     })
     @ApiOperation(value = "检测账号是否可用", notes = "检测账号是否可用")
     @GetMapping("/check")
-    public R<Boolean> check(@RequestParam String tenantCode, @RequestParam String account) {
+    public R<Boolean> check(@RequestParam String tenantCode, @RequestParam String username) {
         ContextUtil.setTenant(tenantCode);
-        return success(baseService.check(null, account));
+        return success(baseService.check(null, username));
     }
 
     @Override
-    public IPage<User> query(PageParams<GlobalUserPageDTO> params) {
+    public IPage<User> query(PageParams<GlobalUserPageQuery> params) {
         IPage<User> page = params.buildPage(User.class);
-        GlobalUserPageDTO model = params.getModel();
+        GlobalUserPageQuery model = params.getModel();
         ContextUtil.setTenant(model.getTenantCode());
 
         baseService.pageByRole(page, params);

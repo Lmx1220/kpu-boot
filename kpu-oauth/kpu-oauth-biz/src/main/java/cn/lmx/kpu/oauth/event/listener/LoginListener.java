@@ -47,7 +47,7 @@ public class LoginListener {
             // 密码错误
             this.userService.incrPasswordErrorNumById(loginStatus.getId());
         }
-        loginLogService.save(loginStatus.getId(), loginStatus.getAccount(), loginStatus.getUa(), loginStatus.getIp(), loginStatus.getLocation(), loginStatus.getDescription());
+        loginLogService.save(loginStatus.getId(), loginStatus.getUsername(), loginStatus.getUa(), loginStatus.getIp(), loginStatus.getLocation(), loginStatus.getDescription());
     }
 
 }

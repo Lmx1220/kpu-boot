@@ -27,8 +27,8 @@
     <select id="findLastTenDaysVisitCount" resultType="map" parameterType="map">
         select l.login_date LOGIN_DATE , count(1) NUM from
         ( select id, login_date from c_login_log where create_time >= #{tenDays}
-        <if test="account != null and account != ''">
-            and account = #{account}
+        <if test="username != null and username != ''">
+            and username = #{username}
         </if>
         ) l group by l.login_date
     </select>

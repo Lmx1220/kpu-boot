@@ -36,7 +36,7 @@ public class LoginStatusDTO implements Serializable {
     /**
      * 账号
      */
-    private String account;
+    private String username;
     /**
      * 租户编码
      */
@@ -83,9 +83,9 @@ public class LoginStatusDTO implements Serializable {
                 .build().setInfo();
     }
 
-    public static LoginStatusDTO fail(String account, String description) {
+    public static LoginStatusDTO fail(String username, String description) {
         return LoginStatusDTO.builder()
-                .account(account).tenant(ContextUtil.getTenant())
+                .username(username).tenant(ContextUtil.getTenant())
                 .type(Type.FAIL).description(description)
                 .build().setInfo();
     }
