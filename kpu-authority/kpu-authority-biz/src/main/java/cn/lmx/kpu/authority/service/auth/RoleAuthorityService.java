@@ -35,7 +35,7 @@ public interface RoleAuthorityService extends SuperService<RoleAuthority> {
      * @param userRole 用于角色
      * @return 是否成功
      */
-    boolean saveUserRole(UserRoleSaveVO userRole);
+    List<Long> saveUserRole(UserRoleSaveVO userRole);
 
     /**
      * 给角色绑定用户
@@ -43,7 +43,7 @@ public interface RoleAuthorityService extends SuperService<RoleAuthority> {
      * @param roleUser 用于角色
      * @return 是否成功
      */
-    List<Long>  saveRoleUser(RoleUserSaveVO roleUser);
+    List<Long> saveRoleUser(RoleUserSaveVO roleUser);
 
     /**
      * 根据角色查找用户
@@ -52,6 +52,13 @@ public interface RoleAuthorityService extends SuperService<RoleAuthority> {
      * @return
      */
     List<Long> findUserIdByRoleId(Long roleId);
+
+    /**
+     * 根据用户查询角色
+     *
+     * @param userId 用户id
+     */
+    List<Long> findRoleIdByUserId(Long userId);
 
     /**
      * 给角色重新分配 权限（资源/菜单）

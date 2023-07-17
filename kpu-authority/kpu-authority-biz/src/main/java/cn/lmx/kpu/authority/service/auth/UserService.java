@@ -49,11 +49,10 @@ public interface UserService extends SuperCacheService<User>, LoadService {
      * <p>
      * 注意，该接口只返回 id，账号，姓名，手机，性别
      *
-     * @param roleId  角色id
-     * @param keyword 账号或名称
+     * @param roleId 角色id
      * @return 用户
      */
-    List<User> findUserByRoleId(Long roleId, String keyword);
+    List<User> findUserByRoleId(Long roleId);
 
     /**
      * 检测账号是否存在
@@ -77,7 +76,7 @@ public interface UserService extends SuperCacheService<User>, LoadService {
      * @param username 账号
      * @return 用户
      */
-    User getByAccount(String username);
+    User getByUsername(String username);
 
 
     /**

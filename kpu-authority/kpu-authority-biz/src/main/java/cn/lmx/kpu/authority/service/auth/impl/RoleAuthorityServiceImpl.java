@@ -1,13 +1,11 @@
 package cn.lmx.kpu.authority.service.auth.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.lmx.basic.base.service.SuperServiceImpl;
 import cn.lmx.basic.cache.repository.CacheOps;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.utils.ArgumentAssert;
-import cn.lmx.kpu.authority.dao.auth.MenuMapper;
 import cn.lmx.kpu.authority.dao.auth.RoleAuthorityMapper;
 import cn.lmx.kpu.authority.dto.auth.RoleResourceSaveVO;
 import cn.lmx.kpu.authority.dto.auth.RoleUserSaveVO;
@@ -25,7 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +45,6 @@ import java.util.stream.Collectors;
 public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
 
     private final UserRoleService userRoleService;
-    private final MenuMapper menuMapper;
     private final CacheOps cacheOps;
 
     @Override
@@ -78,34 +78,26 @@ public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveUserRole(UserRoleSaveVO userRole) {
-        List<UserRole> oldUserRoleList = userRoleService.list(Wraps.<UserRole>lbQ().eq(UserRole::getRoleId, userRole.getRoleId()));
-        userRoleService.remove(Wraps.<UserRole>lbQ().eq(UserRole::getRoleId, userRole.getRoleId()));
+    public List<Long> saveUserRole(UserRoleSaveVO saveVO) {
+        ArgumentAssert.notEmpty(saveVO.getRoleIdList(), "请选择角色");
+        if (saveVO.getFlag() == null) {
+            saveVO.setFlag(true);
+        }
 
-        Set<Long> delIdList = new HashSet<>();
-        if (CollUtil.isNotEmpty(userRole.getUserIdList())) {
-            List<UserRole> list = userRole.getUserIdList()
-                    .stream()
-                    .map(userId -> UserRole.builder()
-                            .userId(userId)
-                            .roleId(userRole.getRoleId())
-                            .build())
-                    .collect(Collectors.toList());
+        userRoleService.remove(Wraps.<UserRole>lbQ().eq(UserRole::getUserId, saveVO.getUserId()).in(UserRole::getRoleId, saveVO.getRoleIdList()));
+        if (saveVO.getFlag()) {
+            List<UserRole> list = saveVO.getRoleIdList().stream().map(roleId ->
+                    UserRole.builder().roleId(roleId).userId(saveVO.getUserId()).build()).collect(Collectors.toList());
             userRoleService.saveBatch(list);
-            delIdList.addAll(userRole.getUserIdList());
         }
+        return findRoleIdByUserId(saveVO.getUserId());
+    }
 
-        /* 角色A -> u1 u2
-            修改成
-            角色A -> u3 u2
-            所以， 应该清除 u1、u2、u3 的角色、菜单、资源
-            */
-
-        if (!oldUserRoleList.isEmpty()) {
-            delIdList.addAll(oldUserRoleList.stream().map(UserRole::getUserId).collect(Collectors.toSet()));
-        }
-        delUserAuthority(delIdList);
-        return true;
+    @Override
+    public List<Long> findRoleIdByUserId(Long userId) {
+        return userRoleService.listObjs(Wraps.<UserRole>lbQ()
+                        .select(UserRole::getRoleId).eq(UserRole::getUserId, userId),
+                Convert::toLong);
     }
 
     @Override

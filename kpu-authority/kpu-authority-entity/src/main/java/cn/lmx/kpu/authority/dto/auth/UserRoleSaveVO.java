@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,20 +30,22 @@ import java.util.List;
 @ApiModel(value = "UserRoleSaveVO", description = "角色分配 账号角色绑定")
 public class UserRoleSaveVO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "绑定或取消")
+    @NotNull(message = "请填写绑定或取消参数")
+    private Boolean flag;
     /**
-     * 角色ID
-     * #c_role
+     * 角色;#c_role
      */
-    @ApiModelProperty(value = "角色ID")
-    @NotNull(message = "请选择角色")
-    private Long roleId;
+    @ApiModelProperty(value = "用户")
+    @NotNull(message = "请选择用户")
+    private Long userId;
     /**
-     * 用户ID
-     * #c_user
+     * 用户;#c_user
      */
-    @ApiModelProperty(value = "用户ID")
-    private List<Long> userIdList;
+    @ApiModelProperty(value = "角色")
+    @Size(min = 1, message = "请选择角色")
+    private List<Long> roleIdList;
 
 }

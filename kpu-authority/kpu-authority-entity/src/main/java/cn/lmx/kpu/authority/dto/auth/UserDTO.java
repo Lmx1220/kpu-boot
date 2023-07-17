@@ -91,7 +91,7 @@ public class UserDTO implements Serializable {
      * 启用状态 1启用 0禁用
      */
     @ApiModelProperty(value = "启用状态 1启用 0禁用")
-    private Boolean status;
+    private Boolean state;
 
     /**
      * 照片

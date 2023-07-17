@@ -89,7 +89,7 @@ public class UserExcelVO implements Serializable, IExcelModel, IExcelDataModel {
      */
     @ApiModelProperty(value = "状态")
     @Excel(name = "状态", replace = {"启用_true", "禁用_false", "_null"})
-    private Boolean status;
+    private Boolean state;
     /**
      * 头像
      */

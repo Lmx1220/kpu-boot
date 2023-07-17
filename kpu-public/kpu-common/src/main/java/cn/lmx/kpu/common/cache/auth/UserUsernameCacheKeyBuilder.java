@@ -11,7 +11,7 @@ import cn.lmx.kpu.common.cache.CacheKeyDefinition;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public class UserAccountCacheKeyBuilder implements CacheKeyBuilder {
+public class UserUsernameCacheKeyBuilder implements CacheKeyBuilder {
     @Override
     public String getPrefix() {
         return CacheKeyDefinition.USER_USERNAME;

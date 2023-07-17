@@ -115,34 +115,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
         return success(baseService.removeByIdWithCache(ids));
     }
 
-    /**
-     * 给用户分配角色
-     *
-     * @param userRole 用户角色授权对象
-     * @return 新增结果
-     */
-    @ApiOperation(value = "给用户分配角色", notes = "给用户分配角色")
-    @PostMapping("/saveUserRole")
-    @SysLog("给角色分配用户")
-    @PreAuth("hasAnyPermission('{}config')")
-    @Deprecated
-    public R<Boolean> saveUserRole(@RequestBody UserRoleSaveVO userRole) {
-        return success(roleAuthorityService.saveUserRole(userRole));
-    }
 
-    /**
-     * 给用户分配角色给角色绑定用户
-     *
-     * @param roleUser 用户角色授权对象
-     * @return 新增结果
-     */
-    @ApiOperation(value = "给角色绑定用户", notes = "给角色绑定用户")
-    @PostMapping("/saveRoleUser")
-    @SysLog("给角色绑定用户")
-    @PreAuth("hasAnyPermission('{}config')")
-    public R<List<Long>> saveUserRole(@RequestBody RoleUserSaveVO roleUser) {
-        return success(roleAuthorityService.saveRoleUser(roleUser));
-    }
 
     /**
      * 查询角色的用户
@@ -157,6 +130,20 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     public R<List<Long>> findUserIdByRoleId(@RequestParam Long roleId) {
         List<UserRole> list = userRoleService.list(Wraps.<UserRole>lbQ().eq(UserRole::getRoleId, roleId));
         return success(list.stream().mapToLong(UserRole::getUserId).boxed().collect(Collectors.toList()));
+    }
+
+    /**
+     * 给用户分配角色给角色绑定用户
+     *
+     * @param roleUser 用户角色授权对象
+     * @return 新增结果
+     */
+    @ApiOperation(value = "给角色绑定用户", notes = "给角色绑定用户")
+    @PostMapping("/saveRoleUser")
+    @SysLog("给角色绑定用户")
+    @PreAuth("hasAnyPermission('{}config')")
+    public R<List<Long>> saveUserRole(@RequestBody RoleUserSaveVO roleUser) {
+        return success(roleAuthorityService.saveRoleUser(roleUser));
     }
 
     /**

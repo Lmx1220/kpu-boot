@@ -69,7 +69,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
         if (userId != null) {
             user = this.userService.getByIdCache(userId);
         } else {
-            user = this.userService.getByAccount(username);
+            user = this.userService.getByUsername(username);
         }
 
         LoginLog loginLog = LoginLog.builder()

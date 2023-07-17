@@ -15,6 +15,7 @@ import cn.lmx.basic.base.controller.SuperCacheController;
 import cn.lmx.basic.base.entity.SuperEntity;
 import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.context.ContextUtil;
+import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.LbqWrapper;
 import cn.lmx.basic.database.mybatis.conditions.query.QueryWrap;
 import cn.lmx.basic.interfaces.echo.EchoService;
@@ -23,7 +24,10 @@ import cn.lmx.kpu.authority.controller.poi.ExcelUserVerifyHandlerImpl;
 import cn.lmx.kpu.authority.controller.poi.UserExcelDictHandlerImpl;
 import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.User;
+import cn.lmx.kpu.authority.entity.auth.UserRole;
 import cn.lmx.kpu.authority.entity.core.Org;
+import cn.lmx.kpu.authority.service.auth.RoleAuthorityService;
+import cn.lmx.kpu.authority.service.auth.UserRoleService;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.common.constant.BizConstant;
@@ -76,6 +80,13 @@ public class UserController extends SuperCacheController<UserService, Long, User
     private final ExcelUserVerifyHandlerImpl excelUserVerifyHandler;
     private final UserExcelDictHandlerImpl userExcelDictHandlerIImpl;
     private final UserHelperService userHelperService;
+    private final RoleAuthorityService roleAuthorityService;
+    private final UserRoleService userRoleService;
+
+    @Override
+    public EchoService getEchoService() {
+        return echoService;
+    }
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
@@ -189,16 +200,27 @@ public class UserController extends SuperCacheController<UserService, Long, User
     /**
      * 查询角色的已关联用户
      *
-     * @param roleId  角色id
-     * @param keyword 账号或名称
-     * @return 用户角色
+     * @param userId 用户id
+     * @return 角色已关联用户
      */
     @ApiOperation(value = "查询角色的已关联用户", notes = "查询角色的已关联用户")
-    @GetMapping(value = "/role/{roleId}")
-    public R<UserRoleDTO> findUserByRoleId(@PathVariable("roleId") Long roleId, @RequestParam(value = "keyword", required = false) String keyword) {
-        List<User> list = baseService.findUserByRoleId(roleId, keyword);
-        List<Long> idList = list.stream().mapToLong(User::getId).boxed().collect(Collectors.toList());
-        return success(UserRoleDTO.builder().idList(idList).userList(list).build());
+    @GetMapping(value = "/roleList")
+    public R<List<Long>> findRoleIdByUserId(@RequestParam("userId") Long userId) {
+        List<UserRole> list = userRoleService.list(Wraps.<UserRole>lbQ().eq(UserRole::getUserId, userId));
+        return success(list.stream().mapToLong(UserRole::getRoleId).boxed().collect(Collectors.toList()));
+    }
+
+    /**
+     * 给用户分配角色
+     *
+     * @param userRole 用户角色授权对象
+     * @return 新增结果
+     */
+    @ApiOperation(value = "给用户分配角色", notes = "给用户分配角色")
+    @PostMapping("/saveUserRole")
+    @SysLog("给用户分配角色")
+    public R<List<Long>> saveUserRole(@RequestBody UserRoleSaveVO userRole) {
+        return success(roleAuthorityService.saveUserRole(userRole));
     }
 
 
@@ -319,8 +341,6 @@ public class UserController extends SuperCacheController<UserService, Long, User
         }
 
         baseService.findPage(page, wrapper);
-        // 手动注入
-        echoService.action(page);
 
         page.getRecords().forEach(item -> {
             item.setPassword(null);
@@ -355,7 +375,10 @@ public class UserController extends SuperCacheController<UserService, Long, User
                 .in(User::getEducation, userPage.getEducation())
                 .in(User::getNation, userPage.getNation())
                 .in(User::getSex, userPage.getSex())
-                .eq(userPage.getState() != null, User::getState, userPage.getState());
+                .eq(userPage.getState() != null, User::getState, userPage.getState())
+                .between(params.getExtra().get("createTime_st") != null && params.getExtra().get("createTime_en") != null,
+                        User::getCreateTime, params.getExtra().get("createTime_st"), params.getExtra().get("createTime_en"));
+        ;
 
         if (StrUtil.equalsAny(userPage.getScope(), BizConstant.SCOPE_BIND, BizConstant.SCOPE_UN_BIND) && userPage.getRoleId() != null) {
             String sql = " select ura.user_id from c_user_role ura where ura.user_id = s.id \n" +

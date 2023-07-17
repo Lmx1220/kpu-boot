@@ -28,11 +28,10 @@ public interface UserMapper extends SuperMapper<User> {
     /**
      * 根据角色id，查询已关联用户
      *
-     * @param roleId  角色id
-     * @param keyword 关键字
+     * @param roleId 角色id
      * @return 用户
      */
-    List<User> findUserByRoleId(@Param("roleId") Long roleId, @Param("keyword") String keyword);
+    List<User> findUserByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 递增 密码错误次数

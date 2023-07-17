@@ -151,7 +151,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
      * @return 用户信息
      */
     protected R<User> getUser(String username, String password) {
-        User user = this.userService.getByAccount(username);
+        User user = this.userService.getByUsername(username);
         // 密码错误
         if (user == null) {
             return R.fail(ExceptionCode.JWT_USER_INVALID);

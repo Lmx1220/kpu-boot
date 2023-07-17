@@ -51,7 +51,7 @@ public class GlobalUserUpdateVo implements Serializable {
      */
     @ApiModelProperty(value = "姓名")
     @Size(max = 50, message = "姓名长度不能超过20")
-    private String name;
+    private String nickName;
     @ApiModelProperty(value = "性别")
     private String sex;
     /**

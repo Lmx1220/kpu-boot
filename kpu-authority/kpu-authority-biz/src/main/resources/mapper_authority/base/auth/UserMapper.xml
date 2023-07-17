@@ -36,7 +36,7 @@
     <sql id="Base_Column_List">
         id
         ,created_by,create_time,updated_by,update_time, created_org_id,
-        username, nickName, org_id, station_id, readonly, email, mobile, sex, state, avatar, nation, education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time, password, salt, last_login_time
+        username, nick_name, org_id, station_id, readonly, email, mobile, sex, state, avatar, nation, education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time, password, salt, last_login_time
     </sql>
 
 </mapper>

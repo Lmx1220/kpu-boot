@@ -6,9 +6,6 @@
         SELECT u.id as id, username, nick_name, mobile, sex
         FROM c_user u INNER JOIN c_user_role ura on u.id = ura.user_id
         where ura.role_id = #{roleId, jdbcType=BIGINT}
-        <if test="keyword != null and keyword != ''">
-            and (u.username like #{keyword, typeHandler=fullLike} or u.nick_name like #{keyword, typeHandler=fullLike})
-        </if>
     </select>
 
 

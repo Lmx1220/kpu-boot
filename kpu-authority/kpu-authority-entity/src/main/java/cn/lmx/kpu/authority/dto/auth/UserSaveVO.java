@@ -43,7 +43,7 @@ public class UserSaveVO implements Serializable {
     @ApiModelProperty(value = "姓名")
     @NotEmpty(message = "姓名不能为空")
     @Size(max = 50, message = "姓名长度不能超过50")
-    private String name;
+    private String nickName;
     /**
      * 组织
      * #c_org

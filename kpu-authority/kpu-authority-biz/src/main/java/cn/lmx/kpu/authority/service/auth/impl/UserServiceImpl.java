@@ -27,10 +27,10 @@ import cn.lmx.kpu.authority.service.auth.UserRoleService;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.authority.service.core.StationService;
-import cn.lmx.kpu.common.cache.auth.UserAccountCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserMenuCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserRoleCacheKeyBuilder;
+import cn.lmx.kpu.common.cache.auth.UserUsernameCacheKeyBuilder;
 import cn.lmx.kpu.common.constant.BizConstant;
 import cn.lmx.kpu.file.service.AppendixService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -121,15 +121,15 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     }
 
     @Override
-    public User getByAccount(String username) {
+    public User getByUsername(String username) {
         Function<CacheKey, Object> loader = k -> getObj(Wraps.<User>lbQ().select(User::getId).eq(User::getUsername, username), Convert::toLong);
-        CacheKeyBuilder builder = new UserAccountCacheKeyBuilder();
+        CacheKeyBuilder builder = new UserUsernameCacheKeyBuilder();
         return getByKey(builder.key(username), loader);
     }
 
     @Override
-    public List<User> findUserByRoleId(Long roleId, String keyword) {
-        return baseMapper.findUserByRoleId(roleId, keyword);
+    public List<User> findUserByRoleId(Long roleId) {
+        return baseMapper.findUserByRoleId(roleId);
     }
 
     @Override
@@ -205,6 +205,8 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
         user.setPassword(SecureUtil.sha256(user.getPassword() + user.getSalt()));
         user.setPasswordErrorNum(0);
         super.save(user);
+        CacheKeyBuilder builder = new UserUsernameCacheKeyBuilder();
+        cacheOps.del(builder.key(user.getUsername()));
         return user;
     }
 
