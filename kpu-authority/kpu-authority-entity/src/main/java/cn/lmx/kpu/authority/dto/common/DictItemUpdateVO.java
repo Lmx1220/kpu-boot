@@ -40,7 +40,7 @@ public class DictItemUpdateVO implements Serializable {
      * 类型
      */
     @ApiModelProperty(value = "字典ID")
-    @NotEmpty(message = "字典ID不能为空")
+    @NotNull(message = "字典ID不能为空")
     private Long parentId;
     /**
      * 编码

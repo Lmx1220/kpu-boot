@@ -45,6 +45,8 @@ public class DictController
     @Override
     public QueryWrap<Dict> handlerWrapper(Dict model, PageParams<DictPageQuery> params) {
         QueryWrap<Dict> qw = Wraps.q(null, params.getExtra(), getEntityClass());
+        qw.lambda().likeRight(Dict::getName, params.getModel().getName());
+        qw.lambda().likeRight(Dict::getKey, params.getModel().getKey());
         qw.lambda().in(ArrayUtil.isNotEmpty(params.getModel().getClassify()), Dict::getClassify, params.getModel().getClassify());
         qw.lambda().in(ArrayUtil.isNotEmpty(params.getModel().getState()), Dict::getState, params.getModel().getState());
         qw.lambda().eq(Dict::getParentId, 0);

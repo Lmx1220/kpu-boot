@@ -39,6 +39,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class DictItemController
         extends SuperNoPoiController<DictService, Long, Dict, DictItemSaveVO, DictItemUpdateVO, DictItemPageQuery, DictItemResultVO> {
     @Override
+    public Class<DictItemResultVO> getResultVOClass() {
+        return DictItemResultVO.class;
+    }
+
+    @Override
     public QueryWrap<Dict> handlerWrapper(Dict model, PageParams<DictItemPageQuery> params) {
         QueryWrap<Dict> qw = Wraps.q(model, params.getExtra(), getEntityClass());
         qw.lambda().in(ArrayUtil.isNotEmpty(params.getModel().getClassify()), Dict::getClassify, params.getModel().getClassify());

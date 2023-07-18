@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -37,8 +38,7 @@ public class DictItemSaveVO implements Serializable {
      * 字典Id
      */
     @ApiModelProperty(value = "字典Id")
-    @NotEmpty(message = "字典ID不能为空")
-    @Size(max = 255, message = "字典Id长度不能超过255")
+    @NotNull(message = "字典ID不能为空")
     private Long parentId;
 
     /**

@@ -49,7 +49,8 @@ public class DictServiceImpl extends SuperServiceImpl<DictMapper, Dict> implemen
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(Dict model) {
-        if (model.getParentId().equals(DefValConstants.PARENT_ID)) {
+        if (model.getParentId() == null) {
+            model.setParentId(DefValConstants.PARENT_ID);
             long count = count(Wraps.<Dict>lbQ().eq(Dict::getKey, model.getKey()).eq(Dict::getKey, model.getKey()));
             ArgumentAssert.isFalse(count > 0, StrUtil.format("字典[{}]已经存在，请勿重复创建", model.getKey()));
         } else {
@@ -80,7 +81,7 @@ public class DictServiceImpl extends SuperServiceImpl<DictMapper, Dict> implemen
     }
 
     private boolean update(Dict model, Function<Dict, Boolean> function) {
-        if (model.getParentId().equals(DefValConstants.PARENT_ID)) {
+        if (model.getParentId() == null) {
             long count = count(Wraps.<Dict>lbQ().eq(Dict::getKey, model.getKey())
                     .eq(Dict::getKey, model.getKey()).ne(Dict::getId, model.getId()));
             ArgumentAssert.isFalse(count > 0, StrUtil.format("字典[{}]已经存在，请勿重复创建", model.getKey()));

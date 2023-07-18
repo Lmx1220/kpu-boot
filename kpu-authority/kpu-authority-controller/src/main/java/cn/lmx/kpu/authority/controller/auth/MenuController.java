@@ -68,9 +68,11 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
             return fail("权限编码重复");
         }
         // 查询数据是否重复 抛出有重复的异常的编码
-        List<String> oldCodes = baseService.list(Wraps.<Menu>lbQ().in(Menu::getCode, codes)).stream().map(Menu::getCode).collect(Collectors.toList());
-        if (oldCodes.size() > 0) {
-            return fail("权限编码重复:[%s]", oldCodes);
+        if (codes != null && codes.size() > 0) {
+            List<String> oldCodes = baseService.list(Wraps.<Menu>lbQ().in(Menu::getCode, codes)).stream().map(Menu::getCode).collect(Collectors.toList());
+            if (oldCodes.size() > 0) {
+                return fail("权限编码重复:[%s]", oldCodes);
+            }
         }
 
 
@@ -155,7 +157,7 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
     @SysLog("查询系统所有的菜单和视图")
     public R<List<MenuViewTreeVO>> allTree() {
         List<Menu> list = baseService.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
-        List<MenuViewTreeVO> viewTreeVOList= dozer.mapList(list, MenuViewTreeVO.class);
+        List<MenuViewTreeVO> viewTreeVOList = dozer.mapList(list, MenuViewTreeVO.class);
         return success(TreeUtil.buildTree(viewTreeVOList));
     }
 
