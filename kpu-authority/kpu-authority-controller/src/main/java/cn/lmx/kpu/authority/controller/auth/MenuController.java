@@ -112,10 +112,12 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
         if (codes.size() != codes.stream().distinct().count()) {
             return fail("权限编码重复");
         }
-        // 查询数据是否重复 抛出有重复的异常的编码 但是不包含自己
-        List<String> oldCodes = baseService.list(Wraps.<Menu>lbQ().in(Menu::getCode, codes).notIn(Menu::getId, ids)).stream().map(Menu::getCode).collect(Collectors.toList());
-        if (oldCodes.size() > 0) {
-            return fail("权限编码重复:%s", oldCodes);
+        if (codes != null && codes.size() > 0) {
+            // 查询数据是否重复 抛出有重复的异常的编码 但是不包含自己
+            List<String> oldCodes = baseService.list(Wraps.<Menu>lbQ().in(Menu::getCode, codes).notIn(ids != null && ids.size() > 0, Menu::getId, ids)).stream().map(Menu::getCode).collect(Collectors.toList());
+            if (oldCodes.size() > 0) {
+                return fail("权限编码重复:%s", oldCodes);
+            }
         }
 
         Menu menu = BeanPlusUtil.toBean(model, Menu.class);
