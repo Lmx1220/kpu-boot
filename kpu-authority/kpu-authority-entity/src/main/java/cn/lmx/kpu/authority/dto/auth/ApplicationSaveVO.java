@@ -73,7 +73,7 @@ public class ApplicationSaveVO implements Serializable {
      */
     @ApiModelProperty(value = "备注")
     @Size(max = 200, message = "备注长度不能超过200")
-    private String describe;
+    private String remarks;
     /**
      * 状态
      */

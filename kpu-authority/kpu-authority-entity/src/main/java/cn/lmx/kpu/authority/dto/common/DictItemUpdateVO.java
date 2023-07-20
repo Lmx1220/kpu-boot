@@ -27,7 +27,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@ApiModel(value = "DictUpdateVo", description = "字典项")
+@ApiModel(value = "DictItemUpdateVO", description = "字典项")
 public class DictItemUpdateVO implements Serializable {
 
     private static final long serialVersionUID = 1L;

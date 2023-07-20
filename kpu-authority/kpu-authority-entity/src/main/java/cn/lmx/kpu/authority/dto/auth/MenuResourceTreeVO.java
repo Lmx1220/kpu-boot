@@ -51,8 +51,8 @@ public class MenuResourceTreeVO extends TreeEntity<MenuResourceTreeVO, Long> imp
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 200, message = "描述长度不能超过200")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "描述")
-    private String describe;
+    private String remarks;
 
 }

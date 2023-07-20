@@ -64,7 +64,7 @@ public class ApplicationPageQuery implements Serializable {
      * 备注
      */
     @ApiModelProperty(value = "备注")
-    private String describe;
+    private String remarks;
     /**
      * 状态
      */

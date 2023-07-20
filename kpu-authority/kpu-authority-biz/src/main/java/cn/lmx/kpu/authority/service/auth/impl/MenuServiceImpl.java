@@ -12,7 +12,10 @@ import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.model.cache.CacheKeyBuilder;
-import cn.lmx.basic.utils.*;
+import cn.lmx.basic.utils.ArgumentAssert;
+import cn.lmx.basic.utils.BeanPlusUtil;
+import cn.lmx.basic.utils.DefValueHelper;
+import cn.lmx.basic.utils.TreeUtil;
 import cn.lmx.kpu.authority.dao.auth.MenuMapper;
 import cn.lmx.kpu.authority.dto.auth.AuthsDto;
 import cn.lmx.kpu.authority.dto.auth.MenuResourceTreeVO;
@@ -118,13 +121,13 @@ public class MenuServiceImpl extends SuperCacheServiceImpl<MenuMapper, Menu> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateWithCache(Menu menu) {
-        if (StrUtil.containsAny(menu.getResourceType(), ResourceTypeEnum.MENU.getCode())) {
-            ArgumentAssert.notEmpty(menu.getPath(), "【地址栏路径】不能为空");
+        if (StrUtil.containsAny(menu.getResourceType(), ResourceTypeEnum.VIEW.getCode())) {
+//            ArgumentAssert.notEmpty(menu.getPath(), "【地址栏路径】不能为空");
             ArgumentAssert.notEmpty(menu.getComponent(), "【页面路径】不能为空");
             ArgumentAssert.isFalse(checkName(menu.getId(), menu.getName()), "【名称】:{}重复", menu.getName());
-            if (!ValidatorUtil.isUrl(menu.getPath())) {
-                ArgumentAssert.isFalse(checkPath(menu.getId(), menu.getPath()), "【地址栏路径】:{}重复", menu.getPath());
-            }
+//            if (!ValidatorUtil.isUrl(menu.getPath())) {
+//                ArgumentAssert.isFalse(checkPath(menu.getId(), menu.getPath()), "【地址栏路径】:{}重复", menu.getPath());
+//            }
         }
         Menu old = getById(menu);
         ArgumentAssert.notNull(old, "您修改的菜单已不存在");
@@ -153,13 +156,13 @@ public class MenuServiceImpl extends SuperCacheServiceImpl<MenuMapper, Menu> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveWithCache(Menu menu) {
-        if (StrUtil.containsAny(menu.getResourceType(), ResourceTypeEnum.MENU.getCode())) {
-            ArgumentAssert.notEmpty(menu.getPath(), "请填写【地址栏路径】");
+        if (StrUtil.containsAny(menu.getResourceType(), ResourceTypeEnum.VIEW.getCode())) {
+//            ArgumentAssert.notEmpty(menu.getPath(), "请填写【地址栏路径】");
             ArgumentAssert.notEmpty(menu.getComponent(), "请填写【页面路径】");
             ArgumentAssert.isFalse(checkName(null, menu.getName()), "【名称】:{}重复", menu.getName());
-            if (!ValidatorUtil.isUrl(menu.getPath())) {
-                ArgumentAssert.isFalse(checkPath(null, menu.getPath()), "【地址栏路径】:{}重复", menu.getPath());
-            }
+//            if (!ValidatorUtil.isUrl(menu.getPath())) {
+//                ArgumentAssert.isFalse(checkPath(null, menu.getPath()), "【地址栏路径】:{}重复", menu.getPath());
+//            }
         }
 
         fill(menu);

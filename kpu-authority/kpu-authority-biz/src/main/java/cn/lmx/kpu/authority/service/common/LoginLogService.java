@@ -29,9 +29,10 @@ public interface LoginLogService extends SuperService<LoginLog> {
      * @param ip          客户端IP
      * @param location    客户端地址
      * @param description 登陆描述消息
+     * @param status      登陆状态
      * @return 登录日志
      */
-    LoginLog save(Long userId, String username, String ua, String ip, String location, String description);
+    LoginLog save(Long userId, String username, String ua, String ip, String location, String description, String status);
 
     /**
      * 获取系统总 登录次数

@@ -78,7 +78,7 @@ public class StationServiceImpl extends SuperCacheServiceImpl<StationMapper, Sta
 
         // ${ew.customSqlSegment} 语法一定要手动eq like 等
         wrapper.like(Station::getName, station.getName())
-                .like(Station::getDescribe, station.getDescribe())
+                .like(Station::getRemarks, station.getRemarks())
                 .eq(Station::getOrgId, station.getOrgId())
                 .eq(Station::getState, station.getState());
         return baseMapper.findStationPage(page, wrapper);

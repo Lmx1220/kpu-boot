@@ -9,7 +9,7 @@
         <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="resourceType" column="resource_type" jdbcType="CHAR"/>
-        <result property="describe" column="describe_" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
         <result property="isGeneral" column="is_general" jdbcType="BIT"/>
         <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
         <result property="path" column="path" jdbcType="VARCHAR"/>
@@ -36,7 +36,7 @@
     <sql id="Base_Column_List">
         id
         ,code,title,
-        name,resource_type,describe_,
+        name,resource_type,remarks,
         is_general,`redirect`,path,component,
         state,sort_value,icon,
         active_icon,group_,data_scope,

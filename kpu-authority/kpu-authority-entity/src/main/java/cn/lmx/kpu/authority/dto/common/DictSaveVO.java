@@ -62,7 +62,7 @@ public class DictSaveVO implements Serializable {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 255, message = "描述长度不能超过255")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "描述")
     private String remark;
 }

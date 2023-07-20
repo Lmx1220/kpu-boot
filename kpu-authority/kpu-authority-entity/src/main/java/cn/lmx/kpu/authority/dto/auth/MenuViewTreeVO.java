@@ -37,7 +37,7 @@ public class MenuViewTreeVO extends TreeEntity<MenuViewTreeVO, Long> {
      * 描述
      */
     @ApiModelProperty(value = "描述")
-    private String describe;
+    private String remarks;
     /**
      * 类型;[10-菜单 20-视图 30-按钮 40-字段 50-数据]
      */

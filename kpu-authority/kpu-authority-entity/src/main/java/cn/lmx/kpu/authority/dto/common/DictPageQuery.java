@@ -23,7 +23,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@ApiModel(value = "DictPageQuery", description = "字典项")
+@ApiModel(value = "DictPageQuery", description = "字典")
 public class DictPageQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;

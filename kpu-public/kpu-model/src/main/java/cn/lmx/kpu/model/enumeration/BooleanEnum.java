@@ -18,7 +18,7 @@ public enum BooleanEnum {
     private Boolean bool;
     private int integer;
     private String str;
-    private String describe;
+    private String remarks;
 
     public boolean eq(Integer val) {
         if (val == null) {

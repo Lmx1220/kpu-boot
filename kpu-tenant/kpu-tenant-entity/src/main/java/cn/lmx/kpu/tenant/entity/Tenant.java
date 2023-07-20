@@ -126,15 +126,15 @@ public class Tenant extends Entity<Long> {
      */
     @ApiModelProperty(value = "企业简介")
     @Size(max = 255, message = "企业简介长度不能超过255")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "企业简介", width = 20)
-    private String describe;
+    private String remarks;
 
 
     @Builder
     public Tenant(Long id, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
                   String code, String name, TenantTypeEnum type, TenantConnectTypeEnum connectType, TenantStatusEnum status,
-                  Boolean readonly, String duty, LocalDateTime expirationTime, String logo, String describe) {
+                  Boolean readonly, String duty, LocalDateTime expirationTime, String logo, String remarks) {
         this.id = id;
         this.createTime = createTime;
         this.createdBy = createdBy;
@@ -149,7 +149,7 @@ public class Tenant extends Entity<Long> {
         this.duty = duty;
         this.expirationTime = expirationTime;
         this.logo = logo;
-        this.describe = describe;
+        this.remarks = remarks;
     }
 
 }

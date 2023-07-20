@@ -1,26 +1,21 @@
 package cn.lmx.kpu.authority.entity.common;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import cn.lmx.basic.base.entity.SuperEntity;
 import cn.lmx.kpu.authority.enumeration.common.LogType;
 import cn.lmx.kpu.model.enumeration.HttpMethod;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static cn.lmx.kpu.model.constant.Condition.LIKE;
 import static cn.lmx.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
+import static cn.lmx.kpu.model.constant.Condition.LIKE;
 
 /**
  * <p>
@@ -66,9 +61,9 @@ public class OptLog extends SuperEntity<Long> {
      */
     @ApiModelProperty(value = "操作人")
     @Size(max = 50, message = "操作人长度不能超过50")
-    @TableField(value = "user_name", condition = LIKE)
+    @TableField(value = "nick_name", condition = LIKE)
     @Excel(name = "操作人")
-    private String userName;
+    private String nickName;
 
     /**
      * 操作描述
@@ -158,7 +153,7 @@ public class OptLog extends SuperEntity<Long> {
         this.createdBy = createdBy;
         this.requestIp = requestIp;
         this.type = type;
-        this.userName = userName;
+        this.nickName = nickName;
         this.description = description;
         this.classPath = classPath;
         this.actionMethod = actionMethod;

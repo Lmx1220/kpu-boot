@@ -15,14 +15,14 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="app_type" jdbcType="VARCHAR" property="appType"/>
-        <result column="describe_" jdbcType="VARCHAR" property="describe"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
         <result column="state" jdbcType="BIT" property="state"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,created_by,create_time,updated_by,update_time,
-        client_id, client_secret, website, name, icon, app_type, describe_, state
+        client_id, client_secret, website, name, icon, app_type, remarks, state
     </sql>
 
 </mapper>

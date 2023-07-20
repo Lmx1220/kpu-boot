@@ -81,14 +81,14 @@ public class RefreshTokenGranter extends AbstractTokenGranter implements TokenGr
 
         if (user == null || !user.getState()) {
             String msg = "您已被禁用！";
-            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(authInfo.getUserId(), msg)));
+            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.accountError(authInfo.getUserId(), msg)));
             return R.fail(msg);
         }
 
         // 密码过期
         if (user.getPasswordExpireTime() != null && LocalDateTime.now().isAfter(user.getPasswordExpireTime())) {
             String msg = "用户密码已过期，请修改密码或者联系管理员重置!";
-            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(user.getId(), msg)));
+            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.accountError(user.getId(), msg)));
             return R.fail(msg);
         }
 

@@ -31,7 +31,7 @@ kpu:
     tenantDatabasePrefix: kpu_base
     # SCHEMA模式专用
     owner: ''
-    multiTenantType: SCHEMA
+    multiTenantType: NONE
     # COLUMN模式专用 隔离租户的字段
     tenantIdColumn: tenant_code
     isNotWrite: false

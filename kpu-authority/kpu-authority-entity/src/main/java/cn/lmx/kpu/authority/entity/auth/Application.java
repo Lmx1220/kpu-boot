@@ -97,9 +97,9 @@ public class Application extends Entity<Long> {
      */
     @ApiModelProperty(value = "备注")
     @Size(max = 200, message = "备注长度不能超过200")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "备注")
-    private String describe;
+    private String remarks;
 
     /**
      * 状态
@@ -113,7 +113,7 @@ public class Application extends Entity<Long> {
     @Builder
     public Application(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
                        String clientId, String clientSecret, String website, String name, String icon,
-                       ApplicationAppTypeEnum appType, String describe, Boolean state) {
+                       ApplicationAppTypeEnum appType, String remarks, Boolean state) {
         this.id = id;
         this.createdBy = createdBy;
         this.createTime = createTime;
@@ -125,7 +125,7 @@ public class Application extends Entity<Long> {
         this.name = name;
         this.icon = icon;
         this.appType = appType;
-        this.describe = describe;
+        this.remarks = remarks;
         this.state = state;
     }
 

@@ -64,7 +64,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
     }
 
     @Override
-    public LoginLog save(Long userId, String username, String ua, String ip, String location, String description) {
+    public LoginLog save(Long userId, String username, String ua, String ip, String location, String description, String status) {
         User user;
         if (userId != null) {
             user = this.userService.getByIdCache(userId);
@@ -76,6 +76,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
                 .location(location)
                 .loginDate(DateUtils.formatAsDate(LocalDateTime.now()))
                 .description(description)
+                .status(status)
                 .requestIp(ip).ua(ua)
                 .build();
 

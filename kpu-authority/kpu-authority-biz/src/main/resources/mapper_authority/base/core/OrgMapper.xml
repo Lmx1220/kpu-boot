@@ -16,13 +16,13 @@
         <result column="abbreviation" jdbcType="VARCHAR" property="abbreviation"/>
         <result column="tree_path" jdbcType="VARCHAR" property="treePath"/>
         <result column="state" jdbcType="BIT" property="state"/>
-        <result column="describe_" jdbcType="VARCHAR" property="describe"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,label,parent_id,sort_value,create_time,created_by,update_time,updated_by,
-        type_, abbreviation, tree_path, state, describe_
+        type_, abbreviation, tree_path, state, remarks
     </sql>
 
 </mapper>

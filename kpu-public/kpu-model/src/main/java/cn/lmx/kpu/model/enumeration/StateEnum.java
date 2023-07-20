@@ -18,7 +18,7 @@ public enum StateEnum {
     private Boolean bool;
     private int integer;
     private String str;
-    private String describe;
+    private String remarks;
 
     public static StateEnum match(String val, StateEnum... defs) {
         StateEnum def = defs.length > 0 ? defs[0] : DISABLE;

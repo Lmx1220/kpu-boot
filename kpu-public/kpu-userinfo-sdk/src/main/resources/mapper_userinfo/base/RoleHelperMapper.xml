@@ -11,7 +11,7 @@
         <result column="category" jdbcType="VARCHAR" property="category"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
-        <result column="describe_" jdbcType="VARCHAR" property="describe"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
         <result column="state" jdbcType="BIT" property="state"/>
         <result column="readonly_" jdbcType="BIT" property="readonly"/>
     </resultMap>
@@ -19,7 +19,7 @@
     <!-- 通用查询结果列 -->
     <sql id="SysRole_Column_List">
         r.id,r.created_by,r.create_time,r.updated_by,r.update_time, r.category,
-        r.name, r.code, r.describe_, r.state, r.readonly_
+        r.name, r.code, r.remarks, r.state, r.readonly_
     </sql>
 
 </mapper>

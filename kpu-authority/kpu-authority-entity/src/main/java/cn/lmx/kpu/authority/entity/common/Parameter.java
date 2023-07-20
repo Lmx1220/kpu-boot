@@ -71,9 +71,9 @@ public class Parameter extends Entity<Long> {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 255, message = "描述长度不能超过255")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "描述")
-    private String describe;
+    private String remarks;
 
     /**
      * 状态
@@ -94,7 +94,7 @@ public class Parameter extends Entity<Long> {
 
     @Builder
     public Parameter(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
-                     String key, String value, String name, String describe, Boolean state, Boolean readonly) {
+                     String key, String value, String name, String remarks, Boolean state, Boolean readonly) {
         this.id = id;
         this.createdBy = createdBy;
         this.createTime = createTime;
@@ -103,7 +103,7 @@ public class Parameter extends Entity<Long> {
         this.key = key;
         this.value = value;
         this.name = name;
-        this.describe = describe;
+        this.remarks = remarks;
         this.state = state;
         this.readonly = readonly;
     }

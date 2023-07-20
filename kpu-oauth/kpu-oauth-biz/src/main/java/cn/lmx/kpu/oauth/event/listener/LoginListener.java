@@ -6,6 +6,7 @@ import cn.lmx.basic.database.properties.DatabaseProperties;
 import cn.lmx.basic.database.properties.MultiTenantType;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.authority.service.common.LoginLogService;
+import cn.lmx.kpu.model.enumeration.base.LoginStatusEnum;
 import cn.lmx.kpu.oauth.event.LoginEvent;
 import cn.lmx.kpu.oauth.event.model.LoginStatusDTO;
 import lombok.RequiredArgsConstructor;
@@ -39,15 +40,15 @@ public class LoginListener {
         }
 
         ContextUtil.setTenant(loginStatus.getTenant());
-        if (LoginStatusDTO.Type.SUCCESS == loginStatus.getType()) {
+        if (LoginStatusEnum.SUCCESS == loginStatus.getStatus()) {
             // 重置错误次数 和 最后登录时间
             this.userService.resetPassErrorNum(loginStatus.getId());
 
-        } else if (LoginStatusDTO.Type.PWD_ERROR == loginStatus.getType()) {
+        } else if (LoginStatusEnum.PWD_ERROR == loginStatus.getStatus()) {
             // 密码错误
             this.userService.incrPasswordErrorNumById(loginStatus.getId());
         }
-        loginLogService.save(loginStatus.getId(), loginStatus.getUsername(), loginStatus.getUa(), loginStatus.getIp(), loginStatus.getLocation(), loginStatus.getDescription());
+        loginLogService.save(loginStatus.getId(), loginStatus.getUsername(), loginStatus.getUa(), loginStatus.getIp(), loginStatus.getLocation(), loginStatus.getDescription(), loginStatus.getStatus().getCode());
     }
 
 }

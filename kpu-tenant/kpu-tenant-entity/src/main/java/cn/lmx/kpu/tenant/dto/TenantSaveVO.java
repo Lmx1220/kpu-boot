@@ -69,6 +69,6 @@ public class TenantSaveVO implements Serializable {
      */
     @ApiModelProperty(value = "企业简介")
     @Size(max = 255, message = "企业简介长度不能超过255")
-    private String describe;
+    private String remarks;
 
 }

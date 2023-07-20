@@ -98,14 +98,14 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 255, message = "描述长度不能超过255")
-    @TableField(value = "describe_", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     @Excel(name = "描述")
-    private String describe;
+    private String remarks;
 
 
     @Builder
     public Org(Long id, String label, Long parentId, Integer sortValue, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
-               String type, String abbreviation, String treePath, Boolean state, String describe) {
+               String type, String abbreviation, String treePath, Boolean state, String remarks) {
         this.id = id;
         this.label = label;
         this.parentId = parentId;
@@ -118,7 +118,7 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
         this.abbreviation = abbreviation;
         this.treePath = treePath;
         this.state = state;
-        this.describe = describe;
+        this.remarks = remarks;
     }
 
 }

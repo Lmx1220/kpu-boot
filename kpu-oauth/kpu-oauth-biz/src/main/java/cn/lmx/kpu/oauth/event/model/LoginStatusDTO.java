@@ -5,6 +5,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.basic.log.util.AddressUtil;
 import cn.lmx.kpu.authority.dto.auth.Online;
+import cn.lmx.kpu.model.enumeration.base.LoginStatusEnum;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.web.context.request.RequestAttributes;
@@ -44,7 +45,7 @@ public class LoginStatusDTO implements Serializable {
     /**
      * 登录类型
      */
-    private Type type;
+    private LoginStatusEnum status;
     /**
      * 登录描述
      */
@@ -68,7 +69,7 @@ public class LoginStatusDTO implements Serializable {
     public static LoginStatusDTO success(Long id, Online online) {
         LoginStatusDTO loginStatus = LoginStatusDTO.builder()
                 .id(id).tenant(ContextUtil.getTenant())
-                .type(Type.SUCCESS).description("登录成功")
+                .status(LoginStatusEnum.SUCCESS).description("登录成功")
                 .build().setInfo();
         online.setLoginIp(loginStatus.getIp());
         online.setLocation(loginStatus.getLocation());
@@ -76,24 +77,24 @@ public class LoginStatusDTO implements Serializable {
         return loginStatus;
     }
 
-    public static LoginStatusDTO fail(Long id, String description) {
+    public static LoginStatusDTO accountError(Long id, String description) {
         return LoginStatusDTO.builder()
                 .id(id).tenant(ContextUtil.getTenant())
-                .type(Type.FAIL).description(description)
+                .status(LoginStatusEnum.ACCOUNT_ERROR).description(description)
                 .build().setInfo();
     }
 
-    public static LoginStatusDTO fail(String username, String description) {
+    public static LoginStatusDTO captchaError(String username, String description) {
         return LoginStatusDTO.builder()
                 .username(username).tenant(ContextUtil.getTenant())
-                .type(Type.FAIL).description(description)
+                .status(LoginStatusEnum.CAPTCHA_ERROR).description(description)
                 .build().setInfo();
     }
 
     public static LoginStatusDTO pwdError(Long id, String description) {
         return LoginStatusDTO.builder()
                 .id(id).tenant(ContextUtil.getTenant())
-                .type(Type.PWD_ERROR).description(description)
+                .status(LoginStatusEnum.PWD_ERROR).description(description)
                 .build().setInfo();
     }
 
@@ -113,22 +114,6 @@ public class LoginStatusDTO implements Serializable {
         this.ip = tempIp;
         this.location = tempLocation;
         return this;
-    }
-
-    @Getter
-    public enum Type {
-        /**
-         * 成功
-         */
-        SUCCESS,
-        /**
-         * 密码错误
-         */
-        PWD_ERROR,
-        /**
-         * 失败
-         */
-        FAIL
     }
 
 }

@@ -85,6 +85,6 @@ public class TenantPageQuery implements Serializable {
      * 企业简介
      */
     @ApiModelProperty(value = "企业简介")
-    private String describe;
+    private String remarks;
 
 }

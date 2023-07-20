@@ -75,8 +75,8 @@ public class SysOrg extends TreeEntity<SysOrg, Long> implements EchoVO {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 255, message = "描述长度不能超过255")
-    @TableField(value = "describe_", condition = LIKE)
-    private String describe;
+    @TableField(value = "remarks", condition = LIKE)
+    private String remarks;
 
 
 }

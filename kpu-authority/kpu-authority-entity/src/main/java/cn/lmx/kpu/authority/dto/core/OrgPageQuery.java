@@ -49,7 +49,7 @@ public class OrgPageQuery implements Serializable {
      * 描述
      */
     @ApiModelProperty(value = "描述")
-    private String describe;
+    private String remarks;
     @ApiModelProperty(value = "父ID")
     protected Long parentId;
     @ApiModelProperty(value = "排序号")

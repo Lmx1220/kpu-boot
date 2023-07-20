@@ -173,13 +173,13 @@ public abstract class AbstractTokenGranter implements TokenGranter {
         // 密码过期
         if (user.getPasswordExpireTime() != null && LocalDateTime.now().isAfter(user.getPasswordExpireTime())) {
             String msg = "用户密码已过期，请修改密码或者联系管理员重置!";
-            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(user.getId(), msg)));
+            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.accountError(user.getId(), msg)));
             return R.fail(msg);
         }
 
         if (!user.getState()) {
             String msg = "用户被禁用，请联系管理员！";
-            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(user.getId(), msg)));
+            SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.accountError(user.getId(), msg)));
             return R.fail(msg);
         }
 
@@ -201,7 +201,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
             if (passwordErrorLockExpireTime.isAfter(LocalDateTime.now())) {
                 // 登录失败事件
                 String msg = StrUtil.format("密码连续输错次数已超过最大限制：{}次,用户将被锁定至: {}", maxPasswordErrorNum, passwordErrorLockExpireTime);
-                SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.fail(user.getId(), msg)));
+                SpringUtils.publishEvent(new LoginEvent(LoginStatusDTO.accountError(user.getId(), msg)));
                 return R.fail(msg);
             }
         }

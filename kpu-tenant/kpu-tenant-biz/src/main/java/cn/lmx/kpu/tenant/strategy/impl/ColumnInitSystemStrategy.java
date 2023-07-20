@@ -129,7 +129,7 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
 
     private boolean initParameter() {
         List<Parameter> list = new ArrayList<>();
-        list.add(Parameter.builder().key(ParameterKey.LOGIN_POLICY).name("登录策略").value(ParameterKey.LoginPolicy.MANY.name()).describe("ONLY_ONE:一个用户只能登录一次; MANY:用户可以任意登录; ONLY_ONE_CLIENT:一个用户在一个应用只能登录一次").state(true).readonly(true).build());
+        list.add(Parameter.builder().key(ParameterKey.LOGIN_POLICY).name("登录策略").value(ParameterKey.LoginPolicy.MANY.name()).remarks("ONLY_ONE:一个用户只能登录一次; MANY:用户可以任意登录; ONLY_ONE_CLIENT:一个用户在一个应用只能登录一次").state(true).readonly(true).build());
         return parameterService.saveBatch(list);
     }
 

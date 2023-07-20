@@ -5,7 +5,7 @@
     <sql id="V_Column_List">
         id
         ,`code`,`title`,
-        `name`,`describe_`,
+        `name`,`remarks`,
         `is_general`,`redirect`,`path`,`component`,
         sort_value,icon,
         active_icon,group_,

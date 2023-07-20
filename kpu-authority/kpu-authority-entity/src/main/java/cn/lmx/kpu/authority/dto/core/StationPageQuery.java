@@ -50,6 +50,6 @@ public class StationPageQuery implements Serializable {
      * 描述
      */
     @ApiModelProperty(value = "描述")
-    private String describe;
+    private String remarks;
     private Long createdOrgId;
 }

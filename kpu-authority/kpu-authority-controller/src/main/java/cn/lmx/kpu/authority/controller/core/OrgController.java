@@ -124,7 +124,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     public R<Boolean> handlerImport(List<Map<String, String>> list) {
         List<Org> userList = list.stream().map((map) -> {
             Org item = new Org();
-            item.setDescribe(map.getOrDefault("描述", EMPTY));
+            item.setRemarks(map.getOrDefault("描述", EMPTY));
             item.setLabel(map.getOrDefault("名称", EMPTY));
             item.setAbbreviation(map.getOrDefault("简称", EMPTY));
             item.setState(Convert.toBool(map.getOrDefault("状态", EMPTY)));

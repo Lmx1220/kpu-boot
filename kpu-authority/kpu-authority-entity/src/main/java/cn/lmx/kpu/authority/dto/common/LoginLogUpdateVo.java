@@ -1,6 +1,7 @@
 package cn.lmx.kpu.authority.dto.common;
 
 import cn.lmx.basic.base.entity.SuperEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -100,4 +101,10 @@ public class LoginLogUpdateVo implements Serializable {
     @ApiModelProperty(value = "登录地点")
     @Size(max = 50, message = "登录地点长度不能超过50")
     private String location;
+    /**
+     * 登录状态
+     */
+    @ApiModelProperty(value = "登录状态")
+    @TableField("status")
+    private String status;
 }

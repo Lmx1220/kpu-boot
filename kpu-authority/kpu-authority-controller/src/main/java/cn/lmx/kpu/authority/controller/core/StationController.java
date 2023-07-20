@@ -82,7 +82,7 @@ public class StationController extends SuperCacheController<StationService, Long
         // 组织id 和 状态需要自行转义，可以参考UserController里面的用户导入如何转义
         List<Station> stationList = list.stream().map((map) -> {
             Station item = new Station();
-            item.setDescribe(map.getOrDefault("描述", ""));
+            item.setRemarks(map.getOrDefault("描述", ""));
             item.setName(map.getOrDefault("名称", ""));
             item.setOrgId(Convert.toLong(map.getOrDefault("组织", "0")));
             item.setState(Convert.toBool(map.getOrDefault("状态", "false")));

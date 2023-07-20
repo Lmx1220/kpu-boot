@@ -22,7 +22,7 @@ import java.util.Map;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Builder
-@ApiModel(value = "TestUserResultVO", description = "用户")
+@ApiModel(value = "DictResultVO", description = "字典")
 public class DictResultVO extends Entity<Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;

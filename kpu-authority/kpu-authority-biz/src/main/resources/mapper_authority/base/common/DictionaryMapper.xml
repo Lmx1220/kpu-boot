@@ -22,7 +22,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,created_by,create_time,updated_by,update_time,
-        type, label, code, name, state, describe_, sort_value, icon, css_style, css_class, readonly_
+        type, label, code, name, state, remarks, sort_value, icon, css_style, css_class, readonly_
     </sql>
 
 </mapper>

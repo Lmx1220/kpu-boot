@@ -48,7 +48,7 @@ public class MenuUpdateVo implements Serializable {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 200, message = "描述长度不能超过200")
-    private String describe;
+    private String remarks;
     @ApiModelProperty(value = "上级资源")
     protected Long parentId;
     /**

@@ -156,7 +156,7 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
      */
     @ApiOperation(value = "查询系统所有的菜单和视图", notes = "查询系统所有的菜单和视图")
     @PostMapping("/treeMenuAndView")
-    @SysLog("查询系统所有的菜单和视图")
+    @SysLog(value = "查询系统所有的菜单和视图", response = false)
     public R<List<MenuViewTreeVO>> allTree() {
         List<Menu> list = baseService.list(Wraps.<Menu>lbQ().in(Menu::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Menu::getSortValue));
         List<MenuViewTreeVO> viewTreeVOList = dozer.mapList(list, MenuViewTreeVO.class);
@@ -168,7 +168,7 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
      */
     @ApiOperation(value = "查询系统所有的菜单和资源树", notes = "查询系统所有的菜单和资源树")
     @PostMapping("/menuResourceTree")
-    @SysLog("查询系统所有的菜单和资源树")
+    @SysLog(value = "查询系统所有的菜单和资源树", response = false)
     public R<List<MenuResourceTreeVO>> menuResourceTree(Boolean menuOnly) {
         List<MenuResourceTreeVO> menuResourceTree = baseService.findMenuResource(menuOnly);
         echoService.action(menuResourceTree);
@@ -180,7 +180,7 @@ public class MenuController extends SuperCacheController<MenuService, Long, Menu
      */
     @ApiOperation(value = "查询系统所有的数据权限", notes = "查询系统所有的数据权限")
     @PostMapping("/findMenuDataScopeTree")
-    @SysLog("查询系统所有的数据权限")
+    @SysLog(value = "查询系统所有的数据权限", response = false)
     public R<List<MenuResourceTreeVO>> findMenuDataScopeTree() {
         return success(baseService.findMenuDataScopeTree());
     }

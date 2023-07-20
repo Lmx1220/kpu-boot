@@ -57,7 +57,7 @@ public class LoginLog extends SuperEntity<Long> {
      */
     @ApiModelProperty(value = "登录人姓名")
     @Size(max = 50, message = "登录人姓名长度不能超过50")
-    @TableField(value = "user_name", condition = LIKE)
+    @TableField(value = "nick_name", condition = LIKE)
     @Excel(name = "登录人姓名")
     private String nickName;
 
@@ -132,6 +132,14 @@ public class LoginLog extends SuperEntity<Long> {
     @TableField(value = "location", condition = LIKE)
     @Excel(name = "登录地点")
     private String location;
+
+    /**
+     * 登录状态
+     */
+    @ApiModelProperty(value = "登录状态")
+    @TableField("status")
+    @Excel(name = "登录状态")
+    private String status;
 
 
 }

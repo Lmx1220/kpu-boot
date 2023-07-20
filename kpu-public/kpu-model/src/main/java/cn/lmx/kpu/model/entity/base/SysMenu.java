@@ -67,8 +67,8 @@ public class SysMenu extends TreeEntity<SysMenu, Long> {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 200, message = "描述长度不能超过200")
-    @TableField(value = "describe_", condition = LIKE)
-    private String describe;
+    @TableField(value = "remarks", condition = LIKE)
+    private String remarks;
     /**
      * 类型;[10-菜单 20-视图 30-按钮 40-字段 50-数据]
      */
@@ -184,7 +184,7 @@ public class SysMenu extends TreeEntity<SysMenu, Long> {
 
     @Builder
     public SysMenu(Long id, String code, String title, String name, Integer sortValue, Long parentId, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
-                   String describe, Boolean isGeneral, String redirect, String path, String component, Boolean state, String resourceType,
+                   String remarks, Boolean isGeneral, String redirect, String path, String component, Boolean state, String resourceType,
                    String icon, String activeIcon, String group, Boolean readonly, String dataScope, String customClass, Boolean isDef, Integer treeGrade, String treePath, String metaJson) {
         this.id = id;
         this.code = code;
@@ -196,7 +196,7 @@ public class SysMenu extends TreeEntity<SysMenu, Long> {
         this.createTime = createTime;
         this.updatedBy = updatedBy;
         this.updateTime = updateTime;
-        this.describe = describe;
+        this.remarks = remarks;
         this.isGeneral = isGeneral;
         this.redirect = redirect;
         this.path = path;

@@ -62,7 +62,7 @@ public class ParameterUpdateVo implements Serializable {
      */
     @ApiModelProperty(value = "描述")
     @Size(max = 255, message = "描述长度不能超过255")
-    private String describe;
+    private String remarks;
     /**
      * 状态
      */
