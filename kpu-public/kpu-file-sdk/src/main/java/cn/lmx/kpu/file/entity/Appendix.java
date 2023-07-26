@@ -1,5 +1,6 @@
 package cn.lmx.kpu.file.entity;
 
+import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.kpu.model.enumeration.base.FileType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -48,6 +49,7 @@ public class Appendix extends Entity<Long> {
      * 文件类型
      */
     @TableField(value = "file_type", condition = LIKE)
+    @Echo(api = Echo.ENUM_API)
     private FileType fileType;
 
     /**

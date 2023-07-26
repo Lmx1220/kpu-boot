@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.core.Org">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="label" jdbcType="VARCHAR" property="label"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
         <result column="sort_value" jdbcType="INTEGER" property="sortValue"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -21,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,label,parent_id,sort_value,create_time,created_by,update_time,updated_by,
+        id,name,parent_id,sort_value,create_time,created_by,update_time,updated_by,
         type_, abbreviation, tree_path, state, remarks
     </sql>
 

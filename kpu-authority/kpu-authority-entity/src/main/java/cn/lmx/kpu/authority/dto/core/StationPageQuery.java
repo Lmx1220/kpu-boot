@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author lmx
- * @since 2021-04-01
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -40,7 +40,7 @@ public class StationPageQuery implements Serializable {
      * @Echo(api = ORG_ID_CLASS,  beanClass = Org.class)
      */
     @ApiModelProperty(value = "组织")
-    private Long orgId;
+    private Long[] orgIdList;
     /**
      * 状态
      */

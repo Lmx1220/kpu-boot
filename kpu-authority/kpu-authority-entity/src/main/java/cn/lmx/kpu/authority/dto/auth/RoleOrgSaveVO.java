@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author lmx
- * @since 2020-11-20
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -28,14 +29,16 @@ import java.io.Serializable;
 public class RoleOrgSaveVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @ApiModelProperty(value = "绑定或取消")
+    @NotNull(message = "请填写绑定或取消参数")
+    private Boolean flag;
     /**
      * 角色ID
      * #c_role
      */
     @ApiModelProperty(value = "角色ID")
     @NotNull(message = "角色ID不能为空")
-    private Long roleId;
+    private List<Long> roleIdList;
     /**
      * 部门ID
      * #c_org

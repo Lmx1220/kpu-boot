@@ -29,16 +29,17 @@ import static cn.lmx.kpu.model.constant.EchoApi.DICT_ITEM_CLASS;
  * </p>
  *
  * @author lmx
- * @since 2021-04-01
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@AllArgsConstructor
 @TableName("c_org")
 @ApiModel(value = "Org", description = "组织")
-@AllArgsConstructor
+
 public class Org extends TreeEntity<Org, Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
@@ -51,8 +52,8 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
     @ApiModelProperty(value = "名称")
     @NotEmpty(message = "名称不能为空")
     @Size(max = 255, message = "名称长度不能超过255")
-    @TableField(value = "label")
-    protected String label;
+    @TableField(value = "name")
+    protected String name;
 
 
     /**
@@ -104,10 +105,10 @@ public class Org extends TreeEntity<Org, Long> implements EchoVO {
 
 
     @Builder
-    public Org(Long id, String label, Long parentId, Integer sortValue, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public Org(Long id, String name, Long parentId, Integer sortValue, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
                String type, String abbreviation, String treePath, Boolean state, String remarks) {
         this.id = id;
-        this.label = label;
+        this.name = name;
         this.parentId = parentId;
         this.sortValue = sortValue;
         this.createTime = createTime;

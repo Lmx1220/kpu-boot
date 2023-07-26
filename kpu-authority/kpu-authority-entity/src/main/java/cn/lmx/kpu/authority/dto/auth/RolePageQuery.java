@@ -15,7 +15,7 @@ import java.util.List;
  * </p>
  *
  * @author lmx
- * @since 2020-11-20
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -34,6 +34,27 @@ public class RolePageQuery implements Serializable {
      */
     @ApiModelProperty(value = "名称")
     private String name;
+    /**
+     * 用户ID
+     */
+    @ApiModelProperty(value = "用户ID")
+    private Long userId;
+    /**
+     * 组织ID
+     */
+    @ApiModelProperty(value = "组织ID")
+    private Long orgId;
+    /**
+     * 是否绑定范围
+     */
+    @ApiModelProperty(value = "范围")
+    private String scope;
+    /**
+     * 范围类型
+     */
+    @ApiModelProperty(value = "范围类型")
+    private String scopeType;
+
     /**
      * 编码
      */

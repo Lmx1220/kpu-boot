@@ -2,6 +2,7 @@ package cn.lmx.kpu.authority.service.core.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.annotation.echo.EchoResult;
 import cn.lmx.basic.base.request.PageParams;
@@ -79,7 +80,7 @@ public class StationServiceImpl extends SuperCacheServiceImpl<StationMapper, Sta
         // ${ew.customSqlSegment} 语法一定要手动eq like 等
         wrapper.like(Station::getName, station.getName())
                 .like(Station::getRemarks, station.getRemarks())
-                .eq(Station::getOrgId, station.getOrgId())
+                .in(ArrayUtil.isNotEmpty(params.getModel().getOrgIdList()), Station::getOrgId, params.getModel().getOrgIdList())
                 .eq(Station::getState, station.getState());
         return baseMapper.findStationPage(page, wrapper);
     }

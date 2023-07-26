@@ -1,17 +1,12 @@
 package cn.lmx.kpu.authority.entity.auth;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.lmx.basic.base.entity.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.lmx.basic.base.entity.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -25,7 +20,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author lmx
- * @since 2020-11-20
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor

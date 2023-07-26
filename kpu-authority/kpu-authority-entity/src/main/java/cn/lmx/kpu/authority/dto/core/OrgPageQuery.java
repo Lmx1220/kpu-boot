@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author lmx
- * @since 2021-04-01
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class OrgPageQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "名称")
-    protected String label;
+    protected String name;
     /**
      * 简称
      */

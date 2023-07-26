@@ -6,22 +6,23 @@ import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.DeleteController;
 import cn.lmx.basic.base.controller.PoiController;
+import cn.lmx.basic.base.controller.QueryController;
 import cn.lmx.basic.base.controller.SuperSimpleController;
+import cn.lmx.basic.interfaces.echo.EchoService;
 import cn.lmx.kpu.authority.dto.common.OptLogResult;
 import cn.lmx.kpu.authority.entity.common.OptLog;
 import cn.lmx.kpu.authority.service.common.OptLogService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-
-import static cn.lmx.kpu.common.constant.SwaggerConstants.DATA_TYPE_LONG;
-import static cn.lmx.kpu.common.constant.SwaggerConstants.PARAM_TYPE_QUERY;
 
 /**
  * <p>
@@ -33,30 +34,27 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.PARAM_TYPE_QUERY;
  * @date 2023/7/4 14:27
  */
 @Slf4j
+@AllArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/optLog")
 @Api(value = "OptLog", tags = "系统日志")
 @PreAuth(replace = "authority:optLog:")
-public class OptLogController extends SuperSimpleController<OptLogService, Long, OptLog, OptLog, OptLog, OptLog, OptLog>
-        implements DeleteController<Long, OptLog, OptLog, OptLog, OptLog, OptLog>, PoiController<Long, OptLog, OptLog, OptLog, OptLog, OptLog> {
+public class OptLogController extends SuperSimpleController<OptLogService, Long, OptLog, OptLog, OptLog, OptLog, OptLogResult>
+        implements DeleteController<Long, OptLog, OptLog, OptLog, OptLog, OptLogResult>,
+        QueryController<Long, OptLog, OptLog, OptLog, OptLog, OptLogResult>,
+        PoiController<Long, OptLog, OptLog, OptLog, OptLog, OptLogResult> {
+    private final EchoService echoService;
 
-    /**
-     * 查询
-     *
-     * @param id 主键id
-     * @return 查询结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
-    })
-    @ApiOperation(value = "单体查询", notes = "单体查询")
-    @GetMapping("/get")
-    @PreAuth("hasAnyPermission('{}view')")
-    public R<OptLogResult> get(@RequestParam Long id) {
-        return success(baseService.getOptLogResultById(id));
+    @Override
+    public EchoService getEchoService() {
+        return echoService;
     }
 
+    @Override
+    public R<OptLogResult> getDetail(@RequestParam("id") Long id) {
+        return success(baseService.getOptLogResultById(id));
+    }
 
     @ApiOperation("清空日志")
     @DeleteMapping("clear")

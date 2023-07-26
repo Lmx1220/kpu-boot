@@ -18,7 +18,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author lmx
- * @since 2021-04-01
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -39,7 +39,7 @@ public class OrgUpdateVo implements Serializable {
     @ApiModelProperty(value = "名称")
     @NotEmpty(message = "名称不能为空")
     @Size(max = 255, message = "名称长度不能超过255")
-    protected String label;
+    protected String name;
     /**
      * 简称
      */

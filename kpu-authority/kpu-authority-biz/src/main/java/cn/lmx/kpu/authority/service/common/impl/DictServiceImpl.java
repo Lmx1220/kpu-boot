@@ -62,9 +62,10 @@ public class DictServiceImpl extends SuperServiceImpl<DictMapper, Dict> implemen
         }
 
         boolean bool = super.save(model);
-
-        CacheHashKey typeKey = new DictItemCacheKeyBuilder().hashFieldKey(model.getKey(), model.getKey());
-        cachePlusOps.hSet(typeKey, model.getName());
+        if (!model.getParentId().equals(DefValConstants.PARENT_ID)) {
+            CacheHashKey typeKey = new DictItemCacheKeyBuilder().hashFieldKey(model.getParentKey());
+            cachePlusOps.del(typeKey);
+        }
         return bool;
     }
 
@@ -96,8 +97,11 @@ public class DictServiceImpl extends SuperServiceImpl<DictMapper, Dict> implemen
         ArgumentAssert.notNull(old, "字典不存在或已被删除！");
         boolean bool = function.apply(model);
 
-        CacheHashKey typeKey = new DictItemCacheKeyBuilder().hashKey(model.getKey());
-        cachePlusOps.del(typeKey);
+        if (!model.getParentId().equals(DefValConstants.PARENT_ID)) {
+            CacheHashKey typeKey = new DictItemCacheKeyBuilder().hashFieldKey(model.getParentKey());
+            cachePlusOps.del(typeKey);
+        }
+
         return bool;
     }
 

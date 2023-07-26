@@ -1,6 +1,7 @@
 package cn.lmx.kpu.tenant.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.kpu.model.enumeration.system.TenantConnectTypeEnum;
 import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
@@ -27,7 +28,7 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
  * </p>
  *
  * @author lmx
- * @since 2020-11-19
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -67,6 +68,7 @@ public class Tenant extends Entity<Long> {
     @ApiModelProperty(value = "类型")
     @TableField("type")
     @Excel(name = "类型", width = 20, replace = {"创建_CREATE", "注册_REGISTER", "_null"})
+    @Echo(api = Echo.ENUM_API)
     private TenantTypeEnum type;
 
     /**
@@ -76,6 +78,7 @@ public class Tenant extends Entity<Long> {
     @ApiModelProperty(value = "连接类型")
     @TableField("connect_type")
     @Excel(name = "连接类型", width = 20, replace = {"本地_LOCAL", "远程_REMOTE", "_null"})
+    @Echo(api = Echo.ENUM_API)
     private TenantConnectTypeEnum connectType;
 
     /**
@@ -85,6 +88,7 @@ public class Tenant extends Entity<Long> {
     @ApiModelProperty(value = "状态")
     @TableField("status")
     @Excel(name = "状态", width = 20, replace = {"正常_NORMAL", "待初始化_WAIT_INIT", "禁用_FORBIDDEN", "待审核_WAITING", "拒绝_REFUSE", "已删除_DELETE", "_null"})
+    @Echo(api = Echo.ENUM_API)
     private TenantStatusEnum status;
 
     /**

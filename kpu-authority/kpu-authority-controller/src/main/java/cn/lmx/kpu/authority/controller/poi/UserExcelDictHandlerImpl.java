@@ -40,7 +40,7 @@ public class UserExcelDictHandlerImpl implements IExcelDictHandler {
         }
         if (DICT_ORG.equals(dict)) {
             Org org = orgService.getByIdCache(Convert.toLong(value));
-            return org != null ? org.getLabel() : value.toString();
+            return org != null ? org.getName() : value.toString();
         }
         if (DICT_STATION.equals(dict)) {
             Station station = stationService.getByIdCache(Convert.toLong(value));
@@ -65,7 +65,7 @@ public class UserExcelDictHandlerImpl implements IExcelDictHandler {
             return station != null ? String.valueOf(station.getId()) : "";
         }
         if (DICT_ORG.equals(dict)) {
-            Org org = orgService.getOne(Wraps.<Org>lbQ().eq(Org::getLabel, String.valueOf(value)), false);
+            Org org = orgService.getOne(Wraps.<Org>lbQ().eq(Org::getName, String.valueOf(value)), false);
             return org != null ? String.valueOf(org.getId()) : "";
         }
         if (StrUtil.equalsAny(dict, DICT_NATION, DICT_EDUCATION, DICT_POSITION_STATUS)) {

@@ -1,7 +1,10 @@
 package cn.lmx.kpu.authority.entity.common;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.hutool.core.map.MapUtil;
+import cn.lmx.basic.annotation.echo.Echo;
 import cn.lmx.basic.base.entity.SuperEntity;
+import cn.lmx.basic.interfaces.echo.EchoVO;
 import cn.lmx.kpu.authority.enumeration.common.LogType;
 import cn.lmx.kpu.model.enumeration.HttpMethod;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,6 +16,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import static cn.lmx.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
@@ -24,7 +28,7 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
  * </p>
  *
  * @author lmx
- * @since 2020-11-20
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -34,10 +38,11 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
 @TableName("c_opt_log")
 @ApiModel(value = "OptLog", description = "系统日志")
 @AllArgsConstructor
-public class OptLog extends SuperEntity<Long> {
+public class OptLog extends SuperEntity<Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
-
+    @TableField(exist = false)
+    private Map<String, Object> echoMap = MapUtil.newHashMap();
     /**
      * 操作IP
      */
@@ -53,6 +58,7 @@ public class OptLog extends SuperEntity<Long> {
      */
     @ApiModelProperty(value = "日志类型")
     @TableField("type")
+    @Echo(api = Echo.ENUM_API)
     @Excel(name = "日志类型", replace = {"操作类型_OPT", "异常类型_EX", "_null"})
     private LogType type;
 
@@ -108,6 +114,7 @@ public class OptLog extends SuperEntity<Long> {
     @ApiModelProperty(value = "请求类型")
     @TableField("http_method")
     @Excel(name = "请求类型", replace = {"GET请求_GET", "POST请求_POST", "PUT请求_PUT", "DELETE请求_DELETE", "PATCH请求_PATCH", "TRACE请求_TRACE", "HEAD请求_HEAD", "OPTIONS请求_OPTIONS", "_null"})
+    @Echo(api = Echo.ENUM_API)
     private HttpMethod httpMethod;
 
     /**

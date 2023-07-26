@@ -1,5 +1,6 @@
 package cn.lmx.kpu.authority.controller.auth;
 
+import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.annotation.log.SysLog;
 import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
@@ -17,6 +18,7 @@ import cn.lmx.kpu.authority.entity.auth.UserRole;
 import cn.lmx.kpu.authority.service.auth.RoleAuthorityService;
 import cn.lmx.kpu.authority.service.auth.RoleService;
 import cn.lmx.kpu.authority.service.auth.UserRoleService;
+import cn.lmx.kpu.common.constant.BizConstant;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,6 +59,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
 
     @Override
     public IPage<Role> query(PageParams<RolePageQuery> params) {
+
         IPage<Role> page = params.buildPage(Role.class);
         RolePageQuery roleQuery = params.getModel();
 
@@ -70,9 +73,50 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
                 .in(Role::getReadonly, roleQuery.getReadonly())
                 .eq(Role::getCategory, roleQuery.getCategory());
         baseService.page(page, wrapper);
+        return page;
+    }
+
+    @ApiOperation(value = "分页查询角色", notes = "分页查询角色")
+    @PostMapping("/myPage")
+    @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
+    public R<IPage<RoleResultVO>> myPage(@RequestBody @Validated PageParams<RolePageQuery> params) {
+        IPage<Role> page = params.buildPage(Role.class);
+        RolePageQuery roleQuery = params.getModel();
+
+        QueryWrap<Role> wrap = handlerWrapper(null, params);
+
+        LbqWrapper<Role> wrapper = wrap.lambda();
+        wrapper.like(Role::getName, roleQuery.getName())
+                .like(Role::getCode, roleQuery.getCode())
+                .eq(Role::getState, roleQuery.getState())
+                .in(Role::getReadonly, roleQuery.getReadonly())
+                .eq(Role::getCategory, roleQuery.getCategory());
+        if (roleQuery.getScopeType() != null && StrUtil.equalsAny(roleQuery.getScopeType(), "1", "2")) {
+            if (StrUtil.equalsAny(roleQuery.getScope(), BizConstant.SCOPE_BIND, BizConstant.SCOPE_UN_BIND)) {
+                if (roleQuery.getScopeType().equals("1") && roleQuery.getUserId() != null) {
+                    String sql = " select ura.role_id from c_user_role ura where ura.role_id = c_role.id \n" +
+                            "  and ura.user_id =   " + roleQuery.getUserId();
+                    if (BizConstant.SCOPE_BIND.equals(roleQuery.getScope())) {
+                        wrapper.inSql(Role::getId, sql);
+                    } else {
+                        wrapper.notInSql(Role::getId, sql);
+                    }
+                }
+                if (roleQuery.getScopeType().equals("2") && roleQuery.getOrgId() != null) {
+                    String sql = " select roa.role_id from c_role_org roa where roa.role_id = c_role.id \n" +
+                            "  and roa.org_id =   " + roleQuery.getOrgId();
+                    if (BizConstant.SCOPE_BIND.equals(roleQuery.getScope())) {
+                        wrapper.inSql(Role::getId, sql);
+                    } else {
+                        wrapper.notInSql(Role::getId, sql);
+                    }
+                }
+            }
+        }
+        baseService.page(page, wrapper);
         IPage<RoleResultVO> voPage = BeanPlusUtil.toBeanPage(page, getResultVOClass());
         handlerResult(voPage);
-        return page;
+        return R.success(voPage);
     }
 
     /**
@@ -114,7 +158,6 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     public R<Boolean> handlerDelete(List<Long> ids) {
         return success(baseService.removeByIdWithCache(ids));
     }
-
 
 
     /**

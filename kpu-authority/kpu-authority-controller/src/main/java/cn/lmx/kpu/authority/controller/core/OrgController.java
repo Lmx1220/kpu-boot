@@ -10,11 +10,13 @@ import cn.lmx.basic.interfaces.echo.EchoService;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.TreeUtil;
+import cn.lmx.kpu.authority.dto.auth.RoleOrgSaveVO;
 import cn.lmx.kpu.authority.dto.core.OrgPageQuery;
 import cn.lmx.kpu.authority.dto.core.OrgPageResultVO;
 import cn.lmx.kpu.authority.dto.core.OrgSaveVO;
 import cn.lmx.kpu.authority.dto.core.OrgUpdateVo;
 import cn.lmx.kpu.authority.entity.core.Org;
+import cn.lmx.kpu.authority.service.auth.RoleOrgService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.common.constant.DefValConstants;
 import io.swagger.annotations.Api;
@@ -23,10 +25,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +53,7 @@ import static cn.lmx.kpu.common.constant.SwaggerConstants.*;
 @RequiredArgsConstructor
 public class OrgController extends SuperCacheController<OrgService, Long, Org, OrgSaveVO, OrgUpdateVo, OrgPageQuery, OrgPageResultVO> {
     private final EchoService echoService;
+    private final RoleOrgService roleOrgService;
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", dataType = DATA_TYPE_LONG, paramType = PARAM_TYPE_QUERY),
@@ -114,7 +114,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     public R<List<Org>> tree(@RequestParam(value = "name", required = false) String name,
                              @RequestParam(value = "state", required = false) Boolean state) {
         List<Org> list = this.baseService.list(Wraps.<Org>lbQ()
-                .like(Org::getLabel, name).eq(Org::getState, state).orderByAsc(Org::getSortValue));
+                .like(Org::getName, name).eq(Org::getState, state).orderByAsc(Org::getSortValue));
         echoService.action(list);
         return this.success(TreeUtil.buildTree(list));
     }
@@ -125,13 +125,41 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
         List<Org> userList = list.stream().map((map) -> {
             Org item = new Org();
             item.setRemarks(map.getOrDefault("描述", EMPTY));
-            item.setLabel(map.getOrDefault("名称", EMPTY));
+            item.setName(map.getOrDefault("名称", EMPTY));
             item.setAbbreviation(map.getOrDefault("简称", EMPTY));
             item.setState(Convert.toBool(map.getOrDefault("状态", EMPTY)));
             return item;
         }).collect(Collectors.toList());
 
         return R.success(baseService.saveBatch(userList));
+    }
+
+    /**
+     * 给机构分配角色
+     *
+     * @param roleUser 角色分配对象
+     * @return 新增结果
+     */
+    @ApiOperation(value = "给机构分配角色", notes = "给机构分配角色")
+    @PostMapping("/saveOrgRole")
+    @SysLog("给机构分配角色")
+    @PreAuth("hasAnyPermission('{}config')")
+    public R<List<Long>> saveUserRole(@RequestBody RoleOrgSaveVO roleUser) {
+        return success(roleOrgService.saveRoleOrg(roleUser));
+    }
+
+    /**
+     * 查询机构的角色
+     *
+     * @param orgId 角色id
+     * @return 查询结果
+     */
+    @ApiOperation(value = "查询机构的角色", notes = "查询机构的角色")
+    @GetMapping("/findOrgRoleByOrgId")
+    @SysLog("查询机构的角色")
+    @PreAuth("hasAnyPermission('{}view')")
+    public R<List<Long>> findRoleByOrgId(@RequestParam Long orgId) {
+        return success(roleOrgService.findRoleByOrgId(orgId));
     }
 
 }

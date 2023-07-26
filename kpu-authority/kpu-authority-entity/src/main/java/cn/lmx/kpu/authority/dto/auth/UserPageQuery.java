@@ -1,6 +1,5 @@
 package cn.lmx.kpu.authority.dto.auth;
 
-import cn.lmx.kpu.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -8,7 +7,6 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * <p>
@@ -17,7 +15,7 @@ import java.util.List;
  * </p>
  *
  * @author lmx
- * @since 2021-04-01
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor
@@ -74,11 +72,9 @@ public class UserPageQuery implements Serializable {
     private String mobile;
     /**
      * 性别
-     *
-     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.SEX)
      */
     @ApiModelProperty(value = "性别")
-    private List<Sex> sex;
+    private String[] sex;
     /**
      * 状态
      */
@@ -91,25 +87,21 @@ public class UserPageQuery implements Serializable {
     private String avatar;
     /**
      * 民族
-     *
-     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.NATION)
      */
     @ApiModelProperty(value = "民族")
-    private List<String> nation;
+    private String[] nation;
     /**
      * 学历
-     *
-     * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.EDUCATION)
      */
     @ApiModelProperty(value = "学历")
-    private List<String> education;
+    private String[] education;
     /**
      * 职位状态
      *
      * @Echo(api = DICT_ITEM_CLASS,  dictType = EchoDictItem.POSITION_STATUS)
      */
     @ApiModelProperty(value = "职位状态")
-    private List<String> positionStatus;
+    private String[] positionStatus;
     /**
      * 工作描述
      */

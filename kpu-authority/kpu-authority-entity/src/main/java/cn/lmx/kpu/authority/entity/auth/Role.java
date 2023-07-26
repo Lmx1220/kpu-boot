@@ -28,7 +28,7 @@ import static cn.lmx.kpu.model.constant.EchoApi.DICT_ITEM_CLASS;
  * </p>
  *
  * @author lmx
- * @since 2020-11-20
+ * @since 2023/7/4 14:27
  */
 @Data
 @NoArgsConstructor

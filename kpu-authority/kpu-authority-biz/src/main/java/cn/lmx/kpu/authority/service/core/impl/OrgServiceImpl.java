@@ -55,21 +55,21 @@ public class OrgServiceImpl extends SuperCacheServiceImpl<OrgMapper, Org> implem
     @Override
     public boolean check(Long id, String name) {
         LbqWrapper<Org> wrap = Wraps.<Org>lbQ()
-                .eq(Org::getLabel, name).ne(Org::getId, id);
+                .eq(Org::getName, name).ne(Org::getId, id);
         return count(wrap) > 0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(Org model) {
-        ArgumentAssert.isFalse(check(null, model.getLabel()), StrUtil.format("组织[{}]已经存在", model.getLabel()));
+        ArgumentAssert.isFalse(check(null, model.getName()), StrUtil.format("组织[{}]已经存在", model.getName()));
         return super.save(model);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateById(Org model) {
-        ArgumentAssert.isFalse(check(model.getId(), model.getLabel()), StrUtil.format("组织[{}]已经存在", model.getLabel()));
+        ArgumentAssert.isFalse(check(model.getId(), model.getName()), StrUtil.format("组织[{}]已经存在", model.getName()));
         return super.updateById(model);
     }
 
