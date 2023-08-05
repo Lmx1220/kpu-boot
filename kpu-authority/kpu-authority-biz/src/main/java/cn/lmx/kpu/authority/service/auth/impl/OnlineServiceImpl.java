@@ -15,6 +15,8 @@ import cn.lmx.kpu.common.constant.ParameterKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
@@ -32,8 +34,8 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class OnlineServiceImpl implements OnlineService {
 
     private final ParameterService parameterService;
@@ -60,6 +62,7 @@ public class OnlineServiceImpl implements OnlineService {
      * @return 是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(Online model) {
         String loginPolicy = parameterService.getValue(ParameterKey.LOGIN_POLICY, ParameterKey.LoginPolicy.MANY.name());
         if (ParameterKey.LoginPolicy.ONLY_ONE.eq(loginPolicy)) {
@@ -84,6 +87,7 @@ public class OnlineServiceImpl implements OnlineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean clear(String token, Long userId, String clientId) {
         String loginPolicy = parameterService.getValue(ParameterKey.LOGIN_POLICY, ParameterKey.LoginPolicy.MANY.name());
         CacheKey key;

@@ -4,7 +4,7 @@ package cn.lmx.kpu.authority.controller.common;
 import cn.hutool.core.util.ArrayUtil;
 import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
-import cn.lmx.basic.base.controller.SuperNoPoiController;
+import cn.lmx.basic.base.controller.SuperPoiController;
 import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.QueryWrap;
@@ -40,7 +40,7 @@ import java.util.List;
 @PreAuth(replace = "authority:dictionary:")
 @RequiredArgsConstructor
 public class DictController
-        extends SuperNoPoiController<DictService, Long, Dict, DictSaveVO, DictUpdateVo, DictPageQuery, DictResultVO> {
+        extends SuperPoiController<DictService, Long, Dict, DictSaveVO, DictUpdateVo, DictPageQuery, DictResultVO> {
 
     @Override
     public QueryWrap<Dict> handlerWrapper(Dict model, PageParams<DictPageQuery> params) {
@@ -55,7 +55,7 @@ public class DictController
 
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
-        this.baseService.removeByIds(ids);
+        this.superService.removeByIds(ids);
         return this.success(true);
     }
 }

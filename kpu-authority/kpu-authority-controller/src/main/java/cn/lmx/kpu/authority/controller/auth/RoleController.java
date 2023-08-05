@@ -13,9 +13,9 @@ import cn.lmx.basic.interfaces.echo.EchoService;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.Role;
-import cn.lmx.kpu.authority.entity.auth.RoleAuthority;
+import cn.lmx.kpu.authority.entity.auth.RoleResource;
 import cn.lmx.kpu.authority.entity.auth.UserRole;
-import cn.lmx.kpu.authority.service.auth.RoleAuthorityService;
+import cn.lmx.kpu.authority.service.auth.RoleResourceService;
 import cn.lmx.kpu.authority.service.auth.RoleService;
 import cn.lmx.kpu.authority.service.auth.UserRoleService;
 import cn.lmx.kpu.common.constant.BizConstant;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoleController extends SuperCacheController<RoleService, Long, Role, RoleSaveVO, RoleUpdateVo, RolePageQuery, RoleResultVO> {
 
-    private final RoleAuthorityService roleAuthorityService;
+    private final RoleResourceService roleResourceService;
     private final EchoService echoService;
     private final UserRoleService userRoleService;
 
@@ -72,7 +72,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
                 .eq(Role::getState, roleQuery.getState())
                 .in(Role::getReadonly, roleQuery.getReadonly())
                 .eq(Role::getCategory, roleQuery.getCategory());
-        baseService.page(page, wrapper);
+        superService.page(page, wrapper);
         return page;
     }
 
@@ -113,7 +113,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
                 }
             }
         }
-        baseService.page(page, wrapper);
+        superService.page(page, wrapper);
         IPage<RoleResultVO> voPage = BeanPlusUtil.toBeanPage(page, getResultVOClass());
         handlerResult(voPage);
         return R.success(voPage);
@@ -129,7 +129,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @GetMapping("/details")
     @SysLog("查询角色")
     public R<RoleQueryDTO> getDetails(@RequestParam Long id) {
-        Role role = baseService.getByIdCache(id);
+        Role role = superService.getByIdCache(id);
         RoleQueryDTO query = BeanPlusUtil.toBean(role, RoleQueryDTO.class);
         return success(query);
     }
@@ -138,25 +138,25 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @GetMapping("/check")
     @SysLog("检测角色编码")
     public R<Boolean> check(@RequestParam String code) {
-        return success(baseService.check(code));
+        return success(superService.check(code));
     }
 
 
     @Override
     public R<Role> handlerSave(RoleSaveVO data) {
-        baseService.saveRole(data, getUserId());
+        superService.saveRole(data, getUserId());
         return success(BeanPlusUtil.toBean(data, Role.class));
     }
 
     @Override
     public R<Role> handlerUpdate(RoleUpdateVo data) {
-        baseService.updateRole(data, getUserId());
+        superService.updateRole(data, getUserId());
         return success(BeanPlusUtil.toBean(data, Role.class));
     }
 
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
-        return success(baseService.removeByIdWithCache(ids));
+        return success(superService.removeByIdWithCache(ids));
     }
 
 
@@ -186,7 +186,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @SysLog("给角色绑定用户")
     @PreAuth("hasAnyPermission('{}config')")
     public R<List<Long>> saveUserRole(@RequestBody RoleUserSaveVO roleUser) {
-        return success(roleAuthorityService.saveRoleUser(roleUser));
+        return success(userRoleService.saveRoleUser(roleUser));
     }
 
     /**
@@ -200,8 +200,8 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @SysLog("查询角色拥有的资源")
     @PreAuth("hasAnyPermission('{}view')")
     public R<List<Long>> findResourceListByRoleId(@RequestParam Long roleId) {
-        List<RoleAuthority> list = roleAuthorityService.list(Wraps.<RoleAuthority>lbQ().eq(RoleAuthority::getRoleId, roleId));
-        List<Long> menuIdList = list.stream().mapToLong(RoleAuthority::getAuthorityId).boxed().collect(Collectors.toList());
+        List<RoleResource> list = roleResourceService.list(Wraps.<RoleResource>lbQ().eq(RoleResource::getRoleId, roleId));
+        List<Long> menuIdList = list.stream().mapToLong(RoleResource::getResourceId).boxed().collect(Collectors.toList());
 
         return success(menuIdList);
     }
@@ -218,7 +218,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @SysLog("给角色配置权限")
     @PreAuth("hasAnyPermission('{}auth')")
     public R<Boolean> saveRoleAuthority(@RequestBody RoleResourceSaveVO roleResourceSaveVO) {
-        return success(roleAuthorityService.saveRoleAuthority(roleResourceSaveVO));
+        return success(roleResourceService.saveRoleResource(roleResourceSaveVO));
     }
 
 
@@ -232,7 +232,7 @@ public class RoleController extends SuperCacheController<RoleService, Long, Role
     @GetMapping("/codes")
     @SysLog("根据角色编码查询用户ID")
     public R<List<Long>> findUserIdByCode(@RequestParam(value = "codes") String[] codes) {
-        return success(baseService.findUserIdByCode(codes));
+        return success(superService.findUserIdByCode(codes));
     }
 
 }

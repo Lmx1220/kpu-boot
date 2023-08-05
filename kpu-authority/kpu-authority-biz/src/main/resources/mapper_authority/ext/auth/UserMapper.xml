@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lmx.kpu.authority.dao.auth.UserMapper">
 
-    <select id="findUserByRoleId" resultMap="BaseResultMap" parameterType="map">
-        SELECT u.id as id, username, nick_name, mobile, sex
-        FROM c_user u INNER JOIN c_user_role ura on u.id = ura.user_id
-        where ura.role_id = #{roleId, jdbcType=BIGINT}
-    </select>
-
-
     <update id="incrPasswordErrorNumById">
         update c_user set password_error_num = password_error_num + 1, password_error_last_time = #{now, jdbcType=TIMESTAMP}
         where id = #{id, jdbcType=BIGINT}
@@ -18,12 +11,6 @@
         where id = #{id, jdbcType=BIGINT}
     </update>
 
-    <select id="findPage" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM c_user s ${ew.customSqlSegment}
-    </select>
-
     <sql id="User_Column_List">
         u.id,u.created_by,u.create_time,u.updated_by,u.update_time,
         u.username, u.nick_name, u.org_id, u.station_id, u.readonly, u.email, u.mobile,
@@ -31,24 +18,4 @@
         u.password_error_last_time, u.password_error_num, u.password_expire_time, u.password, u.last_login_time, u.salt
     </sql>
 
-    <select id="pageByRole" resultMap="BaseResultMap" parameterType="map">
-        SELECT
-        <include refid="User_Column_List"/>
-        FROM c_user u LEFT JOIN c_user_role ura on u.id= ura.user_id
-        LEFT JOIN c_role r on r.id = ura.role_id
-        where r.code = #{param.extra.roleCode}
-        <if test="param.model.username != null and param.model.username != ''">
-            and u.username like #{param.model.username, typeHandler=fullLike}
-        </if>
-        <if test="param.model.nickName != null and param.model.nickName != ''">
-            and u.nick_name like #{param.model.nickName, typeHandler=fullLike}
-        </if>
-        <if test="param.extra.createTime_st != null">
-            and u.create_time >= #{param.extra.createTime_st}
-        </if>
-        <if test="param.extra.createTime_ed != null">
-            and u.create_time  <![CDATA[ <= ]]>  #{param.extra.createTime_ed}
-        </if>
-
-    </select>
 </mapper>

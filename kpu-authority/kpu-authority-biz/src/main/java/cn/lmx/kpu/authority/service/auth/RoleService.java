@@ -1,6 +1,8 @@
 package cn.lmx.kpu.authority.service.auth;
 
 import cn.lmx.basic.base.service.SuperCacheService;
+import cn.lmx.kpu.authority.dto.auth.RolePageQuery;
+import cn.lmx.kpu.authority.dto.auth.RoleResultVO;
 import cn.lmx.kpu.authority.dto.auth.RoleSaveVO;
 import cn.lmx.kpu.authority.dto.auth.RoleUpdateVo;
 import cn.lmx.kpu.authority.entity.auth.Role;
@@ -16,7 +18,7 @@ import java.util.List;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface RoleService extends SuperCacheService<Role> {
+public interface RoleService extends SuperCacheService<Long, Role, RoleSaveVO, RoleUpdateVo, RolePageQuery, RoleResultVO> {
 
 
     /**

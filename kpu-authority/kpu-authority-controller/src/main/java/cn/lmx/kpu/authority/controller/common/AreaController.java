@@ -42,7 +42,7 @@ public class AreaController extends SuperCacheController<AreaService, Long, Area
     @GetMapping("/check/{code}")
     @SysLog("检测地区编码是否重复")
     public R<Boolean> check(@RequestParam(required = false) Long id, @PathVariable String code) {
-        long count = baseService.count(Wraps.<Area>lbQ().eq(Area::getCode, code).ne(Area::getId, id));
+        long count = superService.getSuperManager().count(Wraps.<Area>lbQ().eq(Area::getCode, code).ne(Area::getId, id));
         return success(count > 0);
     }
 
@@ -50,7 +50,7 @@ public class AreaController extends SuperCacheController<AreaService, Long, Area
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
         //TODO 重点测试递归删除
-        return R.success(baseService.recursively(ids));
+        return R.success(superService.recursively(ids));
     }
 
     /**
@@ -67,7 +67,7 @@ public class AreaController extends SuperCacheController<AreaService, Long, Area
         LbqWrapper<Area> query = Wraps.<Area>lbQ()
                 .eq(Area::getParentId, parentId)
                 .orderByAsc(Area::getSortValue);
-        return success(baseService.list(query));
+        return success(superService.list(query));
     }
 
 }

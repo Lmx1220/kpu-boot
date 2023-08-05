@@ -4,7 +4,7 @@
           xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd">
 
     <mapping date-format="yyyy-MM-dd HH:mm:ss">
-        <class-a>cn.lmx.kpu.authority.entity.auth.Menu</class-a>
+        <class-a>cn.lmx.kpu.authority.entity.auth.Resource</class-a>
         <class-b>cn.lmx.kpu.authority.dto.auth.VueRouter</class-b>
         <field custom-converter="cn.lmx.kpu.boot.dozer.JsonToRouterMetaCustomConverter">
             <a>metaJson</a>
@@ -25,8 +25,8 @@
 
     </mapping>
     <mapping date-format="yyyy-MM-dd HH:mm:ss">
-        <class-a>cn.lmx.kpu.authority.entity.auth.Menu</class-a>
-        <class-b>cn.lmx.kpu.authority.dto.auth.MenuViewTreeVO</class-b>
+        <class-a>cn.lmx.kpu.authority.entity.auth.Resource</class-a>
+        <class-b>cn.lmx.kpu.authority.dto.auth.ResourceViewTreeVO</class-b>
         <field custom-converter="cn.lmx.kpu.boot.dozer.JsonToRouterMetaCustomConverter">
             <a>metaJson</a>
             <b>meta</b>

@@ -25,11 +25,11 @@
             <artifactId>kpu-authority-controller</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>cn.lmx.kpu</groupId>-->
-        <!--            <artifactId>kpu-file-controller</artifactId>-->
-        <!--            <version>${kpu-project.version}</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-file-controller</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
         <!--        <dependency>-->
         <!--            <groupId>cn.lmx.kpu</groupId>-->
         <!--            <artifactId>kpu-msg-controller</artifactId>-->

@@ -25,9 +25,9 @@ public interface CacheKeyDefinition {
 
     /**
      * 菜单 前缀
-     * 完整key: menu:{menuId} -> obj
+     * 完整key: auth:{authId} -> obj
      */
-    String MENU = "menu";
+    String Auth = "auth";
     /**
      * 组织 前缀
      * 完整key: station:{stationId} -> obj
@@ -84,9 +84,9 @@ public interface CacheKeyDefinition {
     String USER_ROLE = "user_role";
     /**
      * 用户拥有的菜单 前缀
-     * 完整key: user_menu:{userId} -> [MENU_ID, MENU_ID, ...]
+     * 完整key: user_auth:{userId} -> [MENU_ID, MENU_ID, ...]
      */
-    String USER_MENU = "user_menu";
+    String USER_AUTH = "user_auth";
     /**
      * 用户拥有的资源 前缀
      * 完整key: user_resource:{userId} -> [RESOURCE_ID, ...]

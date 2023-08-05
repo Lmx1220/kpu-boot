@@ -1,15 +1,17 @@
 package cn.lmx.kpu.authority.service.auth.impl;
 
 
-import cn.lmx.basic.base.service.SuperServiceImpl;
+import cn.lmx.basic.base.service.impl.SuperServiceImpl;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.utils.ArgumentAssert;
-import cn.lmx.kpu.authority.dao.auth.RoleOrgMapper;
 import cn.lmx.kpu.authority.dto.auth.RoleOrgSaveVO;
 import cn.lmx.kpu.authority.entity.auth.RoleOrg;
+import cn.lmx.kpu.authority.manager.auth.RoleOrgManager;
 import cn.lmx.kpu.authority.service.auth.RoleOrgService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,9 +27,10 @@ import java.util.stream.Collectors;
  * @date 2023/7/4 14:27
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
-
-public class RoleOrgServiceImpl extends SuperServiceImpl<RoleOrgMapper, RoleOrg> implements RoleOrgService {
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+public class RoleOrgServiceImpl extends SuperServiceImpl<RoleOrgManager, Long, RoleOrg, RoleOrg, RoleOrg, RoleOrg, RoleOrg> implements RoleOrgService {
     @Override
     public List<Long> listOrgByRoleId(Long roleId) {
         List<RoleOrg> list = super.list(Wraps.<RoleOrg>lbQ().eq(RoleOrg::getRoleId, roleId));

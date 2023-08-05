@@ -26,7 +26,6 @@ import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.User;
 import cn.lmx.kpu.authority.entity.auth.UserRole;
 import cn.lmx.kpu.authority.entity.core.Org;
-import cn.lmx.kpu.authority.service.auth.RoleAuthorityService;
 import cn.lmx.kpu.authority.service.auth.UserRoleService;
 import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.authority.service.core.OrgService;
@@ -80,7 +79,6 @@ public class UserController extends SuperCacheController<UserService, Long, User
     private final ExcelUserVerifyHandlerImpl excelUserVerifyHandler;
     private final UserExcelDictHandlerImpl userExcelDictHandlerIImpl;
     private final UserHelperService userHelperService;
-    private final RoleAuthorityService roleAuthorityService;
     private final UserRoleService userRoleService;
 
     @Override
@@ -95,7 +93,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @ApiOperation(value = "检测名称是否可用", notes = "检测名称是否可用")
     @GetMapping("/check")
     public R<Boolean> check(@RequestParam(required = false) Long id, @RequestParam String name) {
-        return success(baseService.check(id, name));
+        return success(superService.check(id, name));
     }
 
     /**
@@ -112,7 +110,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
         if (sysUser != null) {
             data.setCreatedOrgId(sysUser.getOrgId());
         }
-        baseService.saveUser(user);
+        superService.saveUser(user);
         return success(user);
     }
 
@@ -124,7 +122,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
      */
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
-        baseService.remove(ids);
+        superService.remove(ids);
         return success(true);
     }
 
@@ -137,7 +135,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @Override
     public R<User> handlerUpdate(UserUpdateVo data) {
         User user = BeanUtil.toBean(data, User.class);
-        baseService.updateUser(user);
+        superService.updateUser(user);
         return success(user);
     }
 
@@ -153,7 +151,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @PreAuth("hasAnyPermission('{}edit')")
     public R<User> updateBase(@RequestBody @Validated({SuperEntity.Update.class}) UserUpdateBaseInfoDTO data) {
         User user = BeanUtil.toBean(data, User.class);
-        baseService.updateById(user);
+        superService.getSuperManager().updateById(user);
         return success(user);
     }
 
@@ -167,7 +165,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @PutMapping("/avatar")
     @SysLog("'修改头像:' + #p0.id")
     public R<Boolean> avatar(@RequestBody @Validated(SuperEntity.Update.class) UserUpdateAvatarDTO data) {
-        return success(baseService.updateAvatar(data));
+        return success(superService.updateAvatar(data));
     }
 
     /**
@@ -180,7 +178,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @PutMapping("/password")
     @SysLog("'修改密码:' + #p0.id")
     public R<Boolean> updatePassword(@RequestBody @Validated(SuperEntity.Update.class) UserUpdatePasswordDTO data) {
-        return success(baseService.updatePassword(data));
+        return success(superService.updatePassword(data));
     }
 
     /**
@@ -193,7 +191,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @PostMapping("/reset")
     @SysLog("'重置密码:' + #data.id")
     public R<Boolean> reset(@RequestBody @Validated(SuperEntity.Update.class) UserUpdatePasswordDTO data) {
-        baseService.reset(data);
+        superService.reset(data);
         return success();
     }
 
@@ -220,7 +218,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @PostMapping("/saveUserRole")
     @SysLog("给用户分配角色")
     public R<List<Long>> saveUserRole(@RequestBody UserRoleSaveVO userRole) {
-        return success(roleAuthorityService.saveUserRole(userRole));
+        return success(userRoleService.saveUserRole(userRole));
     }
 
 
@@ -228,21 +226,16 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @GetMapping("/find")
     @SysLog("查询所有用户")
     public R<List<Long>> findAllUserId() {
-        return success(baseService.findAllUserId());
+        return success(superService.findAllUserId());
     }
 
     @ApiOperation(value = "查询所有用户实体", notes = "查询所有用户实体")
     @GetMapping("/findAll")
     @SysLog("查询所有用户")
     public R<List<User>> findAll() {
-        List<User> res = baseService.list();
+        List<User> res = superService.list();
         res.forEach(obj -> obj.setPassword(null));
         return success(res);
-    }
-
-    @RequestMapping(value = "/findUserById", method = RequestMethod.GET)
-    public R<List<User>> findUserById(@RequestParam(value = "ids") List<Long> ids) {
-        return this.success(baseService.findUserById(ids));
     }
 
     @Override
@@ -298,7 +291,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
             return user;
         }).collect(Collectors.toList());
 
-        baseService.saveBatch(userList);
+        superService.saveBatch(userList);
         return this.success(true);
     }
 
@@ -340,7 +333,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
             }
         }
 
-        baseService.findPage(page, wrapper);
+        superService.page(page, wrapper);
 
         page.getRecords().forEach(item -> {
             item.setPassword(null);
@@ -350,55 +343,6 @@ public class UserController extends SuperCacheController<UserService, Long, User
         appendixService.echoAppendix(page);
 
         return page;
-    }
-
-    @ApiOperation(value = "分页查询所有用户", notes = "分页查询所有用户")
-    @PostMapping("/pageAll")
-    @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
-    public R<IPage<User>> pageAll(@RequestBody @Validated PageParams<UserPageQuery> params) {
-        IPage<User> page = params.buildPage(User.class);
-        UserPageQuery userPage = params.getModel();
-
-        QueryWrap<User> wrap = handlerWrapper(null, params);
-
-        LbqWrapper<User> wrapper = wrap.lambda();
-        if (userPage.getOrgId() != null && userPage.getOrgId() > 0) {
-            List<Org> children = orgService.findChildren(Arrays.asList(userPage.getOrgId()));
-            wrapper.in(User::getOrgId, children.stream().map(Org::getId).collect(Collectors.toList()));
-        }
-        wrapper.like(User::getNickName, userPage.getNickName())
-                .like(User::getUsername, userPage.getUsername())
-                .like(User::getEmail, userPage.getEmail())
-                .like(User::getMobile, userPage.getMobile())
-                .eq(User::getStationId, userPage.getStationId())
-                .in(User::getPositionStatus, userPage.getPositionStatus())
-                .in(User::getEducation, userPage.getEducation())
-                .in(User::getNation, userPage.getNation())
-                .in(User::getSex, userPage.getSex())
-                .eq(userPage.getState() != null, User::getState, userPage.getState())
-                .between(params.getExtra().get("createTime_st") != null && params.getExtra().get("createTime_en") != null,
-                        User::getCreateTime, params.getExtra().get("createTime_st"), params.getExtra().get("createTime_en"));
-        ;
-
-        if (StrUtil.equalsAny(userPage.getScope(), BizConstant.SCOPE_BIND, BizConstant.SCOPE_UN_BIND) && userPage.getRoleId() != null) {
-            String sql = " select ura.user_id from c_user_role ura where ura.user_id = s.id \n" +
-                    "  and ura.role_id =   " + userPage.getRoleId();
-            if (BizConstant.SCOPE_BIND.equals(userPage.getScope())) {
-                wrapper.inSql(User::getId, sql);
-            } else {
-                wrapper.notInSql(User::getId, sql);
-            }
-        }
-
-        baseService.findPage(page, wrapper);
-        // 手动注入
-        echoService.action(page);
-
-        page.getRecords().forEach(item -> {
-            item.setPassword(null);
-            item.setSalt(null);
-        });
-        return R.success(page);
     }
 
 }

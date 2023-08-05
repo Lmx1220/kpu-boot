@@ -2,6 +2,7 @@ package cn.lmx.kpu.authority.service.common;
 
 import cn.lmx.basic.base.service.SuperService;
 import cn.lmx.basic.interfaces.echo.LoadService;
+import cn.lmx.kpu.authority.dto.common.*;
 import cn.lmx.kpu.authority.entity.common.Dict;
 import cn.lmx.kpu.model.vo.query.CodeQueryVO;
 
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface DictService extends SuperService<Dict>, LoadService {
+public interface DictService extends SuperService<Long, Dict, DictSaveVO, DictUpdateVo, DictPageQuery, DictResultVO>, LoadService {
 
 
     /**

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface OptLogService extends SuperService<OptLog> {
+public interface OptLogService extends SuperService<Long, OptLog, OptLog, OptLog, OptLog, OptLogResult> {
 
     /**
      * 保存日志

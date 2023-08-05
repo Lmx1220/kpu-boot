@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.base.request.PageUtil;
-import cn.lmx.basic.base.service.SuperCacheServiceImpl;
+import cn.lmx.basic.base.service.impl.SuperCacheServiceImpl;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.LbqWrapper;
@@ -15,12 +15,11 @@ import cn.lmx.basic.model.cache.CacheKeyBuilder;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.CollHelper;
 import cn.lmx.kpu.authority.dao.auth.UserMapper;
-import cn.lmx.kpu.authority.dto.auth.GlobalUserPageQuery;
-import cn.lmx.kpu.authority.dto.auth.UserUpdateAvatarDTO;
-import cn.lmx.kpu.authority.dto.auth.UserUpdatePasswordDTO;
+import cn.lmx.kpu.authority.dto.auth.*;
 import cn.lmx.kpu.authority.entity.auth.Role;
 import cn.lmx.kpu.authority.entity.auth.User;
 import cn.lmx.kpu.authority.entity.auth.UserRole;
+import cn.lmx.kpu.authority.manager.auth.UserManager;
 import cn.lmx.kpu.authority.service.auth.RoleOrgService;
 import cn.lmx.kpu.authority.service.auth.RoleService;
 import cn.lmx.kpu.authority.service.auth.UserRoleService;
@@ -28,7 +27,6 @@ import cn.lmx.kpu.authority.service.auth.UserService;
 import cn.lmx.kpu.authority.service.core.OrgService;
 import cn.lmx.kpu.authority.service.core.StationService;
 import cn.lmx.kpu.common.cache.auth.UserCacheKeyBuilder;
-import cn.lmx.kpu.common.cache.auth.UserMenuCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserRoleCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserUsernameCacheKeyBuilder;
 import cn.lmx.kpu.common.constant.BizConstant;
@@ -37,6 +35,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -58,79 +57,36 @@ import static cn.lmx.kpu.common.constant.BizConstant.DEF_PASSWORD;
  * @date 2023/7/4 14:27
  */
 @Slf4j
-@Service
-
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> implements UserService {
+@Service
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+public class UserServiceImpl extends SuperCacheServiceImpl<UserManager, Long, User, UserSaveVO, UserUpdateVo, UserPageQuery, UserResultVO> implements UserService {
 
-    private final StationService stationService;
     private final RoleService roleService;
     private final UserRoleService userRoleService;
     private final RoleOrgService roleOrgService;
     private final OrgService orgService;
     private final AppendixService appendixService;
 
-    @Override
-    protected CacheKeyBuilder cacheKeyBuilder() {
-        return new UserCacheKeyBuilder();
-    }
-
-    @Override
-    public IPage<User> pageByRole(IPage<User> page, PageParams<GlobalUserPageQuery> params) {
-        params.put("roleCode", BizConstant.INIT_ROLE_CODE);
-        PageUtil.timeRange(params);
-        return baseMapper.pageByRole(page, params);
-    }
-
-    @Override
-    public IPage<User> findPage(IPage<User> page, LbqWrapper<User> wrapper) {
-        return baseMapper.findPage(page, wrapper);
-    }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updatePassword(UserUpdatePasswordDTO data) {
-        ArgumentAssert.notEmpty(data.getOldPassword(), "当前密码不能为空");
-        User user = getById(data.getId());
-        ArgumentAssert.notNull(user, "用户不存在");
-        ArgumentAssert.equals(user.getId(), ContextUtil.getUserId(), "只能修改自己的密码");
-        String oldPassword = SecureUtil.sha256(data.getOldPassword() + user.getSalt());
-        ArgumentAssert.equals(user.getPassword(), oldPassword, "旧密码错误");
+        return superManager.updatePassword(data);
 
-        return reset(data);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean reset(UserUpdatePasswordDTO data) {
-        ArgumentAssert.equals(data.getConfirmPassword(), data.getPassword(), "密码和重复密码不一致");
-        User user = getById(data.getId());
-        ArgumentAssert.notNull(user, "用户不存在");
-        String defPassword = SecureUtil.sha256(data.getPassword() + user.getSalt());
-        super.update(Wraps.<User>lbU()
-                .set(User::getPassword, defPassword)
-                .set(User::getPasswordErrorNum, 0L)
-                // 置空
-                .set(User::getPasswordErrorLastTime, null)
-                .eq(User::getId, data.getId())
-        );
-        delCache(data.getId());
-        return true;
+        return superManager.reset(data);
     }
 
     @Override
     public User getByUsername(String username) {
-        Function<CacheKey, Object> loader = k -> getObj(Wraps.<User>lbQ().select(User::getId).eq(User::getUsername, username), Convert::toLong);
-        CacheKeyBuilder builder = new UserUsernameCacheKeyBuilder();
-        return getByKey(builder.key(username), loader);
+        return superManager.getByUsername(username);
     }
 
-    @Override
-    public List<User> findUserByRoleId(Long roleId) {
-        return baseMapper.findUserByRoleId(roleId);
-    }
 
     @Override
     public Map<String, Object> getDataScopeById(Long userId) {
@@ -176,85 +132,55 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     @Override
     public boolean check(Long id, String username) {
         //这里不能用缓存，否则会导致用户无法登录
-        return count(Wraps.<User>lbQ().eq(User::getUsername, username).ne(User::getId, id)) > 0;
+        return superManager.count(Wraps.<User>lbQ().eq(User::getUsername, username).ne(User::getId, id)) > 0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void incrPasswordErrorNumById(Long id) {
-        baseMapper.incrPasswordErrorNumById(id, LocalDateTime.now());
-        delCache(id);
+        superManager.incrPasswordErrorNumById(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int resetPassErrorNum(Long id) {
-        int count = baseMapper.resetPassErrorNum(id, LocalDateTime.now());
-        delCache(id);
-        return count;
+        return superManager.resetPassErrorNum(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User saveUser(User user) {
-        ArgumentAssert.isFalse(check(null, user.getUsername()), "账号{}已经存在", user.getUsername());
-        user.setSalt(RandomUtil.randomString(20));
-        if (StrUtil.isEmpty(user.getPassword())) {
-            user.setPassword(DEF_PASSWORD);
-        }
-        user.setPassword(SecureUtil.sha256(user.getPassword() + user.getSalt()));
-        user.setPasswordErrorNum(0);
-        super.save(user);
-        CacheKeyBuilder builder = new UserUsernameCacheKeyBuilder();
-        cacheOps.del(builder.key(user.getUsername()));
-        return user;
+        return superManager.saveUser(user);
     }
 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User updateUser(User user) {
-        // 不允许修改用户信息时修改密码，请单独调用修改密码接口
-        user.setPassword(null);
-        user.setSalt(null);
-        updateById(user);
-        return user;
+        return superManager.updateUser(user);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean remove(List<Long> ids) {
-        if (ids.isEmpty()) {
-            return true;
-        }
-        userRoleService.remove(Wraps.<UserRole>lbQ().in(UserRole::getUserId, ids));
-        cacheOps.del(ids.stream().map(new UserRoleCacheKeyBuilder()::key).toArray(CacheKey[]::new));
-        cacheOps.del(ids.stream().map(new UserMenuCacheKeyBuilder()::key).toArray(CacheKey[]::new));
-        return removeByIds(ids);
+        return superManager.remove(ids);
     }
 
     @Override
     public Map<Serializable, Object> findByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findUser(ids), User::getId, User::getNickName);
+        return CollHelper.uniqueIndex(superManager.findUser(ids), User::getId, User::getNickName);
     }
 
-    @Override
-    public List<User> findUser(Set<Serializable> ids) {
-        // 强转， 防止数据库隐式转换，  若你的id 是string类型，请勿强转
-        return findByIds(ids,
-                missIds -> super.listByIds(missIds.stream().filter(Objects::nonNull).map(Convert::toLong).collect(Collectors.toList()))
-        );
-    }
 
     @Override
     public List<User> findUserById(List<Long> ids) {
-        return findUser(new HashSet<>(ids));
+        return superManager.findUser(new HashSet<>(ids));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Long> findAllUserId() {
-        return super.listObjs(Wraps.<User>lbQ().select(User::getId), Convert::toLong);
+        return getSuperManager().listObjs(Wraps.<User>lbQ().select(User::getId), Convert::toLong);
     }
 
     @Override
@@ -268,7 +194,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     @Override
     @Transactional(readOnly = true)
     public Long todayUserCount() {
-        return count(Wraps.<User>lbQ().leFooter(User::getCreateTime, LocalDateTime.now()).geHeader(User::getCreateTime, LocalDateTime.now()));
+        return superManager.todayUserCount();
     }
 
     @Override
@@ -276,7 +202,7 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
     public Boolean updateAvatar(UserUpdateAvatarDTO data) {
         ArgumentAssert.isFalse(StrUtil.isEmpty(data.getAvatar()) && data.getAppendixAvatar() == null, "请上传或选择头像");
         if (StrUtil.isNotEmpty(data.getAvatar())) {
-            return updateById(User.builder().avatar(data.getAvatar()).id(data.getId()).build());
+            return superManager.updateById(User.builder().avatar(data.getAvatar()).id(data.getId()).build());
         }
         return appendixService.save(data.getId(), data.getAppendixAvatar());
     }

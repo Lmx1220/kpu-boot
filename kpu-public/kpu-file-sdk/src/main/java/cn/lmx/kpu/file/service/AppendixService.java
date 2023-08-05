@@ -4,8 +4,10 @@ import cn.lmx.basic.base.entity.SuperEntity;
 import cn.lmx.basic.base.service.SuperService;
 import cn.lmx.basic.interfaces.echo.EchoVO;
 import cn.lmx.kpu.file.entity.Appendix;
+import cn.lmx.kpu.model.vo.query.AppendixPageQuery;
 import cn.lmx.kpu.model.vo.result.AppendixResultVO;
 import cn.lmx.kpu.model.vo.save.AppendixSaveVO;
+import cn.lmx.kpu.model.vo.save.AppendixUpdateVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.collect.Multimap;
 import lombok.*;
@@ -25,7 +27,7 @@ import java.util.List;
  * @date 2023/7/4 14:27
  * @create [2023/7/4 14:27] [lmx] [初始创建]
  */
-public interface AppendixService extends SuperService<Appendix> {
+public interface AppendixService extends SuperService<Long, Appendix, AppendixSaveVO, AppendixUpdateVO, AppendixPageQuery, AppendixResultVO> {
 
     @Data
     @Builder

@@ -2,6 +2,10 @@ package cn.lmx.kpu.authority.service.core;
 
 import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.basic.interfaces.echo.LoadService;
+import cn.lmx.kpu.authority.dto.core.OrgPageQuery;
+import cn.lmx.kpu.authority.dto.core.OrgPageResultVO;
+import cn.lmx.kpu.authority.dto.core.OrgSaveVO;
+import cn.lmx.kpu.authority.dto.core.OrgUpdateVo;
 import cn.lmx.kpu.authority.entity.core.Org;
 
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.List;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface OrgService extends SuperCacheService<Org>, LoadService {
+public interface OrgService extends SuperCacheService<Long, Org, OrgSaveVO, OrgUpdateVo, OrgPageQuery, OrgPageResultVO>, LoadService {
     /**
      * 查询指定id集合下的所有子集
      *

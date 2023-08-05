@@ -32,7 +32,7 @@ public class RoleResourceSaveVO implements Serializable {
 
     /**
      * 菜单ID
-     * #c_menu
+     * #c_resource
      */
     @ApiModelProperty(value = "资源ID")
     private List<Long> menuIdList;

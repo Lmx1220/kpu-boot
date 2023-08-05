@@ -3,7 +3,7 @@ package cn.lmx.kpu.authority.controller.common;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.lmx.basic.annotation.security.PreAuth;
-import cn.lmx.basic.base.controller.SuperNoPoiController;
+import cn.lmx.basic.base.controller.SuperPoiController;
 import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.QueryWrap;
@@ -12,6 +12,7 @@ import cn.lmx.kpu.authority.dto.common.DictItemResultVO;
 import cn.lmx.kpu.authority.dto.common.DictItemSaveVO;
 import cn.lmx.kpu.authority.dto.common.DictItemUpdateVO;
 import cn.lmx.kpu.authority.entity.common.Dict;
+import cn.lmx.kpu.authority.service.common.DictItemService;
 import cn.lmx.kpu.authority.service.common.DictService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuth(replace = "authority:dict:")
 @RequiredArgsConstructor
 public class DictItemController
-        extends SuperNoPoiController<DictService, Long, Dict, DictItemSaveVO, DictItemUpdateVO, DictItemPageQuery, DictItemResultVO> {
+        extends SuperPoiController<DictItemService, Long, Dict, DictItemSaveVO, DictItemUpdateVO, DictItemPageQuery, DictItemResultVO> {
     @Override
     public Class<DictItemResultVO> getResultVOClass() {
         return DictItemResultVO.class;

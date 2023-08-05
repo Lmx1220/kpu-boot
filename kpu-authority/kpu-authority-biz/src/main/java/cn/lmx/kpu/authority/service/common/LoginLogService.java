@@ -1,6 +1,7 @@
 package cn.lmx.kpu.authority.service.common;
 
 import cn.lmx.basic.base.service.SuperService;
+import cn.lmx.kpu.authority.dto.common.LoginLogUpdateVo;
 import cn.lmx.kpu.authority.entity.common.LoginLog;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface LoginLogService extends SuperService<LoginLog> {
+public interface LoginLogService extends SuperService<Long, LoginLog, LoginLog, LoginLogUpdateVo, LoginLog, LoginLog> {
 
 
     /**

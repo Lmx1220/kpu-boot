@@ -87,7 +87,7 @@ public class LoginLogController extends SuperController<LoginLogService, Long, L
             clearBeforeNum = 100000;
         }
 
-        return success(baseService.clearLog(clearBeforeTime, clearBeforeNum));
+        return success(superService.clearLog(clearBeforeTime, clearBeforeNum));
     }
 
 }

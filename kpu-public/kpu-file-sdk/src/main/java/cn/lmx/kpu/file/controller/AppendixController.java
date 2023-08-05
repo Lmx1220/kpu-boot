@@ -48,6 +48,6 @@ public class AppendixController extends SuperSimpleController<AppendixService, L
     @PostMapping(value = "/listByBizId")
     @SysLog("根据业务id 和 业务类型查询附件信息")
     public R<List<AppendixResultVO>> listByBizId(@RequestParam Long bizId, @RequestParam(required = false) String bizType) {
-        return R.success(baseService.listByBizIdAndBizType(bizId, bizType));
+        return R.success(superService.listByBizIdAndBizType(bizId, bizType));
     }
 }

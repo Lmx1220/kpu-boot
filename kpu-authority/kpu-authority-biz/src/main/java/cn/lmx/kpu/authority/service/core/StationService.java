@@ -4,6 +4,9 @@ import cn.lmx.basic.base.request.PageParams;
 import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.basic.interfaces.echo.LoadService;
 import cn.lmx.kpu.authority.dto.core.StationPageQuery;
+import cn.lmx.kpu.authority.dto.core.StationResultVO;
+import cn.lmx.kpu.authority.dto.core.StationSaveVO;
+import cn.lmx.kpu.authority.dto.core.StationUpdateVo;
 import cn.lmx.kpu.authority.entity.core.Station;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -16,7 +19,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface StationService extends SuperCacheService<Station>, LoadService {
+public interface StationService extends SuperCacheService<Long, Station, StationSaveVO, StationUpdateVo, StationPageQuery, StationResultVO>, LoadService {
     /**
      * 按权限查询岗位的分页信息
      *

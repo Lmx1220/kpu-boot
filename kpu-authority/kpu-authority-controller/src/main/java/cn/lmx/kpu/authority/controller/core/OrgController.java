@@ -62,7 +62,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     @ApiOperation(value = "检测名称是否可用", notes = "检测名称是否可用")
     @GetMapping("/check")
     public R<Boolean> check(@RequestParam(required = false) Long id, @RequestParam String name) {
-        return success(baseService.check(id, name));
+        return success(superService.check(id, name));
     }
 
 
@@ -70,7 +70,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     public R<Org> handlerSave(OrgSaveVO model) {
         Org org = BeanPlusUtil.toBean(model, Org.class);
         fillOrg(org);
-        this.baseService.save(org);
+        this.superService.save(model);
         return success(org);
     }
 
@@ -78,7 +78,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     public R<Org> handlerUpdate(OrgUpdateVo model) {
         Org org = BeanPlusUtil.toBean(model, Org.class);
         fillOrg(org);
-        this.baseService.updateAllById(org);
+        this.superService.updateAllById(model);
         return success(org);
     }
 
@@ -87,7 +87,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
             org.setParentId(DEF_PARENT_ID);
             org.setTreePath(DefValConstants.ROOT_PATH);
         } else {
-            Org parent = this.baseService.getByIdCache(org.getParentId());
+            Org parent = this.superService.getByIdCache(org.getParentId());
             ArgumentAssert.notNull(parent, "请正确填写父级组织");
 
             org.setTreePath(TreeUtil.getTreePath(parent.getTreePath(), parent.getId()));
@@ -96,7 +96,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
 
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
-        return this.success(baseService.remove(ids));
+        return this.success(superService.remove(ids));
     }
 
 
@@ -113,7 +113,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
     @SysLog("查询系统所有的组织树")
     public R<List<Org>> tree(@RequestParam(value = "name", required = false) String name,
                              @RequestParam(value = "state", required = false) Boolean state) {
-        List<Org> list = this.baseService.list(Wraps.<Org>lbQ()
+        List<Org> list = this.superService.list(Wraps.<Org>lbQ()
                 .like(Org::getName, name).eq(Org::getState, state).orderByAsc(Org::getSortValue));
         echoService.action(list);
         return this.success(TreeUtil.buildTree(list));
@@ -131,7 +131,7 @@ public class OrgController extends SuperCacheController<OrgService, Long, Org, O
             return item;
         }).collect(Collectors.toList());
 
-        return R.success(baseService.saveBatch(userList));
+        return R.success(superService.saveBatch(userList));
     }
 
     /**

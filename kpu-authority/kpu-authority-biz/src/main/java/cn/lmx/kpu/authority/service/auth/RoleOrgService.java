@@ -15,7 +15,7 @@ import java.util.List;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface RoleOrgService extends SuperService<RoleOrg> {
+public interface RoleOrgService extends SuperService<Long, RoleOrg, RoleOrg, RoleOrg, RoleOrg, RoleOrg> {
 
     /**
      * 根据角色id查询

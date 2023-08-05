@@ -4,11 +4,11 @@ import cn.lmx.basic.base.R;
 import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.utils.CollHelper;
 import cn.lmx.basic.utils.StrPool;
-import cn.lmx.kpu.model.entity.base.SysMenu;
+import cn.lmx.kpu.model.entity.base.SysResource;
 import cn.lmx.kpu.model.entity.base.SysStation;
 import cn.lmx.kpu.model.entity.base.SysUser;
-import cn.lmx.kpu.model.vo.query.MenuQueryDTO;
-import cn.lmx.kpu.userinfo.service.MenuHelperService;
+import cn.lmx.kpu.model.vo.query.ResourceQueryDTO;
+import cn.lmx.kpu.userinfo.service.ResourceHelperService;
 import cn.lmx.kpu.userinfo.service.RoleHelperService;
 import cn.lmx.kpu.userinfo.service.UserHelperService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 public class UserResolverServiceFeignImpl implements UserResolverService {
     private final UserHelperService userHelperService;
-    private final MenuHelperService menuHelperService;
+    private final ResourceHelperService resourceHelperService;
     private final RoleHelperService roleHelperService;
 
     @Override
@@ -55,8 +55,8 @@ public class UserResolverServiceFeignImpl implements UserResolverService {
             sysUser.setRoles(list);
         }
         if (query.getFull() || query.getResource()) {
-            List<SysMenu> resourceList = menuHelperService.findVisibleResource(MenuQueryDTO.builder().userId(userId).build());
-            sysUser.setResources(CollHelper.split(resourceList, SysMenu::getCode, StrPool.SEMICOLON));
+            List<SysResource> resourceList = resourceHelperService.findVisibleAuth(ResourceQueryDTO.builder().userId(userId).build());
+            sysUser.setResources(CollHelper.split(resourceList, SysResource::getCode, StrPool.SEMICOLON));
         }
 
         return R.success(sysUser);

@@ -9,5 +9,5 @@ import cn.lmx.kpu.tenant.entity.TenantDatasourceConfig;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface TenantDatasourceConfigService extends SuperService<TenantDatasourceConfig> {
+public interface TenantDatasourceConfigService extends SuperService<Long, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig> {
 }

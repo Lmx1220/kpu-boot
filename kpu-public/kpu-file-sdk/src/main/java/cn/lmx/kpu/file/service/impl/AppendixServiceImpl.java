@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.base.entity.SuperEntity;
-import cn.lmx.basic.base.service.SuperServiceImpl;
+import cn.lmx.basic.base.service.impl.SuperServiceImpl;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.mybatis.conditions.query.LbqWrapper;
 import cn.lmx.basic.interfaces.echo.EchoVO;
@@ -12,10 +12,12 @@ import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.basic.utils.BeanPlusUtil;
 import cn.lmx.basic.utils.CollHelper;
 import cn.lmx.kpu.file.entity.Appendix;
-import cn.lmx.kpu.file.mapper.AppendixMapper;
+import cn.lmx.kpu.file.manager.AppendixManager;
 import cn.lmx.kpu.file.service.AppendixService;
+import cn.lmx.kpu.model.vo.query.AppendixPageQuery;
 import cn.lmx.kpu.model.vo.result.AppendixResultVO;
 import cn.lmx.kpu.model.vo.save.AppendixSaveVO;
+import cn.lmx.kpu.model.vo.save.AppendixUpdateVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 
 @Transactional(readOnly = true)
-public class AppendixServiceImpl extends SuperServiceImpl<AppendixMapper, Appendix> implements AppendixService {
+public class AppendixServiceImpl extends SuperServiceImpl<AppendixManager, Long, Appendix, AppendixSaveVO, AppendixUpdateVO, AppendixPageQuery, AppendixResultVO> implements AppendixService {
 
 
     @Override
@@ -128,7 +130,7 @@ public class AppendixServiceImpl extends SuperServiceImpl<AppendixMapper, Append
         }
         Appendix commonFile = BeanPlusUtil.toBean(saveVO, Appendix.class);
         commonFile.setBizId(bizId);
-        save(commonFile);
+        superManager.save(commonFile);
         return true;
     }
 

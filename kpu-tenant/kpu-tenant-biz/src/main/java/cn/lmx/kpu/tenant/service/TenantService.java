@@ -2,9 +2,7 @@ package cn.lmx.kpu.tenant.service;
 
 import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
-import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
-import cn.lmx.kpu.tenant.dto.TenantSaveVO;
-import cn.lmx.kpu.tenant.dto.TenantUpdateVo;
+import cn.lmx.kpu.tenant.dto.*;
 import cn.lmx.kpu.tenant.entity.Tenant;
 
 import java.util.List;
@@ -18,7 +16,8 @@ import java.util.List;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface TenantService extends SuperCacheService<Tenant> {
+public interface TenantService extends SuperCacheService<Long, Tenant, TenantSaveVO,
+        TenantUpdateVo, TenantPageQuery, TenantResultVO> {
     /**
      * 检测 租户编码是否存在
      *

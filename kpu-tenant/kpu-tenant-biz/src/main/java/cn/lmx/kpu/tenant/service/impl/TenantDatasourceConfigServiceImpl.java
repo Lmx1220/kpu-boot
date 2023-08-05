@@ -1,9 +1,9 @@
 package cn.lmx.kpu.tenant.service.impl;
 
 
-import cn.lmx.basic.base.service.SuperServiceImpl;
-import cn.lmx.kpu.tenant.dao.TenantDatasourceConfigMapper;
+import cn.lmx.basic.base.service.impl.SuperServiceImpl;
 import cn.lmx.kpu.tenant.entity.TenantDatasourceConfig;
+import cn.lmx.kpu.tenant.manager.TenantDatasourceConfigManager;
 import cn.lmx.kpu.tenant.service.TenantDatasourceConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,5 +16,5 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class TenantDatasourceConfigServiceImpl extends SuperServiceImpl<TenantDatasourceConfigMapper, TenantDatasourceConfig> implements TenantDatasourceConfigService {
+public class TenantDatasourceConfigServiceImpl extends SuperServiceImpl<TenantDatasourceConfigManager, Long, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig, TenantDatasourceConfig> implements TenantDatasourceConfigService {
 }

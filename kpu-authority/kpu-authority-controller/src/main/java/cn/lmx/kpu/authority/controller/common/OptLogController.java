@@ -53,7 +53,7 @@ public class OptLogController extends SuperSimpleController<OptLogService, Long,
 
     @Override
     public R<OptLogResult> getDetail(@RequestParam("id") Long id) {
-        return success(baseService.getOptLogResultById(id));
+        return success(superService.getOptLogResultById(id));
     }
 
     @ApiOperation("清空日志")
@@ -83,7 +83,7 @@ public class OptLogController extends SuperSimpleController<OptLogService, Long,
             // 清理十万条以前日志数据
             clearBeforeNum = 100000;
         }
-        return success(baseService.clearLog(clearBeforeTime, clearBeforeNum));
+        return success(superService.clearLog(clearBeforeTime, clearBeforeNum));
     }
 
 }

@@ -36,11 +36,11 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuth(replace = "authority:application:")
 public class ApplicationController extends SuperCacheController<ApplicationService, Long, Application, ApplicationSaveVO, ApplicationUpdateVo, ApplicationPageQuery, ApplicationResultVO> {
 
-    @Override
-    public R<Application> handlerSave(ApplicationSaveVO applicationSaveVO) {
-        applicationSaveVO.setClientId(RandomUtil.randomString(24));
-        applicationSaveVO.setClientSecret(RandomUtil.randomString(32));
-        return super.handlerSave(applicationSaveVO);
-    }
+//    @Override
+//    public R<Application> handlerSave(ApplicationSaveVO applicationSaveVO) {
+//        applicationSaveVO.setClientId(RandomUtil.randomString(24));
+//        applicationSaveVO.setClientSecret(RandomUtil.randomString(32));
+//        return super.handlerSave(applicationSaveVO);
+//    }
 
 }

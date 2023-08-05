@@ -1,7 +1,7 @@
 package cn.lmx.kpu.tenant.service.impl;
 
 import cn.hutool.core.convert.Convert;
-import cn.lmx.basic.base.service.SuperCacheServiceImpl;
+import cn.lmx.basic.base.service.impl.SuperCacheServiceImpl;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.model.cache.CacheKeyBuilder;
@@ -14,10 +14,9 @@ import cn.lmx.kpu.model.enumeration.system.TenantConnectTypeEnum;
 import cn.lmx.kpu.model.enumeration.system.TenantStatusEnum;
 import cn.lmx.kpu.model.enumeration.system.TenantTypeEnum;
 import cn.lmx.kpu.tenant.dao.TenantMapper;
-import cn.lmx.kpu.tenant.dto.TenantConnectDTO;
-import cn.lmx.kpu.tenant.dto.TenantSaveVO;
-import cn.lmx.kpu.tenant.dto.TenantUpdateVo;
+import cn.lmx.kpu.tenant.dto.*;
 import cn.lmx.kpu.tenant.entity.Tenant;
+import cn.lmx.kpu.tenant.manager.TenantManager;
 import cn.lmx.kpu.tenant.service.TenantService;
 import cn.lmx.kpu.tenant.strategy.InitSystemContext;
 import lombok.RequiredArgsConstructor;
@@ -40,17 +39,8 @@ import java.util.function.Function;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenant> implements TenantService {
-
-    private final InitSystemContext initSystemContext;
-    private final AppendixService appendixService;
-
-    @Override
-    protected CacheKeyBuilder cacheKeyBuilder() {
-        return new TenantCacheKeyBuilder();
-    }
-
-
+public class TenantServiceImpl extends SuperCacheServiceImpl<TenantManager, Long, Tenant, TenantSaveVO,
+        TenantUpdateVo, TenantPageQuery, TenantResultVO> implements TenantService {
     /**
      * tenant_name:{tenantCode} -> id 只存租户的id，然后根据id再次查询缓存，这样子的好处是，删除或者修改租户信息时，只需要根据id淘汰缓存即可
      * 缺点就是 每次查询，需要多查一次缓存
@@ -60,82 +50,42 @@ public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenan
      */
     @Override
     public Tenant getByCode(String tenant) {
-        Function<CacheKey, Object> loader = (k) ->
-                getObj(Wraps.<Tenant>lbQ().select(Tenant::getId).eq(Tenant::getCode, tenant), Convert::toLong);
-        CacheKey cacheKey = new TenantCodeCacheKeyBuilder().key(tenant);
-        return getByKey(cacheKey, loader);
+        return superManager.getByCode(tenant);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Tenant save(TenantSaveVO data) {
-        // defaults 库
-        ArgumentAssert.isFalse(check(data.getCode()), "编码重复，请重新输入");
-
-        // 1， 保存租户 (默认库)
-        Tenant tenant = BeanPlusUtil.toBean(data, Tenant.class);
-        tenant.setStatus(TenantStatusEnum.WAIT_INIT);
-        tenant.setType(TenantTypeEnum.CREATE);
-        tenant.setConnectType(TenantConnectTypeEnum.SYSTEM);
-        // defaults 库
-        save(tenant);
-        appendixService.save(tenant.getId(), data.getLogos());
-
-        CacheKey cacheKey = new TenantCodeCacheKeyBuilder().key(tenant.getCode());
-        cacheOps.set(cacheKey, tenant.getId());
-        return tenant;
+        return superManager.save(data);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Tenant update(TenantUpdateVo model) {
-        Tenant tenant = BeanPlusUtil.toBean(model, Tenant.class);
-        super.updateById(tenant);
-        appendixService.save(tenant.getId(), model.getLogos());
-        return tenant;
+        return superManager.update(model);
     }
 
     @Override
     public boolean check(String tenantCode) {
-        return super.count(Wraps.<Tenant>lbQ().eq(Tenant::getCode, tenantCode)) > 0;
+        return superManager.check(tenantCode);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean connect(TenantConnectDTO tenantConnect) {
-        return initSystemContext.initConnect(tenantConnect) && updateTenantStatus(tenantConnect);
-    }
-
-    private Boolean updateTenantStatus(TenantConnectDTO tenantConnect) {
-        Boolean flag = this.update(Wraps.<Tenant>lbU()
-                .set(Tenant::getStatus, TenantStatusEnum.NORMAL)
-                .set(Tenant::getConnectType, tenantConnect.getConnectType())
-                .eq(Tenant::getId, tenantConnect.getId()));
-        delCache(tenantConnect.getId());
-        return flag;
+        return superManager.connect(tenantConnect);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean delete(List<Long> ids) {
-        List<String> tenantCodeList = listObjs(Wraps.<Tenant>lbQ().select(Tenant::getCode).in(Tenant::getId, ids), Convert::toStr);
-        if (tenantCodeList.isEmpty()) {
-            return true;
-        }
-        appendixService.removeByBizId(ids);
-        return removeByIds(ids);
+        return superManager.delete(ids);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteAll(List<Long> ids) {
-        List<String> tenantCodeList = listObjs(Wraps.<Tenant>lbQ().select(Tenant::getCode).in(Tenant::getId, ids), Convert::toStr);
-        if (tenantCodeList.isEmpty()) {
-            return true;
-        }
-        appendixService.removeByBizId(ids);
-        removeByIds(ids);
-        return initSystemContext.delete(ids, tenantCodeList);
+        return superManager.deleteAll(ids);
     }
 
     @Override
@@ -146,10 +96,7 @@ public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenan
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateStatus(List<Long> ids, TenantStatusEnum status) {
-        boolean update = super.update(Wraps.<Tenant>lbU().set(Tenant::getStatus, status)
-                .in(Tenant::getId, ids));
 
-        delCache(ids);
-        return update;
+        return superManager.updateStatus(ids, status);
     }
 }

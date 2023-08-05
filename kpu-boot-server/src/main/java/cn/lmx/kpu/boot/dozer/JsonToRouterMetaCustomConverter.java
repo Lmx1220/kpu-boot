@@ -1,5 +1,6 @@
 package cn.lmx.kpu.boot.dozer;
 
+import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.jackson.JsonUtil;
 import cn.lmx.kpu.authority.dto.auth.RouterMeta;
 import com.github.dozermapper.core.CustomConverter;
@@ -23,6 +24,9 @@ public class JsonToRouterMetaCustomConverter implements CustomConverter {
             // 将 metaJson 字符串转换为 RouterMeta 对象
             String jsonString = (String) sourceFieldValue;
             RouterMeta routerMeta = JsonUtil.parse(jsonString, RouterMeta.class);
+            if (StrUtil.isBlank(routerMeta.getActiveMenu())) {
+                routerMeta.setActiveMenu(null);
+            }
             return routerMeta;
         } catch (Exception e) {
             e.printStackTrace();

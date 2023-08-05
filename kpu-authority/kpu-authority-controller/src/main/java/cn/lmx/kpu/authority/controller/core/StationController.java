@@ -58,7 +58,7 @@ public class StationController extends SuperCacheController<StationService, Long
     @ApiOperation(value = "检测名称是否可用", notes = "检测名称是否可用")
     @GetMapping("/check")
     public R<Boolean> check(@RequestParam(required = false) Long id, @RequestParam String name) {
-        return success(baseService.check(id, name));
+        return success(superService.check(id, name));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class StationController extends SuperCacheController<StationService, Long
     @Override
     public IPage<Station> query(PageParams<StationPageQuery> params) {
         IPage<Station> page = params.buildPage(Station.class);
-        baseService.findStationPage(page, params);
+        superService.findStationPage(page, params);
         return page;
     }
 
@@ -90,7 +90,7 @@ public class StationController extends SuperCacheController<StationService, Long
             return item;
         }).collect(Collectors.toList());
 
-        return R.success(baseService.saveBatch(stationList));
+        return R.success(superService.saveBatch(stationList));
     }
 
 }

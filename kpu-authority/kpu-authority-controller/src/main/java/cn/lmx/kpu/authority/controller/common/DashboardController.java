@@ -49,7 +49,7 @@ public class DashboardController {
     public R<Map<String, Object>> item() {
         Map<String, Object> data = new HashMap<>(11);
         // 用户数
-        data.put("totalUserCount", userService.count());
+//        data.put("totalUserCount", userService..count());
         data.put("todayUserCount", userService.todayUserCount());
         // 页面 访问量
         data.put("totalPv", loginLogService.getTotalPv());

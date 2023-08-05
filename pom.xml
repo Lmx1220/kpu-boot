@@ -23,7 +23,7 @@
         <module>kpu-authority</module>
         <module>kpu-tenant</module>
         <!--        <module>kpu-msg</module>-->
-        <!--        <module>kpu-file</module>-->
+        <module>kpu-file</module>
         <module>kpu-boot-server</module>
     </modules>
 

@@ -59,32 +59,32 @@ public class TenantController extends SuperCacheController<TenantService, Long, 
     @ApiOperation(value = "查询所有企业", notes = "查询所有企业")
     @GetMapping("/all")
     public R<List<Tenant>> list() {
-        return success(baseService.list(Wraps.<Tenant>lbQ().eq(Tenant::getStatus, NORMAL)));
+        return success(superService.list(Wraps.<Tenant>lbQ().eq(Tenant::getStatus, NORMAL)));
     }
 
     @Override
     public R<Tenant> handlerSave(TenantSaveVO model) {
-        Tenant tenant = baseService.save(model);
+        Tenant tenant = superService.save(model);
         return success(tenant);
     }
 
     @Override
     public R<Tenant> handlerUpdate(TenantUpdateVo model) {
-        Tenant tenant = baseService.update(model);
+        Tenant tenant = superService.update(model);
         return success(tenant);
     }
 
     @ApiOperation(value = "检测租户是否存在", notes = "检测租户是否存在")
     @GetMapping("/check/{code}")
     public R<Boolean> check(@PathVariable("code") String code) {
-        return success(baseService.check(code));
+        return success(superService.check(code));
     }
 
 
     @Override
     public R<Boolean> handlerDelete(List<Long> ids) {
         // 这个操作相当的危险，请谨慎操作！！!
-        return success(baseService.delete(ids));
+        return success(superService.delete(ids));
     }
 
 
@@ -92,14 +92,14 @@ public class TenantController extends SuperCacheController<TenantService, Long, 
     @DeleteMapping("/deleteAll")
     @PreAuth("hasAnyRole('PT_ADMIN')")
     public R<Boolean> deleteAll(@RequestBody List<Long> ids) {
-        return success(baseService.deleteAll(ids));
+        return success(superService.deleteAll(ids));
     }
 
     @ApiOperation(value = "修改租户状态", notes = "修改租户状态")
     @PostMapping("/status")
     public R<Boolean> updateStatus(@RequestParam("ids[]") List<Long> ids,
                                    @RequestParam(defaultValue = "FORBIDDEN") @NotNull(message = "状态不能为空") TenantStatusEnum status) {
-        return success(baseService.updateStatus(ids, status));
+        return success(superService.updateStatus(ids, status));
     }
 
     /**
@@ -108,6 +108,6 @@ public class TenantController extends SuperCacheController<TenantService, Long, 
     @ApiOperation(value = "连接数据源", notes = "连接数据源")
     @PostMapping("/initConnect")
     public R<Boolean> initConnect(@Validated @RequestBody TenantConnectDTO tenantConnect) {
-        return success(baseService.connect(tenantConnect));
+        return success(superService.connect(tenantConnect));
     }
 }
