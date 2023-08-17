@@ -1,10 +1,6 @@
 package cn.lmx.kpu.file.strategy.impl;
 
 import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.web.multipart.MultipartFile;
 import cn.lmx.basic.context.ContextUtil;
 import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.utils.StrPool;
@@ -14,6 +10,10 @@ import cn.lmx.kpu.file.entity.File;
 import cn.lmx.kpu.file.properties.FileServerProperties;
 import cn.lmx.kpu.file.strategy.FileStrategy;
 import cn.lmx.kpu.file.utils.FileTypeUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -96,8 +96,12 @@ public abstract class AbstractFileStrategy implements FileStrategy {
      * 企业/年/月/日/业务类型/唯一文件名
      */
     protected String getPath(String bizType, String uniqueFileName) {
-        return new StringJoiner(StrPool.SLASH).add(String.valueOf(ContextUtil.getTenant()))
-                .add(bizType).add(getDateFolder()).add(uniqueFileName).toString();
+        StringJoiner stringJoiner = new StringJoiner(StrPool.SLASH);
+        if (StrUtil.isNotBlank(ContextUtil.getTenant())) {
+            stringJoiner.add(String.valueOf(ContextUtil.getTenant()));
+        }
+        stringJoiner.add(bizType).add(getDateFolder()).add(uniqueFileName);
+        return stringJoiner.toString();
     }
 
     protected String getUniqueFileName(File file) {

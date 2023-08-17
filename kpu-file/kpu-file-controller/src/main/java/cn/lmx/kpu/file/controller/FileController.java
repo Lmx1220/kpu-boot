@@ -1,6 +1,17 @@
 package cn.lmx.kpu.file.controller;
 
+import cn.lmx.basic.annotation.log.SysLog;
+import cn.lmx.basic.base.R;
+import cn.lmx.basic.base.controller.DeleteController;
+import cn.lmx.basic.base.controller.QueryController;
+import cn.lmx.basic.base.controller.SuperSimpleController;
 import cn.lmx.basic.interfaces.echo.EchoService;
+import cn.lmx.basic.utils.ArgumentAssert;
+import cn.lmx.kpu.file.entity.File;
+import cn.lmx.kpu.file.service.FileService;
+import cn.lmx.kpu.file.vo.param.FileParamVO;
+import cn.lmx.kpu.file.vo.param.FileUploadVO;
+import cn.lmx.kpu.file.vo.result.FileResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -10,17 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import cn.lmx.basic.annotation.log.SysLog;
-import cn.lmx.basic.base.R;
-import cn.lmx.basic.base.controller.DeleteController;
-import cn.lmx.basic.base.controller.QueryController;
-import cn.lmx.basic.base.controller.SuperSimpleController;
-import cn.lmx.basic.utils.ArgumentAssert;
-import cn.lmx.kpu.file.entity.File;
-import cn.lmx.kpu.file.service.FileService;
-import cn.lmx.kpu.file.vo.param.FileParamVO;
-import cn.lmx.kpu.file.vo.param.FileUploadVO;
-import cn.lmx.kpu.file.vo.result.FileResultVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,9 +104,9 @@ public class FileController extends SuperSimpleController<FileService, Long, Fil
      * @param ids 文件id
      */
     @ApiOperation(value = "根据文件id打包下载", notes = "根据附件id下载多个打包的附件")
-    @PostMapping(value = "/download", produces = "application/octet-stream")
+    @GetMapping(value = "/download", produces = "application/octet-stream")
     @SysLog("下载附件")
-    public void download(@RequestBody List<Long> ids, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void download(@RequestParam("ids") List<Long> ids, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ArgumentAssert.notEmpty(ids, "请选择至少一个附件");
         superService.download(request, response, ids);
     }
