@@ -1,7 +1,6 @@
 package cn.lmx.kpu.authority.manager.auth;
 
 import cn.lmx.basic.base.manager.SuperCacheManager;
-import cn.lmx.basic.base.manager.SuperManager;
 import cn.lmx.kpu.authority.entity.auth.Application;
 
 /**

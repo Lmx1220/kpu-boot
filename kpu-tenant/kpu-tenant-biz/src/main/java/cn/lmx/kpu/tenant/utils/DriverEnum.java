@@ -11,7 +11,8 @@ public enum DriverEnum {
     /**
      * mysql
      */
-    MYSQL("com.mysql.cj.jdbc.Driver"),
+    MYSQL5("com.mysql.jdbc.Driver"),
+    MYSQL6("com.mysql.cj.jdbc.Driver"),
 
     /**
      * oracle
@@ -35,5 +36,14 @@ public enum DriverEnum {
 
     public String getDriver() {
         return driver;
+    }
+
+    public static DriverEnum findEnumByType(String type) {
+        for (DriverEnum value : DriverEnum.values()) {
+            if (value.name().equalsIgnoreCase(type)) {
+                return value;
+            }
+        }
+        return null;
     }
 }

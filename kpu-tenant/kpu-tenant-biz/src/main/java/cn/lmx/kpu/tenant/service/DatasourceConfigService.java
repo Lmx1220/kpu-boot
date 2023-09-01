@@ -6,7 +6,6 @@ import cn.lmx.kpu.tenant.dto.DatasourceConfigResultVO;
 import cn.lmx.kpu.tenant.dto.DatasourceConfigSaveVO;
 import cn.lmx.kpu.tenant.dto.DatasourceConfigUpdateVo;
 import cn.lmx.kpu.tenant.entity.DatasourceConfig;
-import cn.lmx.kpu.tenant.manager.DatasourceConfigManager;
 
 /**
  * <p>
@@ -19,5 +18,6 @@ import cn.lmx.kpu.tenant.manager.DatasourceConfigManager;
  */
 public interface DatasourceConfigService extends SuperService<Long, DatasourceConfig, DatasourceConfigSaveVO, DatasourceConfigUpdateVo, DatasourceConfigPageQuery, DatasourceConfigResultVO> {
 
+    boolean testConnect(Long id);
 
 }

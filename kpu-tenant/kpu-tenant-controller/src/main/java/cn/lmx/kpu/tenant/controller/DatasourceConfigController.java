@@ -12,6 +12,7 @@ import cn.lmx.kpu.tenant.service.DatasourceConfigService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 @SysLog(enabled = false)
 public class DatasourceConfigController extends SuperController<DatasourceConfigService, Long, DatasourceConfig, DatasourceConfigSaveVO,
         DatasourceConfigUpdateVo, DatasourceConfigPageQuery, DatasourceConfigResultVO> {
+
+    @PostMapping("testConnect")
+    public void testConnect() {
+//        superService.testConnect();
+    }
 
 }

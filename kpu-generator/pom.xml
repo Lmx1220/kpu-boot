@@ -2,6 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>cn.lmx.kpu</groupId>
@@ -10,18 +11,16 @@
         <relativePath>../kpu-dependencies-parent/pom.xml</relativePath>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>kpu-file</artifactId>
+    <groupId>cn.lmx.kpu</groupId>
+    <artifactId>kpu-generator</artifactId>
+    <version>1.0.0</version>
     <name>${project.artifactId}</name>
-    <description>文件服务</description>
+    <description>生成代码</description>
 
     <packaging>pom</packaging>
     <modules>
-        <module>kpu-file-entity</module>
-        <module>kpu-file-biz</module>
-        <module>kpu-file-controller</module>
+        <module>kpu-generator-entity</module>
+        <module>kpu-generator-biz</module>
+        <module>kpu-generator-controller</module>
     </modules>
-
-
 </project>
