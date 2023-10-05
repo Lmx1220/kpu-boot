@@ -50,6 +50,11 @@
             <artifactId>kpu-tenant-controller</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-generator-controller</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.lmx.basic</groupId>

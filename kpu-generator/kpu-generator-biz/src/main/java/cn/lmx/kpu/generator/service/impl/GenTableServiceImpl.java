@@ -1,6 +1,7 @@
 package cn.lmx.kpu.generator.service.impl;
 
 import cn.hutool.core.io.FileUtil;
+import cn.lmx.basic.base.request.DownloadVO;
 import cn.lmx.basic.base.service.impl.SuperServiceImpl;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.database.properties.DatabaseProperties;
@@ -58,6 +59,7 @@ public class GenTableServiceImpl extends SuperServiceImpl<GenTableManager, Long,
     @Value("${spring.profiles.active}")
     private String profile;
 
+    @Override
     public Map<String, String> previewCode(Long id, TemplateEnum template) {
         GenTable genTable = previewCheck(id);
         List<GenTableColumn> fileList = genTableColumnManager.list(Wraps.<GenTableColumn>lbQ().eq(GenTableColumn::getTableId, id));
@@ -71,7 +73,8 @@ public class GenTableServiceImpl extends SuperServiceImpl<GenTableManager, Long,
         return fileCodeMap;
     }
 
-    public void previewCode(GenVO genVO) {
+    @Override
+    public void generatorCode(GenVO genVO) {
         List<Long> ids = genVO.getIds();
         TemplateEnum templateEnum = genVO.getTemplateEnum();
         if (!StrPool.DEV.equals(profile)) {
@@ -91,6 +94,17 @@ public class GenTableServiceImpl extends SuperServiceImpl<GenTableManager, Long,
             generatorByTemplate(genTable, templatePathList, objMap, genVO);
         }
 
+    }
+
+    @Override
+    public DownloadVO downloadZip(List<Long> ids, TemplateEnum templateEnum) {
+        return null;
+    }
+
+    @Override
+    public List<GenTable> selectTableList() {
+
+        return getSuperManager().selectTableList();
     }
 
     private void generatorByTemplate(GenTable genTable, List<String> templatePathList, Map<String, Object> objMap, GenVO genVO) {

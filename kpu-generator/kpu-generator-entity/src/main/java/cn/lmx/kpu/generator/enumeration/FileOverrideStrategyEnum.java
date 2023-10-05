@@ -17,7 +17,7 @@ public enum FileOverrideStrategyEnum implements BaseEnum {
 
     @Override
     public String getDesc() {
-        return null;
+        return desc;
     }
 
     public boolean eq(FileOverrideStrategyEnum val) {

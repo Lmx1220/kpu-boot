@@ -1,19 +1,24 @@
 package cn.lmx.kpu.generator.config;
 
 import cn.hutool.core.util.StrUtil;
+import cn.lmx.basic.constant.Constants;
 import cn.lmx.kpu.generator.enumeration.FileOverrideStrategyEnum;
 import cn.lmx.kpu.generator.type.SuperClass;
 import cn.lmx.kpu.generator.type.VueVersion;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.po.LikeTable;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -21,11 +26,13 @@ import java.util.*;
  * @version v1.0.0
  * @date 2023/08/19  11:36
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Accessors(chain = true)
+@Getter
+@Setter
+//@RefreshScope
+@Configuration
+@ConfigurationProperties(prefix = GeneratorConfig.PREFIX)
 public class GeneratorConfig {
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".generator";
     public SuperClass superClass = SuperClass.SUPER_CLASS;
     /**
      * 项目跟路径
@@ -164,36 +171,36 @@ public class GeneratorConfig {
     private ServiceConfig serviceConfig = new ServiceConfig();
     private ManagerConfig managerConfig = new ManagerConfig();
 
-    /**
-     * 必填项 构造器
-     *
-     * @param serviceName     服务名
-     *                        eg： msgs
-     * @param childModuleName 子模块名
-     *                        eg: sms、emial
-     * @param author          作者
-     * @param tablePrefix     表前缀
-     * @param tableInclude    生成的表 支持通配符
-     *                        eg： msgs_.* 会生成msgs_开头的所有表
-     * @return
-     */
-    public static GeneratorConfig build(String serviceName, String childModuleName, String author, String tablePrefix, List<String> tableInclude) {
-        GeneratorConfig config = new GeneratorConfig();
-        config.setServiceName(serviceName).setAuthor(author).setTablePrefix(tablePrefix)
-                .setTableInclude(tableInclude.stream().toArray(String[]::new))
-                .setChildModuleName(childModuleName == null ? "" : childModuleName);
-        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
-        return config;
-    }
-
-    public static GeneratorConfig buildVue(String serviceName, String tablePrefix, List<String> tableInclude) {
-        GeneratorConfig config = new GeneratorConfig();
-        config.setServiceName(serviceName).setTablePrefix(tablePrefix)
-                .setTableInclude(tableInclude.stream().toArray(String[]::new))
-                .setChildModuleName("");
-        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
-        return config;
-    }
+//    /**
+//     * 必填项 构造器
+//     *
+//     * @param serviceName     服务名
+//     *                        eg： msgs
+//     * @param childModuleName 子模块名
+//     *                        eg: sms、emial
+//     * @param author          作者
+//     * @param tablePrefix     表前缀
+//     * @param tableInclude    生成的表 支持通配符
+//     *                        eg： msgs_.* 会生成msgs_开头的所有表
+//     * @return
+//     */
+//    public static GeneratorConfig build(String serviceName, String childModuleName, String author, String tablePrefix, List<String> tableInclude) {
+//        GeneratorConfig config = new GeneratorConfig();
+//        config.setServiceName(serviceName).setAuthor(author).setTablePrefix(tablePrefix)
+//                .setTableInclude(tableInclude.stream().toArray(String[]::new))
+//                .setChildModuleName(childModuleName == null ? "" : childModuleName);
+//        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
+//        return config;
+//    }
+//
+//    public static GeneratorConfig buildVue(String serviceName, String tablePrefix, List<String> tableInclude) {
+//        GeneratorConfig config = new GeneratorConfig();
+//        config.setServiceName(serviceName).setTablePrefix(tablePrefix)
+//                .setTableInclude(tableInclude.stream().toArray(String[]::new))
+//                .setChildModuleName("");
+//        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
+//        return config;
+//    }
 
     public String getPackageBaseParent() {
         return StrUtil.subPre(this.packageBase, this.packageBase.lastIndexOf("."));
