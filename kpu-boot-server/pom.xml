@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.lmx.kpu</groupId>
-            <artifactId>kpu-saas-mode</artifactId>
+            <artifactId>kpu-database-mode</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
         <dependency>
@@ -45,11 +45,7 @@
             <artifactId>kpu-oauth-controller</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cn.lmx.kpu</groupId>
-            <artifactId>kpu-tenant-controller</artifactId>
-            <version>${kpu-project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>cn.lmx.kpu</groupId>
             <artifactId>kpu-generator-controller</artifactId>

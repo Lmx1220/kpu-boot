@@ -1,4 +1,16 @@
 kpu:
+  druid-oracle: &druid-oracle
+    validation-query: SELECT 'x' FROM DUAL
+  druid-mysql: &druid-mysql
+    validation-query: SELECT 'x'
+  druid-sqlserver: &druid-sqlserver
+    validation-query: SELECT 'x'
+  mysql: &db-mysql
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: 'root'
+    password: 'lmx123125'
+    url: jdbc:mysql://127.0.0.1:3306/kpu_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+
   system:
     # 登录时否验证密码有效性 （常用于开发环境快速登录）
     verifyPassword: true
@@ -23,6 +35,7 @@ kpu:
     password: 'root'
     url: jdbc:mysql://127.0.0.1:3306/kpu_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
+
     dbType: MYSQL
     # 需要初始化的数据库前缀
     initDatabasePrefix:
@@ -34,8 +47,12 @@ kpu:
     multiTenantType: NONE
     # COLUMN模式专用 隔离租户的字段
     tenantIdColumn: tenant_code
+    # 是否允许写入数据
     isNotWrite: false
+    # 是否启用 数据权限
+    isDataScope: true
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
+    # 是否启用 分布式事务
     isSeata: false
     p6spy: true
     id-type: HU_TOOL
@@ -432,39 +449,41 @@ spring:
         max-active: 100
   cache:
     type: GENERIC
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
-    # 从这里开始(dynamic)，中间的这段配置用于 kpu.database.multiTenantType == DATASOURCE 时
-      # 联系作者开通
-    # 从这里结束(dynamic)，中间的这段配置用于 kpu.database.multiTenantType == DATASOURCE 时
-    druid:
-      enable: true
-      # 从这里开始(druid)，中间的这段配置用于 kpu.database.multiTenantType != DATASOURCE 时
-      username: ${kpu.druid.username}
-      password: ${kpu.druid.password}
-      driverClassName: ${kpu.druid.driverClassName}
-      url: ${kpu.druid.url}
-      db-type: mysql
-      validation-query: SELECT 'x'
-      initialSize: 10
-      minIdle: 10
-      maxActive: 200
-      max-wait: 60000
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      test-on-borrow: false
-      test-on-return: false
-      test-while-idle: true
-      time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
-      filters: stat,wall
-      filter:
+    dynamic:
+      enabled: true
+      # 从这里开始(dynamic)，中间的这段配置用于 lamp.database.multiTenantType == DATASOURCE 时
+      p6spy: ${kpu.database.p6spy:false}
+      seata: ${kpu.database.isSeata:false}
+      primary: "0"
+      datasource:
+        "0": # 只配置了默认数据库  lamp_defaults
+          <<: *db-mysql
+      druid:
+        <<: *druid-mysql
+        initialSize: 10
+        minIdle: 10
+        maxActive: 200
+        max-wait: 60000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
+        filters: stat,wall
         wall:
           enabled: true
-          config:
-            strictSyntaxCheck: false
-            commentAllow: true
-            multiStatementAllow: true
-            noneBaseStatementAllow: true
+          strictSyntaxCheck: false
+          commentAllow: true
+          multiStatementAllow: true
+          noneBaseStatementAllow: true
+    druid:
+      enable: true
+      filter:
         slf4j:
           enabled: false     # 使用slf4j打印可执行日志时，改成true
           statement-executable-sql-log-enable: true
@@ -485,10 +504,11 @@ spring:
         login-username: kpu
         login-password: kpu
 
+
+# database.yml
 mybatis-plus:
   mapper-locations:
     - classpath*:mapper_**/**/*Mapper.xml
-  #实体扫描，多个package用逗号或者分号分隔
   typeAliasesPackage: cn.lmx.kpu.*.entity;cn.lmx.basic.database.mybatis.typehandler
   typeEnumsPackage: cn.lmx.kpu.*.enumeration
   global-config:

@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>cn.lmx.kpu</groupId>
-            <artifactId>kpu-tenant-biz</artifactId>
+            <artifactId>kpu-tenant-database-init</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
         <!-- jwt 只有认证服务需要使用 -->

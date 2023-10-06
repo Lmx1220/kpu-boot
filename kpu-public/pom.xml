@@ -23,7 +23,8 @@
         <module>kpu-model</module>
         <module>kpu-security-sdk</module>
         <module>kpu-userinfo-sdk</module>
-        <module>kpu-saas-mode</module>
+        <module>kpu-database-mode</module>
+        <module>kpu-tenant-database-init</module>
     </modules>
 
 </project>

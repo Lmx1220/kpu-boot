@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lmx.kpu.tenant.dao.InitDbMapper">
+
+    <update id="createDatabase" databaseId="sqlserver" parameterType="java.util.Map">
+        IF
+        DB_ID (N'${database}') IS NULL
+        CREATE
+            DATABASE
+            ${database}
+            COLLATE
+                Chinese_PRC_CI_AS
+    </update>
+    <update id="createDatabase" databaseId="oracle" parameterType="java.util.Map">
+        create
+        user
+        ${database}
+        identified
+        by
+        ${database}
+    </update>
+    <update id="createDatabase" parameterType="java.util.Map">
+        CREATE
+        DATABASE IF NOT EXISTS
+        ${database}
+        DEFAULT
+        CHARACTER
+        SET
+        utf8mb4
+        COLLATE
+        utf8mb4_general_ci
+    </update>
+
+
+    <delete id="dropDatabase" parameterType="java.util.Map">
+        DROP DATABASE IF EXISTS ${database}
+    </delete>
+    <select id="selectDataSourceConfig" resultType="cn.lmx.kpu.tenant.dto.DatasourceConfigBO">
+        select cdc.id,
+        cdc.name,
+        cdc.username,
+        cdc.password,
+        cdc.url,
+        cdc.driver_class_name,
+        ctr.db_prefix,
+        ctr.tenant_id,
+        cdc.create_time,
+        cdc.created_by,
+        cdc.update_time,
+        cdc.updated_by
+
+        FROM
+        c_datasource_config cdc
+        INNER JOIN c_tenant_datasource_config ctr ON cdc.id = ctr.datasource_config_id
+        INNER JOIN (
+        SELECT
+        id
+        FROM
+        c_tenant
+        WHERE status in <foreach
+            collection="statusList" item="status" open="(" separator="," close=")">#{status}
+    </foreach> and connect_type= #{connectType}
+        )ct ON ctr.tenant_id = ct.id;
+    </select>
+    <select id="selectTenantCodeList" resultType="java.lang.Long">
+        select id from c_tenant where status in <foreach collection="statusList" item="status" open="(" separator=","
+                                                         close=")">#{status}
+    </foreach> and connect_type= #{connectType}
+    </select>
+    <select id="selectDataSourceConfigByTenantId" resultType="cn.lmx.kpu.tenant.dto.DatasourceConfigBO">
+        select id,
+               name,
+               username,
+               password,
+               url,
+               driver_class_name,
+               create_time,
+               created_by,
+               update_time,
+               updated_by
+        from c_datasource_config
+        where id in (select datasource_config_id
+                     from c_tenant_datasource_config
+                     where tenant_id in (select id
+                                         from c_tenant
+                                         where id = #{tenantId}))
+    </select>
+    <select id="getTenantBy" resultType="cn.lmx.kpu.tenant.dto.TenantBo">
+        select id,
+               code,
+               name,
+               status,
+               create_time,
+               created_by,
+               update_time,
+               updated_by,
+               connect_type
+        from c_tenant
+        where id = #{tenantId}
+    </select>
+
+
+</mapper>

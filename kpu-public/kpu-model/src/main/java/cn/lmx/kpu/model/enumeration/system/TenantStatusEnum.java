@@ -48,7 +48,10 @@ public enum TenantStatusEnum implements BaseEnum {
      * DELETE="已删除"
      */
     DELETE("已删除"),
-    ;
+    /**
+     * WAIT_INIT_DATASOURCE="待初始化数据源"
+     */
+    WAIT_INIT_DATASOURCE("待初始化数据源");
 
     @ApiModelProperty(value = "描述")
     private String desc;

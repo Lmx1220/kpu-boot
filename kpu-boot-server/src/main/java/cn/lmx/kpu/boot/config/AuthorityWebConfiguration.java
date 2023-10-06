@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2023/7/4 14:27
  */
 @Configuration
-@EnableConfigurationProperties({IgnoreProperties.class, SystemProperties.class})
+@EnableConfigurationProperties({DatabaseProperties.class, IgnoreProperties.class, SystemProperties.class})
 @RequiredArgsConstructor
 public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfigurer {
 
