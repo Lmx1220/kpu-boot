@@ -79,5 +79,5 @@ public class AppendixResultVO implements Serializable {
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
 }

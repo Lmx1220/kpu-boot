@@ -1,225 +1,126 @@
 package cn.lmx.kpu.generator.config;
 
-import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.constant.Constants;
-import cn.lmx.kpu.generator.enumeration.FileOverrideStrategyEnum;
-import cn.lmx.kpu.generator.type.SuperClass;
-import cn.lmx.kpu.generator.type.VueVersion;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
-import com.baomidou.mybatisplus.generator.config.po.LikeTable;
+import cn.lmx.kpu.generator.enumeration.GenTypeEnum;
+import cn.lmx.kpu.generator.enumeration.ProjectTypeEnum;
+import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 
 /**
+ * 读取代码生成相关配置
+ *
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/19  11:36
+ * @date 2023/10/13 14:27
  */
-@Getter
-@Setter
-//@RefreshScope
-@Configuration
+@Data
+@RefreshScope
 @ConfigurationProperties(prefix = GeneratorConfig.PREFIX)
 public class GeneratorConfig {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".generator";
-    public SuperClass superClass = SuperClass.SUPER_CLASS;
     /**
-     * 项目跟路径
+     * 后端工程 kpu-cloud-pro-datasource-column 代码生成跟路径
      */
-    String projectRootPath = System.getProperty("user.dir");
+    public String outputDir;
     /**
-     * 服务名
-     * 如消息服务 (用于创建cloud-%s-api、cloud-%s-entity等项目)
+     * 前端工程kpu-web-plus 跟路径
      */
-    String serviceName = "";
+    public String frontOutputDir;
     /**
-     * 子模块名称
-     * 如消息服务(cloud-msgs-new)包含消息、短信、邮件3个模块
-     * 则分别填入 msgs、sms、email
-     * (用于创建cloud-%s-rest、cloud-%s-repository等项目)
+     * 默认项目
      */
-    String childModuleName = "";
-    /**
-     * 子模块是否单独生成 lamp-{childModuleName}-entity模块
-     */
-    Boolean isGenEntity = false;
-    /**
-     * 是否lamp-boot
-     */
-    Boolean isBoot = false;
-    /**
-     * 基础包   所有的代码都放置在这个包之下
-     */
-    String packageBase = "cn.lmx.kpu.authority";
-    /**
-     * 子包名称
-     * 会在api、controller、service、serviceImpl、dao、entity等包下面创建子包
-     */
-    String childPackageName = "";
+    public ProjectTypeEnum projectType = ProjectTypeEnum.BOOT;
+
     /**
      * 作者
      */
-    String author = "lmx";
+    public String author = "lmx";
     /**
-     * 版本
+     * 去除表前缀(类名不会包含表前缀)
      */
-    String version = "1.0-SNAPSHOT";
+    public List<String> tablePrefix = new ArrayList<>();
     /**
-     * 端口号
+     * 去除字段前缀
      */
-    String serverPort = "8080";
+    public List<String> fieldPrefix = new ArrayList<>();
     /**
-     * lamp-cloud项目的包路径和pom中的groupId
+     * 去除字段后缀
      */
-    String groupId = "cn.lmx.kpu";
+    public List<String> fieldSuffix = new ArrayList<>();
     /**
-     * lamp-util项目的包路径
+     * 后端项目前缀
+     * 项目部分公共文件夹的名称
+     * <p>
+     * 如：后端 kpu-base、kpu-base-api、kpu-base-entity、kpu-base-biz、kpu-base-controller、kpu-base-server 等模块的前缀：kpu
+     * 如：前端 src/api/kpu/xxx
+     * 如：前端 src/utils/kpu/xxx
+     * 如：前端 src/utils/kpu/xxx
      */
-    String utilPackage = "cn.lmx.basic";
-    String description = "服务";
+    private String projectPrefix = Constants.PROJECT_PREFIX;
+
     /**
-     * 前端字段类型映射
-     *
-     * @author lmx
-     * @date 2021/5/9 10:33 下午
+     * 其他类的父类
      */
-    Map<String, String> fieldTypeMapping = new HashMap<>();
+    private SuperClassEnum superClass = SuperClassEnum.SUPER_CLASS;
+
     /**
-     * 是否生成导入导出 API
-     *
-     * @author lmx
+     * 生成方式
      */
-    Boolean isGenerateExportApi = false;
+    private GenTypeEnum genType = GenTypeEnum.GEN;
+
     /**
-     * 项目统一前缀  比如：  cloud-
+     * 包配置
      */
-    private String projectPrefix = "kpu";
-    private String apiSuffix = "-api";
-    //    private String serverSuffix = "-server";
-    private String entitySuffix = "-entity";
-    private String serviceSuffix = "-biz";
-    private String controllerSuffix = "-controller";
+    @NestedConfigurationProperty
+    private PackageInfoConfig packageInfoConfig = new PackageInfoConfig();
+
     /**
-     * 表前缀
+     * 实体 VO 配置
      */
-    private String tablePrefix = "";
-    /**
-     * 字段前缀
-     */
-    private String fieldPrefix = "";
-    /**
-     * 需要包含的表名，允许正则表达式；用来自动生成代码
-     */
-    private String[] tableInclude = {"c_user"};
-    /**
-     * 排除那些表
-     */
-    private String[] tableExclude = {};
-    /**
-     * 包含表名
-     *
-     * @since 3.3.0
-     */
-    private LikeTable likeTable;
-    /**
-     * 不包含表名
-     *
-     * @since 3.3.0
-     */
-    private LikeTable notLikeTable;
-    /**
-     * 驱动连接的URL
-     */
-    private String url = "jdbc:mysql://127.0.0.1:3306/kpu_base_0000?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull";
-    /**
-     * 驱动名称
-     */
-    private String driverName = "com.mysql.cj.jdbc.Driver";
-    /**
-     * 数据库连接用户名
-     */
-    private String username = "root";
-    /**
-     * 数据库连接密码
-     */
-    private String password = "root";
-    /**
-     * 仅仅在微服务架构下面才进行分包
-     */
-    private boolean enableMicroService = true;
-    private Map<String, FileOverrideStrategyEnum> fileOverrideStrategy = new HashMap<>();
-    /**
-     * 需要制定生成路径的枚举类列表
-     */
-    private Set<CustomFile> filedTypes = new HashSet<>();
-    private Vue vue = new Vue();
-    private PackageInfoConfig packageInfo = new PackageInfoConfig();
-    private ControllerConfig controllerConfig = new ControllerConfig();
+    @NestedConfigurationProperty
     private EntityConfig entityConfig = new EntityConfig();
+    /**
+     * Mapper 配置
+     */
+    @NestedConfigurationProperty
     private MapperConfig mapperConfig = new MapperConfig();
+    /**
+     * Service 配置
+     */
+    @NestedConfigurationProperty
     private ServiceConfig serviceConfig = new ServiceConfig();
+    /**
+     * Manager 配置
+     */
+    @NestedConfigurationProperty
     private ManagerConfig managerConfig = new ManagerConfig();
+    /**
+     * Controller 配置
+     */
+    @NestedConfigurationProperty
+    private ControllerConfig controllerConfig = new ControllerConfig();
+    /**
+     * Web 端配置
+     */
+    @NestedConfigurationProperty
+    private WebProConfig webProConfig = new WebProConfig();
+    /**
+     * 文件覆盖策略
+     */
+    @NestedConfigurationProperty
+    private FileOverrideStrategy fileOverrideStrategy = new FileOverrideStrategy();
 
-//    /**
-//     * 必填项 构造器
-//     *
-//     * @param serviceName     服务名
-//     *                        eg： msgs
-//     * @param childModuleName 子模块名
-//     *                        eg: sms、emial
-//     * @param author          作者
-//     * @param tablePrefix     表前缀
-//     * @param tableInclude    生成的表 支持通配符
-//     *                        eg： msgs_.* 会生成msgs_开头的所有表
-//     * @return
-//     */
-//    public static GeneratorConfig build(String serviceName, String childModuleName, String author, String tablePrefix, List<String> tableInclude) {
-//        GeneratorConfig config = new GeneratorConfig();
-//        config.setServiceName(serviceName).setAuthor(author).setTablePrefix(tablePrefix)
-//                .setTableInclude(tableInclude.stream().toArray(String[]::new))
-//                .setChildModuleName(childModuleName == null ? "" : childModuleName);
-//        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
-//        return config;
-//    }
-//
-//    public static GeneratorConfig buildVue(String serviceName, String tablePrefix, List<String> tableInclude) {
-//        GeneratorConfig config = new GeneratorConfig();
-//        config.setServiceName(serviceName).setTablePrefix(tablePrefix)
-//                .setTableInclude(tableInclude.stream().toArray(String[]::new))
-//                .setChildModuleName("");
-//        config.setPackageBase(config.getGroupId() + "." + config.getChildModuleName());
-//        return config;
-//    }
+    /**
+     * 常用的常量、枚举包
+     * 配置后，若生成代码时，枚举和常量名称与{constantsPackage.key}一致，就不会重复生成，而是采用{constantsPackage.value}的类
+     */
+    private Map<String, Class<?>> constantsPackage = new HashMap<>();
 
-    public String getPackageBaseParent() {
-        return StrUtil.subPre(this.packageBase, this.packageBase.lastIndexOf("."));
-    }
-
-    public String getChildModuleName() {
-        if (StringUtils.isBlank(this.childModuleName)) {
-            this.childModuleName = this.serviceName;
-        }
-        return this.childModuleName;
-    }
-
-    @Data
-    public static class Vue {
-        private String viewsPath = "views" + File.separator + "lamp";
-        private VueVersion version = VueVersion.vue;
-        /**
-         * 表名 - <字段名 - 字段信息>
-         */
-//        private Map<String, Map<String, GenTableColumn>> tableFieldMap = new HashMap<>();
-    }
 }

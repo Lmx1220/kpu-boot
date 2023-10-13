@@ -27,9 +27,9 @@
         <result property="treePath" column="tree_path" jdbcType="VARCHAR"/>
         <result property="metaJson" column="meta_json" jdbcType="VARCHAR"/>
         <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
         <result property="updatedBy" column="updated_by" jdbcType="BIGINT"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -42,8 +42,8 @@
         active_icon,group_,data_scope,
         custom_class,is_def,parent_id,
         tree_grade,tree_path,meta_json,
-        created_by,create_time,updated_by,
-        update_time
+        created_by,created_time,updated_by,
+        updated_time
     </sql>
 
 </mapper>

@@ -1,20 +1,29 @@
-package ${package.Service};
+package ${package.Manager};
 
-import ${package.Entity}.${entity};
+<#if superManagerClass??>
 import ${superManagerClassPackage};
+    import ${entityPackage};
+</#if>
+<#list managerImport as pkg>
+    import ${pkg};
+</#list>
 
 /**
 * <p>
-    * ${table.comment!} 服务类
+    * 通用业务接口
+    * ${table.comment!?replace("\n","\n * ")}
     * </p>
 *
 * @author ${author}
-* @since ${date}
+* @date ${datetime}
+* @create [${datetime}] [${author}] [代码生成器生成]
 */
-<#if kotlin>
-    interface ${table.serviceName} : ${superMapperClass}<${entity}>
+<#if superManagerClass??>
+    public interface ${managerName} extends ${superManagerClass}<${table.entityName}> {
 <#else>
-    public interface ${table.serviceName} extends ${superManagerClass}<${entity}> {
-
-    }
+    public interface ${managerName} {
 </#if>
+
+}
+
+

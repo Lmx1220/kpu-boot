@@ -1,33 +1,17 @@
-/*
- * Copyright (c) 2011-2023, baomidou (jobob@qq.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package cn.lmx.kpu.generator.rules;
 
+import cn.lmx.basic.utils.StrPool;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 从数据库表到文件的命名策略
  *
- * @author YangHu, tangguo
- * @since 2016/8/30
+ * @author lmx
+ * @date 2023/10/13 14:27
  */
 public enum NamingStrategy {
 
@@ -59,7 +43,7 @@ public enum NamingStrategy {
         }
         StringBuilder result = new StringBuilder();
         // 用下划线将原始字符串分割
-        String[] camels = tempName.split(ConstVal.UNDERLINE);
+        String[] camels = tempName.split(StrPool.UNDERSCORE);
         // 跳过原始字符串中开头、结尾的下换线或双重下划线
         // 处理真正的驼峰片段
         Arrays.stream(camels).filter(camel -> !StringUtils.isBlank(camel)).forEach(camel -> {
@@ -81,12 +65,12 @@ public enum NamingStrategy {
      * @param prefix 前缀
      * @return 转换后的字符串
      */
-    public static String removePrefix(String name, Set<String> prefix) {
+    public static String removePrefix(String name, List<String> prefix) {
         if (StringUtils.isBlank(name)) {
             return StringPool.EMPTY;
         }
         // 判断是否有匹配的前缀，然后截取前缀
-        return prefix.stream().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
+        return prefix.stream().distinct().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
                 .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
     }
 
@@ -97,7 +81,7 @@ public enum NamingStrategy {
      * @param prefix 前缀
      * @return 转换后的字符串
      */
-    public static String removePrefixAndCamel(String name, Set<String> prefix) {
+    public static String removePrefixAndCamel(String name, List<String> prefix) {
         return underlineToCamel(removePrefix(name, prefix));
     }
 
@@ -108,12 +92,12 @@ public enum NamingStrategy {
      * @param suffix 后缀
      * @return 转换后的字符串
      */
-    public static String removeSuffix(String name, Set<String> suffix) {
+    public static String removeSuffix(String name, List<String> suffix) {
         if (StringUtils.isBlank(name)) {
             return StringPool.EMPTY;
         }
         // 判断是否有匹配的后缀，然后截取后缀
-        return suffix.stream().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
+        return suffix.stream().distinct().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
                 .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
     }
 
@@ -124,7 +108,7 @@ public enum NamingStrategy {
      * @param suffix 后缀
      * @return 转换后的字符串
      */
-    public static String removeSuffixAndCamel(String name, Set<String> suffix) {
+    public static String removeSuffixAndCamel(String name, List<String> suffix) {
         return underlineToCamel(removeSuffix(name, suffix));
     }
 
@@ -139,23 +123,5 @@ public enum NamingStrategy {
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         return StringPool.EMPTY;
-    }
-
-    public static String removePrefix(String propertyName, List<String> prefix) {
-        if (StringUtils.isBlank(propertyName)) {
-            return StringPool.EMPTY;
-        }
-        // 判断是否有匹配的前缀，然后截取前缀
-        return prefix.stream().filter(pf -> propertyName.toLowerCase().startsWith(pf.toLowerCase()))
-                .findFirst().map(pf -> propertyName.substring(pf.length())).orElse(propertyName);
-    }
-
-    public static String removeSuffix(String propertyName, List<String> suffix) {
-        if (StringUtils.isBlank(propertyName)) {
-            return StringPool.EMPTY;
-        }
-        // 判断是否有匹配的后缀，然后截取后缀
-        return suffix.stream().filter(sf -> propertyName.toLowerCase().endsWith(sf.toLowerCase()))
-                .findFirst().map(sf -> propertyName.substring(0, propertyName.length() - sf.length())).orElse(propertyName);
     }
 }

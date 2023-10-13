@@ -3,14 +3,15 @@
 <mapper namespace="cn.lmx.kpu.authority.dao.auth.ResourceMapper">
     <!-- 通用查询结果列 -->
     <sql id="V_Column_List">
-        id
-        ,`code`,`title`,
-        `name`,`remarks`,
-        `is_general`,`redirect`,`path`,`component`,
-        sort_value,icon,
-        active_icon,group_,
-        is_def,parent_id,
-        tree_grade,tree_path,meta_json
+        id,`code`,title,
+        `name`,resource_type,remarks,
+        is_general,redirect,`path`,
+        `component`,state,sort_value,
+        icon,active_icon,group_,
+        data_scope,custom_class,is_def,
+        parent_id,tree_grade,tree_path,
+        meta_json,created_by,created_time,
+        updated_by,updated_time
     </sql>
 
     <select id="findVisibleResource" parameterType="map"

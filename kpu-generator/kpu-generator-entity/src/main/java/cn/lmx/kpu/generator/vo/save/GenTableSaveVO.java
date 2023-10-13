@@ -1,8 +1,6 @@
 package cn.lmx.kpu.generator.vo.save;
 
-import cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.GenTypeEnum;
-import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
+import cn.lmx.kpu.generator.enumeration.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -188,18 +186,18 @@ public class GenTableSaveVO implements Serializable {
     @ApiModelProperty(value = "前端生成路径")
     @Size(max = 255, message = "前端生成路径长度不能超过{max}")
     private String frontOutputDir;
-//    /**
-//     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
-//     */
-//    @ApiModelProperty(value = "使用的模板")
-//    @NotNull(message = "请填写使用的模板")
-//    private TplEnum tplType;
-//    /**
-//     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
-//     */
-//    @ApiModelProperty(value = "弹窗方式")
-//    @NotNull(message = "请填写弹窗方式")
-//    private PopupTypeEnum popupType;
+    /**
+     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
+     */
+    @ApiModelProperty(value = "使用的模板")
+    @NotNull(message = "请填写使用的模板")
+    private TplEnum tplType;
+    /**
+     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
+     */
+    @ApiModelProperty(value = "弹窗方式")
+    @NotNull(message = "请填写弹窗方式")
+    private PopupTypeEnum popupType;
     /**
      * 新增按钮权限编码
      */

@@ -1,50 +1,109 @@
 package cn.lmx.kpu.generator.utils;
 
+import cn.lmx.kpu.generator.enumeration.PopupTypeEnum;
 import cn.lmx.kpu.generator.enumeration.TemplateEnum;
+import cn.lmx.kpu.generator.enumeration.TplEnum;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 模板工具类
+ *
  * @author lmx
  * @version v1.0.0
- * @date 2023/08/22  15:21
+ * @date 2023/10/13 14:27
  */
 public class TemplateUtils {
-    private static Configuration configuration;
+    private static final Configuration configuration;
 
-    public TemplateUtils() {
+    static {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-        configuration.setDefaultEncoding(ConstVal.UTF8);
-        configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, StringPool.SLASH);
+        configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        configuration.setClassForTemplateLoading(SourceCodeUtils.class, StringPool.SLASH);
     }
 
     public static Template getTemplate(String templatePath) throws IOException {
         return configuration.getTemplate(templatePath);
     }
 
-    public static List<String> getTemplateList(TemplateEnum template) {
+    /**
+     * 获取模板列表
+     *
+     * @return 模板列表
+     */
+    public static List<String> getTemplateList(TemplateEnum template, TplEnum tplType, PopupTypeEnum popupType) {
+        List<String> templates = new ArrayList<>();
+        if (TemplateEnum.BACKEND.eq(template)) {
+            templates.add(GenCodeConstant.TEMPLATE_CONTROLLER);
+            templates.add(GenCodeConstant.TEMPLATE_SERVICE);
+            templates.add(GenCodeConstant.TEMPLATE_SERVICE_IMPL);
+            templates.add(GenCodeConstant.TEMPLATE_MANAGER);
+            templates.add(GenCodeConstant.TEMPLATE_MANAGER_IMPL);
+            templates.add(GenCodeConstant.TEMPLATE_MAPPER);
+            templates.add(GenCodeConstant.TEMPLATE_XML);
+            templates.add(GenCodeConstant.TEMPLATE_ENTITY_JAVA);
+            templates.add(GenCodeConstant.TEMPLATE_SAVE_VO);
+            templates.add(GenCodeConstant.TEMPLATE_UPDATE_VO);
+            templates.add(GenCodeConstant.TEMPLATE_RESULT_VO);
+            templates.add(GenCodeConstant.TEMPLATE_PAGE_QUERY);
+            templates.add(GenCodeConstant.TEMPLATE_SQL);
+        } else if (TemplateEnum.WEB_PLUS.eq(template)) {
+            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_API);
+            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_MODEL);
+            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_EN);
+            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH);
+            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_SCHEMA);
 
-        List<String> templateList = new ArrayList<>();
-        templateList.add(GenCodeConstant.TEMPLATE_CONTROLLER);
-        templateList.add(GenCodeConstant.TEMPLATE_SERVICE);
-        templateList.add(GenCodeConstant.TEMPLATE_SERVICE_IMPL);
-        templateList.add(GenCodeConstant.TEMPLATE_MANAGER);
-        templateList.add(GenCodeConstant.TEMPLATE_MANAGER_IMPL);
-        templateList.add(GenCodeConstant.TEMPLATE_MAPPER);
-        templateList.add(GenCodeConstant.TEMPLATE_MAPPER_XML);
-        templateList.add(GenCodeConstant.TEMPLATE_ENTITY_JAVA);
-        templateList.add(GenCodeConstant.TEMPLATE_SAVE_VO);
-        templateList.add(GenCodeConstant.TEMPLATE_UPDATE_VO);
-        templateList.add(GenCodeConstant.TEMPLATE_PAGE_QUERY);
-        templateList.add(GenCodeConstant.TEMPLATE_RESULT_VO);
+            if (TplEnum.TREE.eq(tplType)) {
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_TREE_INDEX);
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_TREE_EDIT);
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_TREE_TREE);
+            } else if (TplEnum.MAIN_SUB.eq(tplType)) {
+                if (PopupTypeEnum.JUMP.eq(popupType)) {
+                    templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_JUMP_EDIT);
+                } else {
+                    templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_EDIT);
+                }
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_INDEX);
+                // 从表
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_INDEX);
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_DATA);
 
-        return templateList;
+            } else {
+                if (PopupTypeEnum.JUMP.eq(popupType)) {
+                    templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_JUMP_EDIT);
+                } else {
+                    templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_EDIT);
+                }
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_INDEX);
+            }
+        }
+        return templates;
     }
+
+    /**
+     * 获取模板列表
+     *
+     * @return 模板列表
+     */
+    public static List<String> getSubTemplateList(TemplateEnum template) {
+        List<String> templates = new ArrayList<>();
+        if (TemplateEnum.BACKEND.eq(template)) {
+            templates.add(GenCodeConstant.TEMPLATE_MANAGER);
+            templates.add(GenCodeConstant.TEMPLATE_MANAGER_IMPL);
+            templates.add(GenCodeConstant.TEMPLATE_MAPPER);
+            templates.add(GenCodeConstant.TEMPLATE_XML);
+            templates.add(GenCodeConstant.TEMPLATE_ENTITY_JAVA);
+            templates.add(GenCodeConstant.TEMPLATE_SAVE_VO);
+            templates.add(GenCodeConstant.TEMPLATE_UPDATE_VO);
+        }
+        return templates;
+    }
+
 }

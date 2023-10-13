@@ -24,6 +24,6 @@ import java.util.Map;
 @ApiModel(value = "GenVO", description = "生成代码")
 public class GenVO {
     private List<Long> ids;
-    private TemplateEnum templateEnum;
+    private TemplateEnum template;
     private Map<String, FileOverrideStrategyEnum> fileOverrideConfig;
 }

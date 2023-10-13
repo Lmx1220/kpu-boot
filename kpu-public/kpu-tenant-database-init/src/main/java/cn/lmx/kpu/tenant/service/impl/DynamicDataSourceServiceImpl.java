@@ -57,7 +57,7 @@ public class DynamicDataSourceServiceImpl implements DataSourceService {
         DataSourceProperty defDataSourceProperty = properties.getDatasource().get(ContextConstants.DEF_TENANT_ID_STR);
         ArgumentAssert.notNull(defDataSourceProperty, "请先配置默认[{}]数据源", ContextConstants.DEF_TENANT_ID_STR);
 
-        // 读取lamp.database.initDatabasePrefix 配置的租户前缀，动态初始化数据库
+        // 读取kpu.database.initDatabasePrefix 配置的租户前缀，动态初始化数据库
         databaseProperties.getInitDatabasePrefix().forEach(database -> {
             // 在程序启动时配置的默认库 数据源配置的基础上，修改租户库自己的特殊配置
             DataSourceProperty newDataSourceProperty = BeanUtil.toBean(defDataSourceProperty, DataSourceProperty.class);

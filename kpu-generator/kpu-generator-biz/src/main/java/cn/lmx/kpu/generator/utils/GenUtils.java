@@ -3,136 +3,113 @@ package cn.lmx.kpu.generator.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.db.meta.Column;
+import cn.hutool.db.meta.Table;
+import cn.lmx.basic.utils.StrHelper;
 import cn.lmx.basic.utils.StrPool;
-import cn.lmx.kpu.generator.config.EntityConfig;
-import cn.lmx.kpu.generator.config.GeneratorConfig;
+import cn.lmx.kpu.common.constant.DsConstant;
+import cn.lmx.kpu.generator.config.*;
 import cn.lmx.kpu.generator.converts.ITypeConvert;
 import cn.lmx.kpu.generator.converts.TypeConverts;
-import cn.lmx.kpu.generator.entity.Column;
 import cn.lmx.kpu.generator.entity.GenTable;
 import cn.lmx.kpu.generator.entity.GenTableColumn;
+import cn.lmx.kpu.generator.enumeration.ComponentEnum;
 import cn.lmx.kpu.generator.enumeration.SqlConditionEnum;
+import cn.lmx.kpu.generator.enumeration.VxeComponentEnum;
 import cn.lmx.kpu.generator.rules.ColumnType;
 import cn.lmx.kpu.generator.rules.DbColumnType;
 import cn.lmx.kpu.generator.rules.NamingStrategy;
+import cn.lmx.kpu.generator.rules.echo.EchoType;
+import cn.lmx.kpu.generator.rules.enumeration.EnumType;
+import cn.lmx.kpu.generator.type.GenConstants;
 import cn.lmx.kpu.generator.utils.inner.CommentUtils;
-import cn.lmx.kpu.generator.utils.inner.EchoType;
-import cn.lmx.kpu.generator.utils.inner.EnumType;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
+import static cn.lmx.kpu.generator.utils.inner.PackageUtils.getName;
+
 /**
+ * 代码生成器 工具类
+ *
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/27  09:20
+ * @date 2023/10/13 14:27
  */
 @Slf4j
 public class GenUtils {
-    public static GenTableColumn initColumnField(GeneratorConfig generatorConfig, DbType dbType, GenTable genTable, Column column) {
+
+    /**
+     * 初始化表信息
+     */
+    public static GenTable initTable(GeneratorConfig generatorConfig, Table tableMeta) {
+        ServiceConfig serviceConfig = generatorConfig.getServiceConfig();
+        MapperConfig mapperConfig = generatorConfig.getMapperConfig();
         EntityConfig entityConfig = generatorConfig.getEntityConfig();
-        if (entityConfig.getIgnoreColumns().contains(column.getName())) {
-            log.info("已经忽略字段:{}.{}", genTable.getName(), column.getName());
-            return null;
-        }
-        GenTableColumn tableColumn = new GenTableColumn();
-        String name = column.getName();
-        tableColumn.setJavaField(processName(name, entityConfig.getColumnNaming(), entityConfig.getFieldPrefix(), entityConfig.getFieldSuffix()));
-        tableColumn.setComment(column.getComment());
-        tableColumn.setSwaggerComment(getSwaggerComment(column.getComment()));
-        EchoType echoType = CommentUtils.getEchoType(column.getComment());
-        if (echoType != null) {
-            // Echo
-            tableColumn.setEchoStr(echoType.getEchoStr());
-            // 字典类型
-            tableColumn.setDictType(echoType.getDictType());
-        }
-        // 解析注释中的枚举类型
-        EnumType enumType = CommentUtils.getEnumStr(genTable.getEntityName(), tableColumn.getJavaField(), entityConfig.getFormatEnumFileName(),
-                tableColumn.getSwaggerComment(), column.getComment());
-        if (enumType != null) {
-            tableColumn.setEnumStr(enumType.getEnumStr());
-            tableColumn.setJavaType(enumType.getEnumName());
-            // 枚举类型的回显注解固定值
-            tableColumn.setEchoStr("@Echo(api = Echo.ENUM_API)");
-            tableColumn.setTsType("string");
+        WebProConfig webProConfig = generatorConfig.getWebProConfig();
 
-//            tableColumn.setComponent(ComponentEnum.PLUS_API_RADIO_GROUP.getValue());
-//            tableColumn.setVxeComponent(VxeComponentEnum.$RADIO.getValue());
-            tableColumn.setQueryType(SqlConditionEnum.EQUAL);
-        } else {
-            ITypeConvert typeConvert = TypeConverts.getTypeConvert(dbType);
-            ColumnType columnType = typeConvert.processTypeConvert(entityConfig.getDateType(), column.getTypeName(), column.getSize(), column.getDigits());
-            tableColumn.setJavaType(columnType.getType());
-            tableColumn.setTsType(columnType.getTsType());
-            if (columnType == DbColumnType.STRING) {
-                tableColumn.setQueryType(SqlConditionEnum.LIKE);
-            } else {
-                tableColumn.setQueryType(SqlConditionEnum.EQUAL);
-            }
+        GenTable genTable = new GenTable();
+        genTable.setName(tableMeta.getTableName());
+        genTable.setComment(tableMeta.getComment());
+        genTable.setSwaggerComment(getSwaggerComment(tableMeta.getComment()));
+        genTable.setMenuName(getName(genTable.getSwaggerComment(), webProConfig.getFormatMenuName(), "维护"));
+        genTable.setAuthor(generatorConfig.getAuthor());
+        genTable.setEntityName(convertClassName(generatorConfig, tableMeta.getTableName()));
+        genTable.setTplType(webProConfig.getTpl());
+        genTable.setParent(generatorConfig.getPackageInfoConfig().getParent());
+        genTable.setPlusApplicationName(StrPool.EMPTY);
+        genTable.setPlusModuleName(StrPool.EMPTY);
+        genTable.setServiceName(StrPool.EMPTY);
+        genTable.setModuleName(StrPool.EMPTY);
+        genTable.setChildPackageName(StrPool.EMPTY);
+        genTable.setGenType(generatorConfig.getGenType());
+        genTable.setOutputDir(generatorConfig.getOutputDir());
+        genTable.setFrontOutputDir(generatorConfig.getFrontOutputDir());
+        genTable.setEntitySuperClass(entityConfig.getEntitySuperClass());
+        genTable.setSuperClass(generatorConfig.getSuperClass());
 
-            // #TODO 前端组件 未完成
+        genTable.setIsTenantLine(mapperConfig.getColumnAnnotationTablePrefix().stream().anyMatch(tablePrefix -> tableMeta.getTableName().startsWith(tablePrefix)));
+        genTable.setIsDs(serviceConfig.getDsTablePrefix().stream().anyMatch(tablePrefix -> tableMeta.getTableName().startsWith(tablePrefix)));
+        genTable.setDsValue(DsConstant.class.getSimpleName() + ".BASE_TENANT");
 
-        }
-        tableColumn.setTableId(genTable.getId());
-        tableColumn.setName(name);
-        tableColumn.setType(column.getTypeName());
-        tableColumn.setSize(column.getSize());
-        tableColumn.setIsPk(column.isPk());
-        tableColumn.setIsRequired(!column.isNullable());
-        tableColumn.setIsIncrement(column.isAutoIncrement());
-        String versionPropertyName = entityConfig.getVersionPropertyName();
-        String versionColumnName = entityConfig.getVersionColumnName();
-        tableColumn.setIsVersionField(StringUtils.isNotBlank(versionPropertyName)
-                && StringUtils.equals(versionPropertyName, tableColumn.getJavaField())
-                || StringUtils.isNotBlank(versionColumnName)
-                && StringUtils.equalsIgnoreCase(versionColumnName, tableColumn.getName()));
-        String logicDeleteColumnName = entityConfig.getLogicDeleteColumnName();
-        String logicDeletePropertyName = entityConfig.getLogicDeletePropertyName();
-        tableColumn.setIsLogicDeleteField(StringUtils.isNotBlank(logicDeletePropertyName)
-                && StringUtils.equals(logicDeletePropertyName, tableColumn.getJavaField())
-                || StringUtils.isNotBlank(logicDeleteColumnName)
-                && StringUtils.equalsIgnoreCase(logicDeleteColumnName, tableColumn.getName()));
-        Map<String, FieldFill> fillColumnName = entityConfig.getFillColumnName();
-        Map<String, FieldFill> fillPropertyName = entityConfig.getFillPropertyName();
-        if (CollUtil.isNotEmpty(fillPropertyName) && fillPropertyName.containsKey(tableColumn.getJavaField())) {
-            tableColumn.setFill(fillPropertyName.get(tableColumn.getJavaField()));
-        }
-        if (CollUtil.isNotEmpty(fillColumnName) && fillColumnName.containsKey(tableColumn.getName())) {
-            tableColumn.setFill(fillColumnName.get(tableColumn.getName()));
-        }
-        // 编辑字段
-        if (!ArrayUtil.contains(GenCodeConstant.NOT_EDIT, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
-            tableColumn.setIsEdit(true);
-        }
-        // 列表字段
-        if (!ArrayUtil.contains(GenCodeConstant.NOT_LIST, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
-            tableColumn.setIsList(true);
-        }
-        // 查询字段
-        if (!ArrayUtil.contains(GenCodeConstant.NOT_QUERY, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
-            tableColumn.setIsQuery(true);
-        }
-        tableColumn.setEditDefValue(column.getColumnDef());
-        return tableColumn;
+        genTable.setIsLombok(entityConfig.getLombok());
+        genTable.setIsChain(entityConfig.getChain());
+        genTable.setIsColumnConstant(entityConfig.getColumnConstant());
+
+        genTable.setAddShow(true);
+        genTable.setCopyShow(true);
+        genTable.setEditShow(true);
+        genTable.setDeleteShow(true);
+
+        return genTable;
     }
 
     /**
-     * @param comment 列描述
+     * 表名转换成Java类名
+     *
+     * @param tableName 表名称
+     * @return 类名
      */
-    private static String getSwaggerComment(String comment) {
-        String swaggerComment = StrUtil.isBlank(comment) ? StrUtil.EMPTY : StrUtil.trim(comment);
-        if (swaggerComment.contains(StrPool.SEMICOLON)) {
-            swaggerComment = StrUtil.subBefore(swaggerComment, StrPool.SEMICOLON, false);
+    public static String convertClassName(GeneratorConfig generatorConfig, String tableName) {
+        List<String> tablePrefix = generatorConfig.getTablePrefix();
+        if (CollUtil.isEmpty(tablePrefix)) {
+            return StrHelper.convertToCamelCase(tableName);
         }
-        // 若含有换行符，替换为空格
-        // \n 是mysql注释中的换行符，其他数据库的换行符需要自己改这里代码适配下
-        swaggerComment = StrUtil.replace(swaggerComment, "\n", " ");
-        return swaggerComment;
+
+        String text = tableName;
+        for (String prefix : tablePrefix) {
+            if (StrUtil.isEmpty(prefix)) {
+                continue;
+            }
+            if (tableName.startsWith(prefix)) {
+                text = tableName.replaceFirst(prefix, StrUtil.EMPTY);
+                break;
+            }
+        }
+        return StrHelper.convertToCamelCase(text);
     }
 
     /**
@@ -141,7 +118,7 @@ public class GenUtils {
      * @param prefix   前缀
      * @param suffix   后缀
      * @return java.lang.String
-     * @date 2023/4/16 10:45 PM
+     * @date 2023/10/13 14:27
      */
     private static String processName(String name, NamingStrategy strategy, List<String> prefix, List<String> suffix) {
         String propertyName = name;
@@ -163,5 +140,138 @@ public class GenUtils {
         return propertyName;
     }
 
+    private static String getSwaggerComment(String comment) {
+        String swaggerComment = StrUtil.isBlank(comment) ? StrUtil.EMPTY : StrUtil.trim(comment);
+        if (swaggerComment.contains(StrPool.SEMICOLON)) {
+            swaggerComment = StrUtil.subBefore(swaggerComment, StrPool.SEMICOLON, false);
+        }
+        swaggerComment = StrUtil.replace(swaggerComment, "\n", " ");
+        return swaggerComment;
+    }
 
+
+    /**
+     * 初始化列属性字段
+     */
+    public static GenTableColumn initColumnField(GeneratorConfig generatorConfig, DbType dbType, GenTable genTable, Column column) {
+        EntityConfig entityConfig = generatorConfig.getEntityConfig();
+        if (entityConfig.getIgnoreColumns().contains(column.getName())) {
+            log.info("已经忽略字段： {}.{} ", genTable.getName(), column.getName());
+            return null;
+        }
+
+        GenTableColumn tableColumn = new GenTableColumn();
+        String name = column.getName();
+        tableColumn.setJavaField(processName(name, entityConfig.getColumnNaming(), generatorConfig.getFieldPrefix(), generatorConfig.getFieldSuffix()));
+        tableColumn.setComment(column.getComment());
+        tableColumn.setSwaggerComment(getSwaggerComment(column.getComment()));
+        // 解析注释中的@Echo注解
+        EchoType echoType = CommentUtils.getEchoType(column.getComment());
+        if (echoType != null) {
+            tableColumn.setEchoStr(echoType.getEchoStr());
+            tableColumn.setDictType(echoType.getDictType());
+        }
+        // 解析注释中的枚举类型
+        EnumType enumType = CommentUtils.getEnumStr(genTable.getEntityName(), tableColumn.getJavaField(), entityConfig.getFormatEnumFileName(), tableColumn.getSwaggerComment(), column.getComment());
+        if (enumType != null) {
+            tableColumn.setEnumStr(enumType.getEnumStr());
+            tableColumn.setJavaType(enumType.getEnumName());
+            tableColumn.setEchoStr("@Echo(api = Echo.ENUM_API)");
+            tableColumn.setTsType("string");
+
+            tableColumn.setComponent(ComponentEnum.PLUS_API_RADIO_GROUP.getValue());
+            tableColumn.setVxeComponent(VxeComponentEnum.$RADIO.getValue());
+            tableColumn.setQueryType(SqlConditionEnum.EQUAL);
+        } else {
+            ITypeConvert typeConvert = TypeConverts.getTypeConvert(dbType);
+            ColumnType columnType = typeConvert.processTypeConvert(entityConfig.getDateType(), column.getTypeName(), column.getSize(), column.getDigit());
+            tableColumn.setJavaType(columnType.getType());
+            tableColumn.setTsType(columnType.getTsType());
+            if (columnType == DbColumnType.STRING) {
+                tableColumn.setQueryType(SqlConditionEnum.LIKE);
+            } else {
+                tableColumn.setQueryType(SqlConditionEnum.EQUAL);
+            }
+
+            /*
+            默认：Input
+            名称含有Password： InputPassword
+            名称含有remarks： InputTextArea
+            字典、枚举： ApiSelect、ApiRadioGroup
+            Boolean: RadioGroup
+            LocalDate、LocalDateTime： DatePicker
+            LocalTime： TimePicker
+            */
+            String component = columnType.getComponent();
+            String vxeComponent = columnType.getVxeComponent();
+            if (StrUtil.containsIgnoreCase(tableColumn.getJavaField(), "password")) {
+                component = ComponentEnum.PLUS_INPUT_PASSWORD.getValue();
+            } else if (StrUtil.containsIgnoreCase(tableColumn.getJavaField(), "remarks")) {
+                component = ComponentEnum.PLUS_INPUT_TEXT_AREA.getValue();
+                vxeComponent = VxeComponentEnum.$TEXTAREA.getValue();
+            }
+            if (StrUtil.isNotEmpty(tableColumn.getEchoStr()) || StrUtil.isNotEmpty(tableColumn.getEnumStr())) {
+                component = ComponentEnum.PLUS_API_RADIO_GROUP.getValue();
+                vxeComponent = VxeComponentEnum.$RADIO.getValue();
+            }
+            tableColumn.setComponent(component);
+            tableColumn.setVxeComponent(vxeComponent);
+        }
+
+        tableColumn.setTableId(genTable.getId());
+        tableColumn.setName(name);
+        tableColumn.setType(column.getTypeName());
+        tableColumn.setSize(column.getSize());
+        tableColumn.setIsPk(column.isPk());
+        tableColumn.setIsRequired(!column.isNullable());
+        tableColumn.setIsIncrement(column.isAutoIncrement());
+
+        String versionPropertyName = entityConfig.getVersionPropertyName();
+        String versionColumnName = entityConfig.getVersionColumnName();
+        tableColumn.setIsVersionField(StringUtils.isNotBlank(versionPropertyName) && tableColumn.getJavaField().equals(versionPropertyName) || StringUtils.isNotBlank(versionColumnName) && tableColumn.getName().equalsIgnoreCase(versionColumnName));
+
+        String logicDeleteColumnName = entityConfig.getLogicDeleteColumnName();
+        String logicDeletePropertyName = entityConfig.getLogicDeletePropertyName();
+        tableColumn.setIsLogicDeleteField(StringUtils.isNotBlank(logicDeletePropertyName) && tableColumn.getJavaField().equals(logicDeletePropertyName) || StringUtils.isNotBlank(logicDeleteColumnName) && tableColumn.getName().equalsIgnoreCase(logicDeleteColumnName));
+
+        Map<String, FieldFill> fillColumnName = entityConfig.getFillColumnName();
+        Map<String, FieldFill> fillPropertyName = entityConfig.getFillPropertyName();
+        if (CollUtil.isNotEmpty(fillPropertyName) && fillPropertyName.containsKey(tableColumn.getJavaField())) {
+            tableColumn.setFill(fillPropertyName.get(tableColumn.getJavaField()));
+        }
+        if (CollUtil.isNotEmpty(fillColumnName) && fillColumnName.containsKey(tableColumn.getName())) {
+            tableColumn.setFill(fillColumnName.get(tableColumn.getName()));
+        }
+
+        // 编辑字段
+        if (!ArrayUtil.contains(GenConstants.NOT_EDIT, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
+            tableColumn.setIsEdit(true);
+        }
+        // 列表字段
+        if (!ArrayUtil.contains(GenConstants.NOT_LIST, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
+            tableColumn.setIsList(true);
+        }
+        // 查询字段
+        if (!ArrayUtil.contains(GenConstants.NOT_QUERY, name) && !column.isPk() && !tableColumn.getIsLogicDeleteField()) {
+            tableColumn.setIsQuery(true);
+        }
+
+        tableColumn.setEditDefValue(getDefValue(column.getColumnDef()));
+
+        return tableColumn;
+    }
+
+    private static String getDefValue(String columnDef) {
+        if (StrUtil.isEmpty(columnDef)) {
+            return StrPool.EMPTY;
+        }
+        switch (columnDef) {
+            case "b'0'":
+                return "false";
+            case "b'1'":
+                return "true";
+            default:
+                return columnDef;
+        }
+    }
 }

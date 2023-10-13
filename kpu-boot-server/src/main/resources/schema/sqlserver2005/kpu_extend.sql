@@ -28,9 +28,9 @@ CREATE TABLE [dbo].[e_block_list]
     8
 ),
     state BIT DEFAULT 0,
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -47,9 +47,9 @@ EXEC sp_addextendedproperty 'MS_Description', '请求方法;
 EXEC sp_addextendedproperty 'MS_Description', '限制时间起', 'SCHEMA', dbo, 'table', e_block_list, 'column', limit_start;
 EXEC sp_addextendedproperty 'MS_Description', '限制时间止', 'SCHEMA', dbo, 'table', e_block_list, 'column', limit_end;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', e_block_list, 'column', state;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_block_list, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_block_list, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', e_block_list, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', e_block_list, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', e_block_list, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '修改人', 'SCHEMA', dbo, 'table', e_block_list, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[e_msg]') AND type in (N'U'))
@@ -91,9 +91,9 @@ CREATE TABLE [dbo].[e_msg]
     500
 ),
     is_single_handle BIT DEFAULT 1,
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -115,9 +115,9 @@ EXEC sp_addextendedproperty 'MS_Description', '处理地址;
 以http开头时直接跳转，否则与#c_application表拼接后跳转http可带参数', 'SCHEMA', dbo, 'table', e_msg, 'column', handler_url;
 EXEC sp_addextendedproperty 'MS_Description', '处理参数', 'SCHEMA', dbo, 'table', e_msg, 'column', handler_params;
 EXEC sp_addextendedproperty 'MS_Description', '是否单人处理', 'SCHEMA', dbo, 'table', e_msg, 'column', is_single_handle;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_msg, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_msg, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', e_msg, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_msg, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_msg, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', e_msg, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[e_msg_receive]') AND type in (N'U'))
@@ -140,11 +140,11 @@ CREATE TABLE [dbo].[e_msg_receive]
     BIT
     DEFAULT
     0,
-    create_time
+    created_time
     DATETIME,
     created_by
     BIGINT,
-    update_time
+    updated_time
     DATETIME,
     updated_by
     BIGINT,
@@ -162,9 +162,9 @@ EXEC sp_addextendedproperty 'MS_Description', '消息ID;
 EXEC sp_addextendedproperty 'MS_Description', '接收人ID;
 #c_user', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', user_id;
 EXEC sp_addextendedproperty 'MS_Description', '是否已读', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', is_read;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', e_msg_receive, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[e_rate_limiter]') AND type in (N'U'))
@@ -198,9 +198,9 @@ CREATE TABLE [dbo].[e_rate_limiter]
 ),
     state BIT DEFAULT 0,
     interval_sec BIGINT DEFAULT 0,
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -218,9 +218,9 @@ EXEC sp_addextendedproperty 'MS_Description', '限制时间起', 'SCHEMA', dbo, 
 EXEC sp_addextendedproperty 'MS_Description', '限制时间止', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', limit_end;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '时间窗口', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', interval_sec;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '修改人', 'SCHEMA', dbo, 'table', e_rate_limiter, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[e_sms_send_status]') AND type in (N'U'))
@@ -262,9 +262,9 @@ CREATE TABLE [dbo].[e_sms_send_status]
 ),
     fee INT,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -287,9 +287,9 @@ EXEC sp_addextendedproperty 'MS_Description', '状态码;阿里：返回OK代表
 EXEC sp_addextendedproperty 'MS_Description', '状态码的描述', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', message;
 EXEC sp_addextendedproperty 'MS_Description', '短信计费的条数;腾讯专用', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', fee;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_send_status, 'column', updated_time;
 
 
 CREATE INDEX task_id_tel_num ON e_sms_send_status (task_id, tel_num);
@@ -330,9 +330,9 @@ CREATE TABLE [dbo].[e_sms_task]
 ),
     draft BIT DEFAULT 0,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -354,9 +354,9 @@ EXEC sp_addextendedproperty 'MS_Description', '发送内容;
 需要封装正确格式化: 您好，张三，您有一个新的快递。', 'SCHEMA', dbo, 'table', e_sms_task, 'column', content;
 EXEC sp_addextendedproperty 'MS_Description', '是否草稿', 'SCHEMA', dbo, 'table', e_sms_task, 'column', draft;
 EXEC sp_addextendedproperty 'MS_Description', '创建人ID', 'SCHEMA', dbo, 'table', e_sms_task, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_task, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_task, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', e_sms_task, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_task, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_task, 'column', updated_time;
 
 
 CREATE INDEX tempate_id_topic_content ON e_sms_task (template_id, topic, content);
@@ -411,9 +411,9 @@ CREATE TABLE [dbo].[e_sms_template]
     255
 ),
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -435,7 +435,7 @@ EXEC sp_addextendedproperty 'MS_Description', '模板编码', 'SCHEMA', dbo, 'ta
 EXEC sp_addextendedproperty 'MS_Description', '签名', 'SCHEMA', dbo, 'table', e_sms_template, 'column', sign_name;
 EXEC sp_addextendedproperty 'MS_Description', '备注', 'SCHEMA', dbo, 'table', e_sms_template, 'column', template_describe;
 EXEC sp_addextendedproperty 'MS_Description', '创建人ID', 'SCHEMA', dbo, 'table', e_sms_template, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_template, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', e_sms_template, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', e_sms_template, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_template, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', e_sms_template, 'column', updated_time;
 

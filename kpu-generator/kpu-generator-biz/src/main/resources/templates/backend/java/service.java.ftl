@@ -1,20 +1,44 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+<#list serviceImport as pkg>
+    import ${pkg};
+</#list>
+<#if superServiceClass??>
 import ${superServiceClassPackage};
+    import ${entityPackage};
+    import ${saveVoPackage};
+    import ${updateVoPackage};
+    import ${resultVoPackage};
+    import ${pageQueryPackage};
+</#if>
+
 
 /**
 * <p>
-    * ${table.comment!} 服务类
+    * 业务接口
+    * ${table.comment!?replace("\n","\n * ")}
     * </p>
 *
 * @author ${author}
-* @since ${date}
+* @date ${datetime}
+* @create [${datetime}] [${author}] [代码生成器生成]
 */
-<#if kotlin>
-    interface ${table.serviceName} : ${superServiceClass}<${entity}>
+<#if superServiceClass??>
+    public interface ${serviceName} extends ${superServiceClass}<${pkField.javaType}, ${table.entityName}, ${saveVoName},
+    ${updateVoName}, ${pageQueryName}, ${resultVoName}> {
 <#else>
-    public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
-
-    }
+    public interface ${serviceName} {
 </#if>
+
+<#if isTreeEntity>
+    /**
+    * 查询树结构
+    *
+    * @param query 参数
+    * @return 树
+    */
+    List<${table.entityName}> findTree(${pageQueryName} query);
+</#if>
+}
+
+

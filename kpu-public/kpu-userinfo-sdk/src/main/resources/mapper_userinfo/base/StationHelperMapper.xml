@@ -5,9 +5,9 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.model.entity.base.SysStation">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="org_id" jdbcType="BIGINT" property="orgId"/>
@@ -17,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,create_time,created_by,update_time,updated_by,
+        id,created_time,created_by,updated_time,updated_by,
         name, org_id, state, remarks
     </sql>
 

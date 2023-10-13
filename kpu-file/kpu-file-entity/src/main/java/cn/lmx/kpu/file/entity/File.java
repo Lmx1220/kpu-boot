@@ -1,12 +1,12 @@
 package cn.lmx.kpu.file.entity;
 
+import cn.lmx.basic.base.entity.Entity;
+import cn.lmx.kpu.file.enumeration.FileStorageType;
+import cn.lmx.kpu.model.enumeration.base.FileType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
-import cn.lmx.basic.base.entity.Entity;
-import cn.lmx.kpu.file.enumeration.FileStorageType;
-import cn.lmx.kpu.model.enumeration.base.FileType;
 
 import java.time.LocalDateTime;
 
@@ -108,14 +108,14 @@ public class File extends Entity<Long> {
 
 
     @Builder
-    public File(Long id, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public File(Long id, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                 String bizType, FileType fileType, FileStorageType storageType, String bucket,
                 String path, String url, String uniqueFileName, String fileMd5, String originalFileName, String contentType,
                 String suffix, Long size) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.bizType = bizType;
         this.fileType = fileType;

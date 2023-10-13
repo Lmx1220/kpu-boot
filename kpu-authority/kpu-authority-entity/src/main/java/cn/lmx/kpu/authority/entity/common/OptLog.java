@@ -152,11 +152,11 @@ public class OptLog extends SuperEntity<Long> implements EchoVO {
 
 
     @Builder
-    public OptLog(Long id, LocalDateTime createTime, Long createdBy,
+    public OptLog(Long id, LocalDateTime createdTime, Long createdBy,
                   String requestIp, LogType type, String userName, String description, String classPath,
                   String actionMethod, String requestUri, HttpMethod httpMethod, LocalDateTime startTime, LocalDateTime finishTime, Long consumingTime, String ua) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.requestIp = requestIp;
         this.type = type;

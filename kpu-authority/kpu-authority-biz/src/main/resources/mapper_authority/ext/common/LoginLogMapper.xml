@@ -26,7 +26,7 @@
 
     <select id="findLastTenDaysVisitCount" resultType="map" parameterType="map">
         select l.login_date LOGIN_DATE , count(1) NUM from
-        ( select id, login_date from c_login_log where create_time >= #{tenDays}
+        ( select id, login_date from c_login_log where created_time >= #{tenDays}
         <if test="username != null and username != ''">
             and username = #{username}
         </if>
@@ -46,13 +46,13 @@
         delete from c_login_log
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="clearBeforeTime != null">
-                AND create_time <![CDATA[ <= ]]> #{clearBeforeTime}
+                AND created_time <![CDATA[ <= ]]> #{clearBeforeTime}
             </if>
             <if test="clearBeforeNum  != null">
                 AND id NOT in(
                 SELECT id FROM(
                 SELECT id FROM c_login_log AS t
-                ORDER BY t.create_time desc LIMIT 0, #{clearBeforeNum}
+                ORDER BY t.created_time desc LIMIT 0, #{clearBeforeNum}
                 ) t1
                 )
             </if>

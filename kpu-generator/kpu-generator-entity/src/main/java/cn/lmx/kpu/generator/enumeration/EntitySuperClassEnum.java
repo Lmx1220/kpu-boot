@@ -7,11 +7,15 @@ import cn.lmx.basic.interfaces.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 /**
  * 父类实体类型
+ * <p>
+ * 若在kpu-core中新增了 基类实体，可以在此增加对应的枚举值
  *
- * @author zuihou
- * @date 2019/05/14
+ * @author lmx
+ * @date 2023/10/13 14:27
  */
 @Getter
 @AllArgsConstructor
@@ -19,30 +23,31 @@ public enum EntitySuperClassEnum implements BaseEnum {
     /**
      * 只有id
      * <p>
-     * "tenant_code" 字段会自动忽略
+     * "org_id" 字段会自动忽略
      */
-    SUPER_ENTITY("01", SuperEntity.class.getName(), new String[]{"id", "tenant_code", "create_time", "created_by"}),
+    SUPER_ENTITY("01", SuperEntity.class.getName(), new String[]{"id", "created_by", "created_time",}),
+
     /**
      * 有创建人创建时间等
-     * "tenant_code" 字段会自动忽略
+     * "org_id" 字段会自动忽略
      */
-    ENTITY("02", Entity.class.getName(), new String[]{"id", "tenant_code", "create_time", "created_by", "update_time", "updated_by"}),
+    ENTITY("02", Entity.class.getName(), new String[]{"id", "created_by", "created_time", "updated_by", "updated_time"}),
 
     /**
      * 树形实体
-     * "tenant_code" 字段会自动忽略
+     * "org_id" 字段会自动忽略
      */
-    TREE_ENTITY("03", TreeEntity.class.getName(), new String[]{"id", "tenant_code", "create_time", "created_by", "update_time", "updated_by", "label", "parent_id", "sort_value"}),
-
+    TREE_ENTITY("03", TreeEntity.class.getName(), new String[]{"id", "created_by", "created_time", "updated_by", "updated_time", "parent_id", "sort_value"}),
     /**
      * 不继承任何实体
      */
     NONE("04", "", new String[]{""}),
     ;
 
-    private String value;
-    private String clazzName;
-    private String[] columns;
+    private final String value;
+    private final String clazzName;
+    // 生成代码时，默认忽略的字段
+    private final String[] columns;
 
 
     @Override
@@ -65,6 +70,12 @@ public enum EntitySuperClassEnum implements BaseEnum {
             return false;
         }
         return eq(val.name());
+    }
+
+
+    public boolean matchSuperEntityColumns(String fieldName) {
+        // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
+        return Stream.of(this.getColumns()).anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
 }

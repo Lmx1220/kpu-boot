@@ -183,7 +183,7 @@ public class SysResource extends TreeEntity<SysResource, Long> {
     private String metaJson;
 
     @Builder
-    public SysResource(Long id, String code, String title, String name, Integer sortValue, Long parentId, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
+    public SysResource(Long id, String code, String title, String name, Integer sortValue, Long parentId, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime,
                    String remarks, Boolean isGeneral, String redirect, String path, String component, Boolean state, String resourceType,
                    String icon, String activeIcon, String group, Boolean readonly, String dataScope, String customClass, Boolean isDef, Integer treeGrade, String treePath, String metaJson) {
         this.id = id;
@@ -193,9 +193,9 @@ public class SysResource extends TreeEntity<SysResource, Long> {
         this.sortValue = sortValue;
         this.parentId = parentId;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.updatedBy = updatedBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.remarks = remarks;
         this.isGeneral = isGeneral;
         this.redirect = redirect;

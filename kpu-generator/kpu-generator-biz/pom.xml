@@ -23,6 +23,11 @@
             <version>${kpu-project.version}</version>
         </dependency>
         <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-tenant-database-init</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatis-plus-generator.version}</version>
@@ -31,6 +36,10 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
     </dependencies>
 

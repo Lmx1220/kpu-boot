@@ -1,20 +1,16 @@
 package ${package.Controller};
 
-
 <#list controllerImport as pkg>
     import ${pkg};
 </#list>
-import io.swagger.annotations.Api;
-<#if table.isLombok>
-    import lombok.RequiredArgsConstructor;
-    import lombok.extern.slf4j.Slf4j;
-</#if>
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
 <#if superControllerClass??>
     import ${superControllerClassPackage};
+    import ${servicePackage};
     import ${entityPackage};
-
+    import ${saveVoPackage};
+    import ${updateVoPackage};
+    import ${resultVoPackage};
+    import ${pageQueryPackage};
 </#if>
 <#if controllerConfig.restStyle>
     import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
 * <p>
-    * ${table.comment!} 前端控制器
+    * 前端控制器
+    * ${table.comment!?replace("\n","\n * ")}
     * </p>
 *
 * @author ${author}
-* @since ${date}
+* @date ${datetime}
+* @create [${datetime}] [${author}] [代码生成器生成]
 */
 <#if table.isLombok>
     @Slf4j
@@ -41,16 +39,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
     @Controller
 </#if>
 @RequestMapping("/<#if controllerConfig.hyphenStyle>${mappingHyphen}<#else>${table.entityName?uncap_first}</#if>")
-@Api(value = "${table.entityName}", tags="${table.swaggerComment}")
+@Api(value = "${table.entityName}", tags = "${table.swaggerComment}")
 <#if superControllerClass??>
     public class ${controllerName} extends ${superControllerClass}<${serviceName}, ${pkField.javaType}, ${table.entityName}, ${saveVoName},
     ${updateVoName}, ${pageQueryName}, ${resultVoName}> {
 <#else>
-    public class ${table.controllerName} {
+    public class ${controllerName} {
 </#if>
 <#if table.isLombok>
     private final EchoService echoService;
-<#else >
+<#else>
     @Autowired
     private EchoService echoService;
 </#if>
@@ -61,5 +59,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
     }
 </#if>
 
+<#if isTreeEntity>
+    /**
+    * 按树结构查询
+    *
+    * @param pageQuery 查询参数
+    * @return 查询结果
+    */
+    @ApiOperation(value = "按树结构查询", notes = "按树结构查询")
+    @PostMapping("/tree")
+    @WebLog("级联查询")
+    public R
+    <List<${table.entityName}>> tree(@RequestBody ${pageQueryName} pageQuery) {
+    return success(superService.findTree(pageQuery));
+    }
+</#if>
 }
+
 

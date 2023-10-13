@@ -54,6 +54,12 @@ public class ResourceUpdateVo implements Serializable {
     @Size(max = 200, message = "描述长度不能超过200")
     private String remarks;
     /**
+     * 重定向
+     */
+    @ApiModelProperty(value = "重定向")
+    @Size(max = 255, message = "重定向长度不能超过255")
+    private String redirect;
+    /**
      * 路径
      */
     @ApiModelProperty(value = "地址栏地址")

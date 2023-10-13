@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.OptLogExt">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
         <result column="params" jdbcType="LONGVARCHAR" property="params"/>
         <result column="result" jdbcType="LONGVARCHAR" property="result"/>
@@ -14,7 +14,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,create_time,created_by,
+        id,created_time,created_by,
         params, result, ex_detail
     </sql>
 

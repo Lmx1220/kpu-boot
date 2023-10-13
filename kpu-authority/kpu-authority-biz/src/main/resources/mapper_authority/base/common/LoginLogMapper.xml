@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.LoginLog">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
         <result column="request_ip" jdbcType="VARCHAR" property="requestIp"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
@@ -23,7 +23,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,create_time,created_by,
+        id,created_time,created_by,
         request_ip, user_id, nick_name, username, description, login_date, ua, browser, browser_version, operating_system, location,status
     </sql>
 

@@ -1,6 +1,5 @@
 package cn.lmx.kpu.generator.converts;
 
-
 import cn.lmx.kpu.generator.converts.select.BranchBuilder;
 import cn.lmx.kpu.generator.converts.select.Selector;
 import cn.lmx.kpu.generator.rules.ColumnType;
@@ -8,8 +7,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 
 /**
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/26  19:40
+ * @date 2023/10/13 14:27
  */
 public class TypeConverts {
 
@@ -22,14 +20,14 @@ public class TypeConverts {
     public static ITypeConvert getTypeConvert(DbType dbType) {
         switch (dbType) {
             case ORACLE:
-//                return OracleTypeConvert.INSTANCE;
+                return OracleTypeConvert.INSTANCE;
+            case SQL_SERVER:
+                return SqlServerTypeConvert.INSTANCE;
             case MYSQL:
             case MARIADB:
+            default:
                 return MySqlTypeConvert.INSTANCE;
-            case SQL_SERVER:
-//                return SqlServerTypeConvert.INSTANCE;
         }
-        return null;
     }
 
     /**
@@ -59,7 +57,9 @@ public class TypeConverts {
     static BranchBuilder<String, ColumnType> containsAny(CharSequence... values) {
         return BranchBuilder.of(s -> {
             for (CharSequence value : values) {
-                if (s.contains(value)) return true;
+                if (s.contains(value)) {
+                    return true;
+                }
             }
             return false;
         });

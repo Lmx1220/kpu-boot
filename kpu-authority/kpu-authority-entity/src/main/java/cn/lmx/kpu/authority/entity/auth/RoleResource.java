@@ -55,10 +55,10 @@ public class RoleResource extends SuperEntity<Long> {
 
 
     @Builder
-    public RoleResource(Long id, LocalDateTime createTime, Long createdBy,
+    public RoleResource(Long id, LocalDateTime createdTime, Long createdBy,
                         Long resourceId, Long roleId) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.resourceId = resourceId;
         this.roleId = roleId;

@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="O_Column_List">
-        o.id,o.name,o.parent_id,o.sort_value,o.create_time,o.created_by,o.update_time,o.updated_by,
+        o.id,o.name,o.parent_id,o.sort_value,o.created_time,o.created_by,o.updated_time,o.updated_by,
         o.type_, o.abbreviation, o.tree_path, o.state, o.remarks
     </sql>
 

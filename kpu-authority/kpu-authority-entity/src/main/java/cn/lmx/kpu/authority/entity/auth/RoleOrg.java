@@ -56,10 +56,10 @@ public class RoleOrg extends SuperEntity<Long> {
 
 
     @Builder
-    public RoleOrg(Long id, LocalDateTime createTime, Long createdBy,
+    public RoleOrg(Long id, LocalDateTime createdTime, Long createdBy,
                    Long roleId, Long orgId) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.roleId = roleId;
         this.orgId = orgId;

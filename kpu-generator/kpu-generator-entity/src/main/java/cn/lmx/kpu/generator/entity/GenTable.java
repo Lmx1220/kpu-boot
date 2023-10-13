@@ -1,9 +1,7 @@
 package cn.lmx.kpu.generator.entity;
 
 import cn.lmx.basic.base.entity.Entity;
-import cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.GenTypeEnum;
-import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
+import cn.lmx.kpu.generator.enumeration.*;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -26,6 +24,8 @@ import static com.baomidou.mybatisplus.annotation.SqlCondition.EQUAL;
 @Builder
 @TableName("c_gen_table")
 public class GenTable extends Entity<Long> {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 表名称
      */
@@ -37,7 +37,7 @@ public class GenTable extends Entity<Long> {
     @TableField(value = "comment_", condition = LIKE)
     private String comment;
     /**
-     * swagger描述
+     * swagger 描述
      */
     @TableField(value = "swagger_comment", condition = LIKE)
     private String swaggerComment;
@@ -61,6 +61,7 @@ public class GenTable extends Entity<Long> {
      */
     @TableField(value = "sub_java_field_name", condition = LIKE)
     private String subJavaFieldName;
+
     /**
      * 实体类名称
      */
@@ -85,12 +86,20 @@ public class GenTable extends Entity<Long> {
     @TableField(value = "parent", condition = LIKE)
     private String parent;
     /**
-     * 前端应用名;如：src/views目录下的basic和devOperation,basic表示基础平台。devOperation表示开发运营系统。xxx 表示你们自己新建的xxx系统。
+     * 前端应用名;
+     * 如：src/views目录下的 basic 和 devOperation
+     * <p>
+     * basic 表示基础平台
+     * <p>
+     * devOperation 表示开发运营系统
+     * <p>
+     * xxx 表示你们自己新建的xxx系统
      */
     @TableField(value = "plus_application_name", condition = LIKE)
     private String plusApplicationName;
     /**
-     * 前端模块名;如：src/views/devOperation目录下的文件夹名
+     * 前端模块名;
+     * 如：src/views/devOperation 目录下的文件夹名
      * 如：src/views/basic 目录下的文件夹名
      */
     @TableField(value = "plus_module_name", condition = LIKE)
@@ -141,31 +150,36 @@ public class GenTable extends Entity<Long> {
     @TableField(value = "is_column_constant", condition = EQUAL)
     private Boolean isColumnConstant;
     /**
-     * 生成代码方式;、; [01-zip压缩包 02-自定义路径]
+     * 生成代码方式;
      * #GenTypeEnum{GEN:01,直接生成;ZIP:02,打包下载;}
+     * （01zip压缩包 02自定义路径）
      */
     @TableField(value = "gen_type", condition = EQUAL)
     private GenTypeEnum genType;
     /**
-     * 生成路径;（不填默认项目路径）
+     * 生成路径;
+     * （不填默认项目路径）
      */
     @TableField(value = "output_dir", condition = LIKE)
     private String outputDir;
     /**
-     * 前端生成路径;（不填默认项目路径）
+     * 前端生成路径;
+     * （不填默认项目路径）
      */
     @TableField(value = "front_output_dir", condition = LIKE)
     private String frontOutputDir;
-//    /**
-//     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
-//     */
-//    @TableField(value = "tpl_type", condition = EQUAL)
-//    private TplEnum tplType;
-//    /**
-//     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
-//     */
-//    @TableField(value = "popup_type", condition = EQUAL)
-//    private PopupTypeEnum popupType;
+    /**
+     * 使用的模板;
+     * #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
+     */
+    @TableField(value = "tpl_type", condition = EQUAL)
+    private TplEnum tplType;
+    /**
+     * 弹窗方式;
+     * #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
+     */
+    @TableField(value = "popup_type", condition = EQUAL)
+    private PopupTypeEnum popupType;
     /**
      * 新增按钮权限编码
      */
@@ -224,7 +238,7 @@ public class GenTable extends Entity<Long> {
     /**
      * 备注
      */
-    @TableField(value = "remark", condition = LIKE)
+    @TableField(value = "remarks", condition = LIKE)
     private String remark;
     /**
      * 上级菜单ID
@@ -256,5 +270,6 @@ public class GenTable extends Entity<Long> {
      */
     @TableField(value = "tree_name", condition = LIKE)
     private String treeName;
+
 
 }

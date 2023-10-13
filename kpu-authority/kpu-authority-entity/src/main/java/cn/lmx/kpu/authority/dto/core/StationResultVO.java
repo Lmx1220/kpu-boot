@@ -64,12 +64,12 @@ public class StationResultVO extends Entity<Long> implements EchoVO {
     private Long createdOrgId;
 
     @Builder
-    public StationResultVO(Long id, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public StationResultVO(Long id, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                            String name, Long orgId, Boolean state, String remarks, Long createdOrgId) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.name = name;
         this.orgId = orgId;

@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : 127.0.0.1:3306
- Source Schema         : lamp_extend_0000
+ Source Schema         : kpu_extend_0000
 
  Target Server Type    : MySQL
  Target Server Version : 50722
@@ -29,9 +29,9 @@ CREATE TABLE `b_order`
     `nation`      varchar(255) DEFAULT NULL COMMENT '民族 \n@Echo(api = DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.NATION)',
     `org_id`      bigint(20)   DEFAULT NULL COMMENT '组织ID \n#c_org@Echo(api = ORG_ID_FEIGN_CLASS)',
     `code`        varchar(255) DEFAULT NULL COMMENT '编号',
-    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time` datetime     DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`  bigint(20)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -46,9 +46,9 @@ CREATE TABLE `b_product`
     `id`          bigint(20)  NOT NULL COMMENT 'ID',
     `name`        varchar(24) NOT NULL COMMENT '名称',
     `stock`       int(10)     NOT NULL COMMENT '库存',
-    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time` datetime     DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`  bigint(20)   DEFAULT NULL COMMENT '修改人',
     `type_`       text COMMENT '商品类型 \n#ProductType{ordinary:普通;gift:赠品}',
     `type2`       longtext COMMENT '商品类型2 \n#{ordinary:普通;gift:赠品;}',
@@ -80,9 +80,9 @@ CREATE TABLE `e_block_list`
     `limit_start`    varchar(8)   DEFAULT '' COMMENT '限制时间起',
     `limit_end`      varchar(8)   DEFAULT '' COMMENT '限制时间止',
     `state`          bit(1)       DEFAULT b'0' COMMENT '状态',
-    `create_time`    datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`     bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time`    datetime     DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`     bigint(20)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -104,9 +104,9 @@ CREATE TABLE `e_msg`
     `handler_url`      varchar(255) DEFAULT '' COMMENT '处理地址 \n以http开头时直接跳转，否则与#c_application表拼接后跳转http可带参数',
     `handler_params`   varchar(500) DEFAULT '' COMMENT '处理参数',
     `is_single_handle` bit(1)       DEFAULT b'1' COMMENT '是否单人处理',
-    `create_time`      datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`       bigint(20)   DEFAULT NULL COMMENT '创建人id',
-    `update_time`      datetime     DEFAULT NULL COMMENT '最后修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '最后修改时间',
     `updated_by`       bigint(20)   DEFAULT NULL COMMENT '最后修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -122,9 +122,9 @@ CREATE TABLE `e_msg_receive`
     `msg_id`      bigint(20) NOT NULL COMMENT '消息ID \n#msg',
     `user_id`     bigint(20) NOT NULL COMMENT '接收人ID \n#c_user',
     `is_read`     bit(1)     DEFAULT b'0' COMMENT '是否已读',
-    `create_time` datetime   DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20) DEFAULT NULL COMMENT '创建人',
-    `update_time` datetime   DEFAULT NULL COMMENT '最后修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '最后修改时间',
     `updated_by`  bigint(20) DEFAULT NULL COMMENT '最后修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -144,9 +144,9 @@ CREATE TABLE `e_rate_limiter`
     `limit_end`      varchar(8)   DEFAULT '' COMMENT '限制时间止',
     `state`          bit(1)       DEFAULT b'0' COMMENT '状态',
     `interval_sec`   bigint(20)   DEFAULT '0' COMMENT '时间窗口',
-    `create_time`    datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`     bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time`    datetime     DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`     bigint(20)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -168,9 +168,9 @@ CREATE TABLE `e_sms_send_status`
     `message`     varchar(500) DEFAULT '' COMMENT '状态码的描述',
     `fee`         int(10)      DEFAULT NULL COMMENT '短信计费的条数\n腾讯专用',
     `created_by`  bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`  bigint(20)   DEFAULT NULL COMMENT '最后修改人',
-    `update_time` datetime     DEFAULT NULL COMMENT '最后修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '最后修改时间',
     PRIMARY KEY (`id`) USING BTREE,
     KEY `task_id_tel_num` (`task_id`, `tel_num`) USING BTREE
 ) ENGINE = InnoDB
@@ -192,9 +192,9 @@ CREATE TABLE `e_sms_task`
     `content`         varchar(500) DEFAULT '' COMMENT '发送内容 \n需要封装正确格式化: 您好，张三，您有一个新的快递。',
     `draft`           bit(1)       DEFAULT b'0' COMMENT '是否草稿',
     `created_by`      bigint(20)   DEFAULT NULL COMMENT '创建人ID',
-    `create_time`     datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`      bigint(20)   DEFAULT NULL COMMENT '最后修改人',
-    `update_time`     datetime     DEFAULT NULL COMMENT '最后修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '最后修改时间',
     PRIMARY KEY (`id`) USING BTREE,
     KEY `tempate_id_topic_content` (`template_id`, `topic`, `content`) USING BTREE
 ) ENGINE = InnoDB
@@ -218,9 +218,9 @@ CREATE TABLE `e_sms_template`
     `sign_name`         varchar(100)          DEFAULT '' COMMENT '签名',
     `template_describe` varchar(255)          DEFAULT '' COMMENT '备注',
     `created_by`        bigint(20)            DEFAULT NULL COMMENT '创建人ID',
-    `create_time`       datetime              DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`        bigint(20)            DEFAULT NULL COMMENT '最后修改人',
-    `update_time`       datetime              DEFAULT NULL COMMENT '最后修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '最后修改时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='短信模板';

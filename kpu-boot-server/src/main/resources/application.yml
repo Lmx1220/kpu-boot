@@ -44,7 +44,7 @@ kpu:
     tenantDatabasePrefix: kpu_base
     # SCHEMA模式专用
     owner: ''
-    multiTenantType: NONE
+    multiTenantType: DATASOURCE
     # COLUMN模式专用 隔离租户的字段
     tenantIdColumn: tenant_code
     # 是否允许写入数据
@@ -182,143 +182,84 @@ kpu:
     keepAliveSeconds: 300
     threadNamePrefix: 'kpu-async-executor-'
 
-  # 代码生成
   generator:
-    # 后端代码生成路径
-    outputDir: /Users/lmx/Documents/IdeaProjects/kpu
-    # 前端代码生成路径
-    frontOutputDir: /Users/lmx/Documents/IdeaProjects/kpu
+    outputDir: /Users/lmx/Documents/IdeaProjects/kpu/kpu-boot
+    frontOutputDir: /Users/lmx/Documents/WebProjects/vue3-ts
     # 作者
-    author: zuihou
-    # 表名转换为实体类类名时，是否去除表名前缀
-    tablePrefix:
-      - xxx_
-    # 字段名转换为实体类字段名时，是否去除字段前缀
-    fieldPrefix:
-      - xxx_
-    # 字段名转换为实体类字段名时，是否去除字段后缀
-    fieldSuffix:
-      - xxx_
-    # 项目前缀。 若你的项目改成了 alibaba-base-server，这里就填alibaba
-    projectPrefix: 'lamp'
-    # 父类
+    author: lmx
+    # 默认项目
+    projectType: BOOT
+    #  # 去除表前缀
+    #  tablePrefix:
+    #    - xxx_
+    #  # 去除字段前缀
+    #  fieldPrefix:
+    #    - xxx_
+    #  # 去除字段后缀
+    #  fieldSuffix:
+    #    - xxx_
+    # 项目前缀
+    projectPrefix: 'kpu'
     superClass: SUPER_CLASS
+    # 生成方式
+    genType: GEN
     packageInfoConfig: # 其他配置建议保持PackageInfoConfig中的默认值
       # 生成代码位于 src/main/java 下的基础包
-      parent: 'cn.lmx.lamp'
-      # lamp-util 项目的基础包
+      parent: 'cn.lmx.kpu'
       utilParent: 'cn.lmx.basic'
-      # 枚举 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      enumeration: 'enumeration'
-      # saveVO 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      saveVo: 'vo.save'
-      # updateVO 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      updateVo: 'vo.update'
-      # query 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      pageQuery: 'vo.query'
-      # resultVo src/main/java/{parent}/{moduleName} 下的 包名
-      resultVo: 'vo.result'
-      # 实体 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      entity: 'entity'
-      # manager 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      manager: 'manager'
-      # managerImpl 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      managerImpl: 'manager.{}impl'
-      # service 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      service: 'service'
-      # serviceImpl 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      serviceImpl: 'service.{}impl'
-      # controller 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      controller: 'controller'
-      # mapper 位于 src/main/java/{parent}/{moduleName} 下的 包名
-      mapper: 'mapper'
-      # Mapper XML 位于 src/main/resource 下的 包名
-      xml: 'mapper_{}/base'
-    entity-config: # 实体类配置
-      # 【实体、VO】时间类型对应策略  ONLY_DATE: java.util  SQL_PACK:java.sql  TIME_PACK: java.time
+    entity-config:
+      # 时间类型对应策略  ONLY_DATE: java.util  SQL_PACK:java.sql  TIME_PACK: java.time
       dateType: TIME_PACK
-      # 【实体】Entity类的父类
+      # Entity类的父类
       entitySuperClass: ENTITY
-      # 【实体】指定生成的主键的ID类型 (${superClass} == NONE 时，新生成的实体才生效)
+      # 指定生成的主键的ID类型 (${superClass} == NONE 时，新生成的实体才生效)
       idType: INPUT
-      # 【实体、VO】表字段转换为实体字段的命名策略
+      # 数据库表字段映射到实体的命名策略
       columnNaming: underline_to_camel
-      # 【实体、VO】生成实体类时，忽略的字段（字段名）
-      ignoreColumns:
-        - xxx
+      # 忽略字段（字段名）
+      # ignoreColumns:
+      #   - xxx
       # 【实体】 是否生成字段常量
       columnConstant: false
       # 【实体、VO】是否为链式模型
       chain: true
       # 【实体、VO】 是否为lombok模型
       lombok: true
-      # 【实体】乐观锁字段名称
+      # 乐观锁字段名称
       versionColumnName: ''
-      # 【实体】乐观锁属性名称
+      # 乐观锁属性名称
       versionPropertyName: ''
-      # 【实体】逻辑删除字段名称
+      # 逻辑删除字段名称
       logicDeleteColumnName: ''
-      # 【实体】逻辑删除属性名称
+      # 逻辑删除属性名称
       logicDeletePropertyName: ''
-      # 【实体】生成的@TableField注解上需要填充的字段和填充类型
       fillColumnName:
         - xxx: INSERT
-      # 【VO】格式化SaveVO文件名称
+      # 格式化BaseVO文件名称
+      formatBaseVoFileName: ''
+      # 格式化SaveVO文件名称
       formatSaveVoFileName: ''
-      # 【VO】格式化UpdateVO文件名称
+      # 格式化UpdateVO文件名称
       formatUpdateVoFileName: ''
-      # 【VO】格式化ResultVO文件名称
+      # 格式化ResultVO文件名称
       formatResultVoFileName: ''
-      # 【VO】格式化 PageQuery 文件名称
+      # 格式化 PageQuery 文件名称
       formatPageQueryFileName: ''
-    mapperConfig: # mapper类配置
-      # 格式化Mapper文件名称
+    mapperConfig:
       formatMapperFileName: ''
-      # 格式化Xml文件名称
       formatXmlFileName: ''
-      # 是否添加 @Mapper 注解（默认 false）
       mapperAnnotation: false
-      # mapper类上是否添加忽略表结构 @InterceptorIgnore
-      columnAnnotationTablePrefix:
-        - 表的前缀
-      # 生成的xml中，是否包含BaseResultMap（默认 false）
+      #    columnAnnotationTablePrefix:
+      #      - xxx
       baseResultMap: true
-    serviceConfig:
-      # 继承的Service类全称，带包名
-      superServiceClass: cn.lmx.basic.base.service.SuperService
-      # 继承的ServiceImpl类全称，带包名
-      superServiceImplClass: cn.lmx.basic.base.service.impl.SuperServiceImpl
-      # 格式化service接口文件名称
-      formatServiceFileName: '{}Service'
-      # 格式化service实现类文件名称
-      formatServiceImplFileName: ''
-      # 匹配到此前缀的表，生成的 serviceImpl 类上会自动添加切换数据源注解 @DS
-      dsTablePrefix:
-        - xxx
-    managerConfig:
-      # 继承的Manager类全称，带包名
-      superManagerClass: 'cn.lmx.basic.base.manager.SuperManager'
-      # 继承的ManagerImpl类全称，带包名
-      superManagerImplClass: 'cn.lmx.basic.base.manager.impl.SuperManagerImpl'
-      # 格式化Manager接口文件名称
-      formatManagerFileName: ''
-      # 格式化Manager实现类文件名称
-      formatManagerImplFileName: ''
-    controllerConfig:
-      # 生成 @RestController 控制器（默认 false）
-      restStyle: true
-      # 格式化文件名称
-      formatFileName: ''
-      # 驼峰转连字符
-      hyphenStyle: false
-      # 继承的Controller类全称，带包名
-      superClass: 'cn.lmx.basic.base.controller.SuperController'
-    #    webProConfig:
-    #      # 格式化菜单文件名称
-    #      formatMenuName: {}维护
-    #      # 前端生成页面样式模板
-    #      tpl: SIMPLE
-    fileOverrideStrategy: # 文件覆盖策略
+      cache: false
+      baseColumnList: true
+      cacheClass: org.apache.ibatis.cache.decorators.LoggingCache
+    #  serviceConfig:
+    #  managerConfig:
+    #  controllerConfig:
+    #  webProConfig:
+    fileOverrideStrategy:
       entityFileOverride: OVERRIDE
       sqlFileOverride: OVERRIDE
       mapperFileOverride: EXIST_IGNORE
@@ -333,25 +274,20 @@ kpu:
     constantsPackage: # 公共枚举的完整类名，配置后自定义的枚举类才能正常 import
       # 业务服务 后台手动改动过的枚举
       FieldFill: com.baomidou.mybatisplus.annotation.FieldFill
-      SuperClassEnum: cn.lmx.lamp.generator.enumeration.SuperClassEnum
-      EntitySuperClassEnum: cn.lmx.lamp.generator.enumeration.EntitySuperClassEnum
+      SuperClassEnum: cn.lmx.kpu.generator.enumeration.SuperClassEnum
+      EntitySuperClassEnum: cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum
       # common 常量
-      EchoDictType: cn.lmx.lamp.model.constant.EchoDictType
-      EchoApi: cn.lmx.lamp.model.constant.EchoApi
+      EchoDictType: cn.lmx.kpu.model.constant.EchoDictType
+      EchoApi: cn.lmx.kpu.model.constant.EchoApi
       # common 公共枚举
-      HttpMethod: cn.lmx.lamp.model.enumeration.HttpMethod
-      BooleanEnum: cn.lmx.lamp.model.enumeration.BooleanEnum
-      StateEnum: cn.lmx.lamp.model.enumeration.StateEnum
-      UserStatusEnum: cn.lmx.lamp.model.enumeration.base.UserStatusEnum
-      RoleCategoryEnum: cn.lmx.lamp.model.enumeration.base.RoleCategoryEnum
-      ActiveStatusEnum: cn.lmx.lamp.model.enumeration.base.ActiveStatusEnum
-      OrgTypeEnum: cn.lmx.lamp.model.enumeration.base.OrgTypeEnum
-      FileType: cn.lmx.lamp.model.enumeration.base.FileType
-      DateType: cn.lmx.lamp.model.enumeration.base.DateType
-      DictClassifyEnum: cn.lmx.lamp.model.enumeration.system.DictClassifyEnum
-      DefTenantStatusEnum: cn.lmx.lamp.model.enumeration.system.DefTenantStatusEnum
-      DataTypeEnum: cn.lmx.lamp.model.enumeration.system.DataTypeEnum
-      TenantConnectTypeEnum: cn.lmx.lamp.model.enumeration.system.TenantConnectTypeEnum
+      HttpMethod: cn.lmx.kpu.model.enumeration.HttpMethod
+      BooleanEnum: cn.lmx.kpu.model.enumeration.BooleanEnum
+      StateEnum: cn.lmx.kpu.model.enumeration.StateEnum
+      RoleCategoryEnum: cn.lmx.kpu.model.enumeration.base.RoleCategoryEnum
+      OrgTypeEnum: cn.lmx.kpu.model.enumeration.base.OrgTypeEnum
+      FileType: cn.lmx.kpu.model.enumeration.base.FileType
+      DateType: cn.lmx.kpu.model.enumeration.base.DateType
+      TenantConnectTypeEnum: cn.lmx.kpu.model.enumeration.system.TenantConnectTypeEnum
 
 
 knife4j:
@@ -405,7 +341,7 @@ spring:
   application:
     name: '@project.artifactId@'
   profiles:
-    active: devmysql
+    active: dev
   mvc:
     pathmatch:
       # 升级springboot2.6.6后临时处理，防止swagger报错
@@ -454,12 +390,12 @@ spring:
   datasource:
     dynamic:
       enabled: true
-      # 从这里开始(dynamic)，中间的这段配置用于 lamp.database.multiTenantType == DATASOURCE 时
+      # 从这里开始(dynamic)，中间的这段配置用于 kpu.database.multiTenantType == DATASOURCE 时
       p6spy: ${kpu.database.p6spy:false}
       seata: ${kpu.database.isSeata:false}
       primary: "0"
       datasource:
-        "0": # 只配置了默认数据库  lamp_defaults
+        "0": # 只配置了默认数据库  kpu_defaults
           <<: *db-mysql
       druid:
         <<: *druid-mysql

@@ -44,9 +44,9 @@
         cdc.driver_class_name,
         ctr.db_prefix,
         ctr.tenant_id,
-        cdc.create_time,
+        cdc.created_time,
         cdc.created_by,
-        cdc.update_time,
+        cdc.updated_time,
         cdc.updated_by
 
         FROM
@@ -74,9 +74,9 @@
                password,
                url,
                driver_class_name,
-               create_time,
+               created_time,
                created_by,
-               update_time,
+               updated_time,
                updated_by
         from c_datasource_config
         where id in (select datasource_config_id
@@ -90,9 +90,9 @@
                code,
                name,
                status,
-               create_time,
+               created_time,
                created_by,
-               update_time,
+               updated_time,
                updated_by,
                connect_type
         from c_tenant

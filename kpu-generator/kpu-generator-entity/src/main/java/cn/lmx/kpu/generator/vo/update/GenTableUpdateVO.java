@@ -1,9 +1,6 @@
 package cn.lmx.kpu.generator.vo.update;
 
-import cn.lmx.basic.base.entity.SuperEntity;
-import cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.GenTypeEnum;
-import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
+import cn.lmx.kpu.generator.enumeration.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -13,11 +10,16 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
+ * <p>
+ * 表单修改方法VO
+ * 代码生成
+ * </p>
+ *
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/27  15:34
+ * @date 2023/10/13 14:27
  */
 @Data
 @NoArgsConstructor
@@ -31,9 +33,10 @@ public class GenTableUpdateVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "编号")
-    @NotNull(message = "请填写编号", groups = SuperEntity.Update.class)
+    @ApiModelProperty(value = "ID")
     private Long id;
+    @ApiModelProperty(value = "ID集合")
+    private List<Long> tableIdList;
 
     /**
      * 表名称
@@ -46,13 +49,15 @@ public class GenTableUpdateVO implements Serializable {
      * 表描述
      */
     @ApiModelProperty(value = "表描述")
+    @NotEmpty(message = "请填写表描述")
     @Size(max = 500, message = "表描述长度不能超过{max}")
     private String comment;
     /**
-     * swagger描述
+     * swagger 描述
      */
-    @ApiModelProperty(value = "swagger描述")
-    @Size(max = 255, message = "swagger描述长度不能超过{max}")
+    @ApiModelProperty(value = "swagger 描述")
+    @NotEmpty(message = "请填写swagger 描述")
+    @Size(max = 255, message = "swagger 描述长度不能超过{max}")
     private String swaggerComment;
     /**
      * 数据源
@@ -68,15 +73,15 @@ public class GenTableUpdateVO implements Serializable {
     @Size(max = 255, message = "作者长度不能超过{max}")
     private String author;
     /**
-     * 关联子表的ID
+     * 关联子表ID
      */
-    @ApiModelProperty(value = "关联子表的ID")
+    @ApiModelProperty(value = "关联子表ID")
     private Long subId;
     /**
-     * 子表关联的外键Java字段名
+     * 子表关联的外键名
      */
-    @ApiModelProperty(value = "子表关联的外键Java字段名")
-    @Size(max = 255, message = "子表关联的外键Java字段名长度不能超过{max}")
+    @ApiModelProperty(value = "子表关联的外键字段名")
+    @Size(max = 255, message = "子表关联的外键字段名长度不能超过{max}")
     private String subJavaFieldName;
     /**
      * 实体类名称
@@ -108,28 +113,40 @@ public class GenTableUpdateVO implements Serializable {
     @Size(max = 255, message = "基础包路径长度不能超过{max}")
     private String parent;
     /**
-     * 前端应用名;如：src/views目录下的basic和devOperation,basic表示基础平台。devOperation表示开发运营系统。xxx 表示你们自己新建的xxx系统。
+     * 前端应用名;
+     * 如：src/views目录下的 basic 和 devOperation
+     * <p>
+     * basic 表示基础平台
+     * <p>
+     * devOperation 表示开发运营系统
+     * <p>
+     * xxx 表示你们自己新建的xxx系统
      */
     @ApiModelProperty(value = "前端应用名")
+    @NotEmpty(message = "请填写前端应用名")
     @Size(max = 255, message = "前端应用名长度不能超过{max}")
     private String plusApplicationName;
     /**
-     * 前端模块名;如：src/views/devOperation目录下的文件夹名
+     * 前端模块名;
+     * 如：src/views/devOperation 目录下的文件夹名
      * 如：src/views/basic 目录下的文件夹名
      */
     @ApiModelProperty(value = "前端模块名")
+    @NotEmpty(message = "请填写前端模块名")
     @Size(max = 255, message = "前端模块名长度不能超过{max}")
     private String plusModuleName;
     /**
      * 服务名
      */
     @ApiModelProperty(value = "服务名")
+    @NotEmpty(message = "请填写服务名")
     @Size(max = 255, message = "服务名长度不能超过{max}")
     private String serviceName;
     /**
      * 模块名
      */
     @ApiModelProperty(value = "模块名")
+    @NotEmpty(message = "请填写模块名")
     @Size(max = 255, message = "模块名长度不能超过{max}")
     private String moduleName;
     /**
@@ -175,36 +192,41 @@ public class GenTableUpdateVO implements Serializable {
     @NotNull(message = "请填写是否生成字段常量")
     private Boolean isColumnConstant;
     /**
-     * 生成代码方式;、; [01-zip压缩包 02-自定义路径]
+     * 生成代码方式;
      * #GenTypeEnum{GEN:01,直接生成;ZIP:02,打包下载;}
+     * （01zip压缩包 02自定义路径）
      */
     @ApiModelProperty(value = "生成代码方式")
     @NotNull(message = "请填写生成代码方式")
     private GenTypeEnum genType;
     /**
-     * 生成路径;（不填默认项目路径）
+     * 生成路径;
+     * （不填默认项目路径）
      */
     @ApiModelProperty(value = "生成路径")
     @Size(max = 255, message = "生成路径长度不能超过{max}")
     private String outputDir;
     /**
-     * 前端生成路径;（不填默认项目路径）
+     * 前端生成路径;
+     * （不填默认项目路径）
      */
     @ApiModelProperty(value = "前端生成路径")
     @Size(max = 255, message = "前端生成路径长度不能超过{max}")
     private String frontOutputDir;
     /**
-     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
+     * 使用的模板;
+     * #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
      */
-//    @ApiModelProperty(value = "使用的模板")
-//    @NotNull(message = "请填写使用的模板")
-//    private TplEnum tplType;
-//    /**
-//     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
-//     */
-//    @ApiModelProperty(value = "弹窗方式")
-//    @NotNull(message = "请填写弹窗方式")
-//    private PopupTypeEnum popupType;
+    @ApiModelProperty(value = "使用的模板")
+    @NotNull(message = "请填写使用的模板")
+    private TplEnum tplType;
+    /**
+     * 弹窗方式;
+     * #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
+     */
+    @ApiModelProperty(value = "弹窗方式")
+    @NotNull(message = "请填写弹窗方式")
+    private PopupTypeEnum popupType;
     /**
      * 新增按钮权限编码
      */
@@ -224,17 +246,17 @@ public class GenTableUpdateVO implements Serializable {
     @Size(max = 255, message = "删除按钮权限编码长度不能超过{max}")
     private String deleteAuth;
     /**
-     * 查看按钮权限编码
-     */
-    @ApiModelProperty(value = "查看按钮权限编码")
-    @Size(max = 255, message = "查看按钮权限编码长度不能超过{max}")
-    private String viewAuth;
-    /**
      * 复制按钮权限编码
      */
     @ApiModelProperty(value = "复制按钮权限编码")
     @Size(max = 255, message = "复制按钮权限编码长度不能超过{max}")
     private String copyAuth;
+    /**
+     * 查看按钮权限编码
+     */
+    @ApiModelProperty(value = "查看按钮权限编码")
+    @Size(max = 255, message = "查看按钮权限编码长度不能超过{max}")
+    private String viewAuth;
     /**
      * 新增按钮是否显示
      */
@@ -276,11 +298,12 @@ public class GenTableUpdateVO implements Serializable {
      */
     @ApiModelProperty(value = "备注")
     @Size(max = 500, message = "备注长度不能超过{max}")
-    private String remark;
+    private String remarks;
     /**
      * 上级菜单ID
      */
     @ApiModelProperty(value = "上级菜单ID")
+    @NotNull(message = "请填写上级菜单ID")
     private Long menuParentId;
     /**
      * 所属应用ID
@@ -291,6 +314,7 @@ public class GenTableUpdateVO implements Serializable {
      * 菜单名称
      */
     @ApiModelProperty(value = "菜单名称")
+    @NotEmpty(message = "请填写菜单名称")
     @Size(max = 255, message = "菜单名称长度不能超过{max}")
     private String menuName;
     /**

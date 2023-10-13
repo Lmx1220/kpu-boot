@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : 127.0.0.1:3306
- Source Schema         : lamp_base_0000
+ Source Schema         : kpu_base_0000
 
  Target Server Type    : MySQL
  Target Server Version : 50722
@@ -32,9 +32,9 @@ CREATE TABLE `c_appendix`
     `original_file_name` varchar(255)          DEFAULT '' COMMENT '原始文件名',
     `content_type`       varchar(255)          DEFAULT '' COMMENT '文件类型',
     `size_`              bigint(20)            DEFAULT '0' COMMENT '大小',
-    `create_time`        datetime     NOT NULL COMMENT '创建时间',
+    `created_time` datetime NOT NULL COMMENT '创建时间',
     `created_by`         bigint(20)   NOT NULL COMMENT '创建人',
-    `update_time`        datetime     NOT NULL COMMENT '最后修改时间',
+    `updated_time` datetime NOT NULL COMMENT '最后修改时间',
     `updated_by`         bigint(20)   NOT NULL COMMENT '最后修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -56,9 +56,9 @@ CREATE TABLE `c_application`
     `describe_`     varchar(200)          DEFAULT '' COMMENT '备注',
     `state`         bit(1)                DEFAULT b'1' COMMENT '状态',
     `created_by`    bigint(20)            DEFAULT NULL COMMENT '创建人id',
-    `create_time`   datetime              DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`    bigint(20)            DEFAULT NULL COMMENT '更新人id',
-    `update_time`   datetime              DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_client_id` (`client_id`) USING BTREE
 ) ENGINE = InnoDB
@@ -81,9 +81,9 @@ CREATE TABLE `c_area`
     `source_`     varchar(255) DEFAULT '' COMMENT '数据来源',
     `state`       bit(1)       DEFAULT b'0' COMMENT '状态',
     `parent_id`   bigint(20)   DEFAULT '0' COMMENT '父ID',
-    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time` datetime     DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     `updated_by`  bigint(20)   DEFAULT NULL COMMENT '更新人',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_code` (`code`) USING BTREE
@@ -109,9 +109,9 @@ CREATE TABLE `c_dictionary`
     `css_class`   varchar(255)          DEFAULT '' COMMENT 'css class',
     `readonly_`   bit(1)                DEFAULT b'0' COMMENT '内置',
     `created_by`  bigint(20)            DEFAULT NULL COMMENT '创建人id',
-    `create_time` datetime              DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`  bigint(20)            DEFAULT NULL COMMENT '更新人id',
-    `update_time` datetime              DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_type_code` (`type`, `code`) USING BTREE
 ) ENGINE = InnoDB
@@ -136,9 +136,9 @@ CREATE TABLE `c_file`
     `content_type`       varchar(255)          DEFAULT '' COMMENT '文件类型',
     `suffix`             varchar(255)          DEFAULT '' COMMENT '后缀',
     `size_`              bigint(20)            DEFAULT '0' COMMENT '大小',
-    `create_time`        datetime     NOT NULL COMMENT '创建时间',
+    `created_time` datetime NOT NULL COMMENT '创建时间',
     `created_by`         bigint(20)   NOT NULL COMMENT '创建人',
-    `update_time`        datetime     NOT NULL COMMENT '最后修改时间',
+    `updated_time` datetime NOT NULL COMMENT '最后修改时间',
     `updated_by`         bigint(20)   NOT NULL COMMENT '最后修改人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -162,7 +162,7 @@ CREATE TABLE `c_login_log`
     `browser_version`  varchar(255) DEFAULT '' COMMENT '浏览器版本',
     `operating_system` varchar(255) DEFAULT '' COMMENT '操作系统',
     `location`         varchar(50)  DEFAULT '' COMMENT '登录地点',
-    `create_time`      datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`       bigint(20)   DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -193,9 +193,9 @@ CREATE TABLE `c_menu`
     `parent_id`     bigint(20)           DEFAULT '0' COMMENT '父级菜单ID',
     `readonly_`     bit(1)               DEFAULT b'0' COMMENT '内置',
     `created_by`    bigint(20)           DEFAULT NULL COMMENT '创建人id',
-    `create_time`   datetime             DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`    bigint(20)           DEFAULT NULL COMMENT '更新人id',
-    `update_time`   datetime             DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_path` (`path`) USING BTREE
 ) ENGINE = InnoDB
@@ -220,7 +220,7 @@ CREATE TABLE `c_opt_log`
     `finish_time`    timestamp  NULL DEFAULT NULL COMMENT '完成时间',
     `consuming_time` bigint(20)      DEFAULT NULL COMMENT '消耗时间',
     `ua`             varchar(500)    DEFAULT '' COMMENT '浏览器',
-    `create_time`    datetime        DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`     bigint(20)      DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -236,7 +236,7 @@ CREATE TABLE `c_opt_log_ext`
     `params`      longtext COMMENT '请求参数',
     `result`      longtext COMMENT '返回值',
     `ex_detail`   longtext COMMENT '异常描述',
-    `create_time` datetime   DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20) DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -257,9 +257,9 @@ CREATE TABLE `c_org`
     `sort_value`   int(11)      DEFAULT '1' COMMENT '排序',
     `state`        bit(1)       DEFAULT b'1' COMMENT '状态',
     `describe_`    varchar(255) DEFAULT '' COMMENT '描述',
-    `create_time`  datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`   bigint(20)   DEFAULT NULL COMMENT '创建人',
-    `update_time`  datetime     DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`   bigint(20)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_name` (`label`),
@@ -281,9 +281,9 @@ CREATE TABLE `c_parameter`
     `state`       bit(1)       DEFAULT b'1' COMMENT '状态',
     `readonly_`   bit(1)       DEFAULT b'0' COMMENT '内置',
     `created_by`  bigint(20)   DEFAULT NULL COMMENT '创建人id',
-    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`  bigint(20)   DEFAULT NULL COMMENT '更新人id',
-    `update_time` datetime     DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_key` (`key_`) USING BTREE
 ) ENGINE = InnoDB
@@ -302,9 +302,9 @@ CREATE TABLE `c_resource`
     `describe_`   varchar(255)          DEFAULT '' COMMENT '描述',
     `readonly_`   bit(1)                DEFAULT b'1' COMMENT '内置',
     `created_by`  bigint(20)            DEFAULT NULL COMMENT '创建人id',
-    `create_time` datetime              DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`  bigint(20)            DEFAULT NULL COMMENT '更新人id',
-    `update_time` datetime              DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_code` (`code`) USING BTREE
 ) ENGINE = InnoDB
@@ -324,9 +324,9 @@ CREATE TABLE `c_role`
     `state`       bit(1)               DEFAULT b'1' COMMENT '状态',
     `readonly_`   bit(1)               DEFAULT b'0' COMMENT '内置角色',
     `created_by`  bigint(20)           DEFAULT NULL COMMENT '创建人id',
-    `create_time` datetime             DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`  bigint(20)           DEFAULT NULL COMMENT '更新人id',
-    `update_time` datetime             DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_code` (`code`) USING BTREE
 ) ENGINE = InnoDB
@@ -342,7 +342,7 @@ CREATE TABLE `c_role_authority`
     `authority_id`   bigint(20)  NOT NULL COMMENT '资源id \n#c_resource #c_menu',
     `authority_type` varchar(10) NOT NULL COMMENT '权限类型 \n#AuthorizeType{MENU:菜单;RESOURCE:资源;}',
     `role_id`        bigint(20)  NOT NULL COMMENT '角色id \n#c_role',
-    `create_time`    datetime   DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`     bigint(20) DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_role_authority` (`authority_id`, `authority_type`, `role_id`) USING BTREE
@@ -358,7 +358,7 @@ CREATE TABLE `c_role_org`
     `id`          bigint(20) NOT NULL COMMENT 'ID',
     `role_id`     bigint(20) NOT NULL COMMENT '角色\n#c_role',
     `org_id`      bigint(20) NOT NULL COMMENT '部门\n#c_org',
-    `create_time` datetime   DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`  bigint(20) DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_role_org` (`org_id`, `role_id`) USING BTREE
@@ -376,9 +376,9 @@ CREATE TABLE `c_station`
     `org_id`         bigint(20)            DEFAULT NULL COMMENT '组织\n#c_org\n@Echo(api = ORG_ID_CLASS,  beanClass = Org.class)',
     `state`          bit(1)                DEFAULT b'1' COMMENT '状态',
     `describe_`      varchar(255)          DEFAULT '' COMMENT '描述',
-    `create_time`    datetime              DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `created_by`     bigint(20)            DEFAULT NULL COMMENT '创建人',
-    `update_time`    datetime              DEFAULT NULL COMMENT '修改时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '修改时间',
     `updated_by`     bigint(20)            DEFAULT NULL COMMENT '修改人',
     `created_org_id` bigint(20)            DEFAULT NULL COMMENT '创建者所属机构',
     PRIMARY KEY (`id`) USING BTREE,
@@ -414,9 +414,9 @@ CREATE TABLE `c_user`
     `salt`                     varchar(20) NOT NULL DEFAULT '' COMMENT '密码盐',
     `last_login_time`          datetime             DEFAULT NULL COMMENT '最后登录时间',
     `created_by`               bigint(20)           DEFAULT NULL COMMENT '创建人id',
-    `create_time`              datetime             DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     `updated_by`               bigint(20)           DEFAULT NULL COMMENT '更新人id',
-    `update_time`              datetime             DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
     `created_org_id`           bigint(20)           DEFAULT NULL COMMENT '创建者所属机构',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_account` (`account`) USING BTREE
@@ -433,7 +433,7 @@ CREATE TABLE `c_user_role`
     `role_id`     bigint(20) NOT NULL COMMENT '角色\n#c_role',
     `user_id`     bigint(20) NOT NULL COMMENT '用户\n#c_user',
     `created_by`  bigint(20) DEFAULT NULL COMMENT '创建人ID',
-    `create_time` datetime   DEFAULT NULL COMMENT '创建时间',
+    `created_time` datetime DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_user_role` (`role_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB

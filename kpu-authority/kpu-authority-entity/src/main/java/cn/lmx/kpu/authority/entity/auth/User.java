@@ -237,16 +237,16 @@ public class User extends Entity<Long> implements EchoVO {
     @TableField(value = "created_org_id", condition = LIKE)
     private Long createdOrgId;
     @Builder
-    public User(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
+    public User(Long id, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime,
                 String username, String nickName, Long orgId, Long stationId, Boolean readonly,
                 String email, String mobile, String sex, Boolean state, String avatar, String nation,
                 String education, String positionStatus, String workDescribe, LocalDateTime passwordErrorLastTime, Integer passwordErrorNum, LocalDateTime passwordExpireTime,
                 String password, String salt, LocalDateTime lastLoginTime, Long createdOrgId) {
         this.id = id;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.updatedBy = updatedBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.username = username;
         this.nickName = nickName;
         this.orgId = orgId;

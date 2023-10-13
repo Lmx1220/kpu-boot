@@ -4,23 +4,50 @@ import cn.lmx.basic.interfaces.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 文件覆盖策略
+ *
+ * @author lmx
+ * @date 2023/10/13 14:27
+ */
 @Getter
 @AllArgsConstructor
 public enum FileOverrideStrategyEnum implements BaseEnum {
-    OVERRIDE("OVERRIDE", "覆盖"),
-    ADD("ADD", "新增"),
-    IGNORE("IGNORE", "忽略"),
-    EXIST_IGNORE("EXIST_IGNORE", "存在时忽略");
+    /**
+     * 覆盖 原始文件
+     */
+    OVERRIDE("1", "覆盖"),
+    /**
+     * 在原文件同一级新增一个 .add 后缀的文件
+     */
+    ADD("2", "新增"),
+    /**
+     * 直接忽略生成
+     */
+    IGNORE("3", "忽略"),
+    /**
+     * 存在时忽略生成，不存在则生成文件
+     */
+    EXIST_IGNORE("4", "存在时忽略"),
+    ;
 
-    private String value;
-    private String desc;
+    final String code;
+    final String desc;
 
     @Override
-    public String getDesc() {
-        return desc;
+    public boolean eq(String val) {
+        return this.name().equals(val);
     }
 
     public boolean eq(FileOverrideStrategyEnum val) {
-        return val != null && eq(val.name());
+        if (val == null) {
+            return false;
+        }
+        return eq(val.name());
+    }
+
+    @Override
+    public String getCode() {
+        return this.name();
     }
 }

@@ -6,9 +6,9 @@
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.Parameter">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="key_" jdbcType="VARCHAR" property="key"/>
         <result column="value" jdbcType="VARCHAR" property="value"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -19,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_by,create_time,updated_by,update_time,
+        id,created_by,created_time,updated_by,updated_time,
         key_, value, name, remarks, state, readonly_
     </sql>
 

@@ -1,4 +1,4 @@
-use lamp_base_1234;
+use kpu_base_1234;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_appendix]') AND type in (N'U'))
 DROP TABLE [dbo].[c_appendix];
@@ -40,9 +40,9 @@ CREATE TABLE [dbo].[c_appendix]
     255
 ),
     size_ BIGINT DEFAULT 0,
-    create_time DATETIME NOT NULL,
+    created_time DATETIME NOT NULL,
     created_by BIGINT,
-    update_time DATETIME NOT NULL,
+    updated_time DATETIME NOT NULL,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -60,9 +60,9 @@ EXEC sp_addextendedproperty 'MS_Description', '文件相对地址', 'SCHEMA', db
 EXEC sp_addextendedproperty 'MS_Description', '原始文件名', 'SCHEMA', dbo, 'table', c_appendix, 'column', original_file_name;
 EXEC sp_addextendedproperty 'MS_Description', '文件类型', 'SCHEMA', dbo, 'table', c_appendix, 'column', content_type;
 EXEC sp_addextendedproperty 'MS_Description', '大小', 'SCHEMA', dbo, 'table', c_appendix, 'column', size_;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_appendix, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_appendix, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_appendix, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', c_appendix, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', c_appendix, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', c_appendix, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_application]') AND type in (N'U'))
@@ -104,9 +104,9 @@ CREATE TABLE [dbo].[c_application]
 ),
     state BIT DEFAULT 1,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -124,9 +124,9 @@ EXEC sp_addextendedproperty 'MS_Description', '类型;#{SERVER:服务应用;APP:
 EXEC sp_addextendedproperty 'MS_Description', '备注', 'SCHEMA', dbo, 'table', c_application, 'column', describe_;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_application, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_application, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_application, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_application, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_application, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_application, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_application, 'column', updated_time;
 
 
 CREATE UNIQUE INDEX uk_client_id ON c_application (client_id);
@@ -171,9 +171,9 @@ CREATE TABLE [dbo].[c_area]
 ),
     state BIT DEFAULT 0,
     parent_id BIGINT DEFAULT 0,
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -194,9 +194,9 @@ EXEC sp_addextendedproperty 'MS_Description', '行政区级;
 EXEC sp_addextendedproperty 'MS_Description', '数据来源', 'SCHEMA', dbo, 'table', c_area, 'column', source_;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_area, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '父ID', 'SCHEMA', dbo, 'table', c_area, 'column', parent_id;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_area, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_area, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_area, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_area, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_area, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人', 'SCHEMA', dbo, 'table', c_area, 'column', updated_by;
 
 
@@ -247,9 +247,9 @@ CREATE TABLE [dbo].[c_dictionary]
 ),
     readonly_ BIT DEFAULT 0,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -270,9 +270,9 @@ EXEC sp_addextendedproperty 'MS_Description', 'css样式', 'SCHEMA', dbo, 'table
 EXEC sp_addextendedproperty 'MS_Description', 'css;class', 'SCHEMA', dbo, 'table', c_dictionary, 'column', css_class;
 EXEC sp_addextendedproperty 'MS_Description', '内置', 'SCHEMA', dbo, 'table', c_dictionary, 'column', readonly_;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_dictionary, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_dictionary, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_dictionary, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_dictionary, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_dictionary, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_dictionary, 'column', updated_time;
 
 
 CREATE UNIQUE INDEX uk_type_code ON c_dictionary (type, code);
@@ -331,9 +331,9 @@ CREATE TABLE [dbo].[c_file]
     255
 ),
     size_ BIGINT DEFAULT 0,
-    create_time DATETIME NOT NULL,
+    created_time DATETIME NOT NULL,
     created_by BIGINT NOT NULL,
-    update_time DATETIME NOT NULL,
+    updated_time DATETIME NOT NULL,
     updated_by BIGINT NOT NULL,
     PRIMARY KEY
 (
@@ -356,9 +356,9 @@ EXEC sp_addextendedproperty 'MS_Description', '原始文件名', 'SCHEMA', dbo, 
 EXEC sp_addextendedproperty 'MS_Description', '文件类型', 'SCHEMA', dbo, 'table', c_file, 'column', content_type;
 EXEC sp_addextendedproperty 'MS_Description', '后缀', 'SCHEMA', dbo, 'table', c_file, 'column', suffix;
 EXEC sp_addextendedproperty 'MS_Description', '大小', 'SCHEMA', dbo, 'table', c_file, 'column', size_;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_file, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_file, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_file, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', c_file, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '最后修改时间', 'SCHEMA', dbo, 'table', c_file, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '最后修改人', 'SCHEMA', dbo, 'table', c_file, 'column', updated_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_login_log]') AND type in (N'U'))
@@ -408,7 +408,7 @@ CREATE TABLE [dbo].[c_login_log]
 (
     255
 ),
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
     PRIMARY KEY
 (
@@ -429,7 +429,7 @@ EXEC sp_addextendedproperty 'MS_Description', '浏览器名称', 'SCHEMA', dbo, 
 EXEC sp_addextendedproperty 'MS_Description', '浏览器版本', 'SCHEMA', dbo, 'table', c_login_log, 'column', browser_version;
 EXEC sp_addextendedproperty 'MS_Description', '操作系统', 'SCHEMA', dbo, 'table', c_login_log, 'column', operating_system;
 EXEC sp_addextendedproperty 'MS_Description', '登录地点', 'SCHEMA', dbo, 'table', c_login_log, 'column', location;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_login_log, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_login_log, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_login_log, 'column', created_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_menu]') AND type in (N'U'))
@@ -489,9 +489,9 @@ CREATE TABLE [dbo].[c_menu]
     parent_id BIGINT DEFAULT 0,
     readonly_ BIT DEFAULT 0,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -518,9 +518,9 @@ EXEC sp_addextendedproperty 'MS_Description', '是否默认', 'SCHEMA', dbo, 'ta
 EXEC sp_addextendedproperty 'MS_Description', '父级菜单ID', 'SCHEMA', dbo, 'table', c_menu, 'column', parent_id;
 EXEC sp_addextendedproperty 'MS_Description', '内置', 'SCHEMA', dbo, 'table', c_menu, 'column', readonly_;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_menu, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_menu, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_menu, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_menu, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_menu, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_menu, 'column', updated_time;
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_opt_log]') AND type in (N'U'))
@@ -571,7 +571,7 @@ CREATE TABLE [dbo].[c_opt_log]
 (
     500
 ),
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
     PRIMARY KEY
 (
@@ -595,7 +595,7 @@ EXEC sp_addextendedproperty 'MS_Description', '开始时间', 'SCHEMA', dbo, 'ta
 EXEC sp_addextendedproperty 'MS_Description', '完成时间', 'SCHEMA', dbo, 'table', c_opt_log, 'column', finish_time;
 EXEC sp_addextendedproperty 'MS_Description', '消耗时间', 'SCHEMA', dbo, 'table', c_opt_log, 'column', consuming_time;
 EXEC sp_addextendedproperty 'MS_Description', '浏览器', 'SCHEMA', dbo, 'table', c_opt_log, 'column', ua;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_opt_log, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_opt_log, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_opt_log, 'column', created_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_opt_log_ext]') AND type in (N'U'))
@@ -612,7 +612,7 @@ CREATE TABLE [dbo].[c_opt_log_ext]
     TEXT,
     ex_detail
     TEXT,
-    create_time
+    created_time
     DATETIME,
     created_by
     BIGINT,
@@ -628,7 +628,7 @@ EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', 
 EXEC sp_addextendedproperty 'MS_Description', '请求参数', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', params;
 EXEC sp_addextendedproperty 'MS_Description', '返回值', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', result;
 EXEC sp_addextendedproperty 'MS_Description', '异常描述', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', ex_detail;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_opt_log_ext, 'column', created_by;
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[c_org]') AND type in (N'U'))
@@ -663,9 +663,9 @@ CREATE TABLE [dbo].[c_org]
 (
     255
 ),
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     PRIMARY KEY
 (
@@ -683,9 +683,9 @@ EXEC sp_addextendedproperty 'MS_Description', '树结构', 'SCHEMA', dbo, 'table
 EXEC sp_addextendedproperty 'MS_Description', '排序', 'SCHEMA', dbo, 'table', c_org, 'column', sort_value;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_org, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '描述', 'SCHEMA', dbo, 'table', c_org, 'column', describe_;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_org, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_org, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_org, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', c_org, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', c_org, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '修改人', 'SCHEMA', dbo, 'table', c_org, 'column', updated_by;
 
 
@@ -720,9 +720,9 @@ CREATE TABLE [dbo].[c_parameter]
     state BIT DEFAULT 1,
     readonly_ BIT DEFAULT 0,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -738,9 +738,9 @@ EXEC sp_addextendedproperty 'MS_Description', '描述', 'SCHEMA', dbo, 'table', 
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_parameter, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '内置', 'SCHEMA', dbo, 'table', c_parameter, 'column', readonly_;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_parameter, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_parameter, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_parameter, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_parameter, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_parameter, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_parameter, 'column', updated_time;
 
 
 CREATE UNIQUE INDEX uk_key ON c_parameter (key_);
@@ -769,9 +769,9 @@ CREATE TABLE [dbo].[c_resource]
 ),
     readonly_ BIT DEFAULT 1,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -786,9 +786,9 @@ EXEC sp_addextendedproperty 'MS_Description', '菜单;#c_menu', 'SCHEMA', dbo, '
 EXEC sp_addextendedproperty 'MS_Description', '描述', 'SCHEMA', dbo, 'table', c_resource, 'column', describe_;
 EXEC sp_addextendedproperty 'MS_Description', '内置', 'SCHEMA', dbo, 'table', c_resource, 'column', readonly_;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_resource, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_resource, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_resource, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_resource, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_resource, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_resource, 'column', updated_time;
 
 
 CREATE UNIQUE INDEX uk_code ON c_resource (code);
@@ -821,9 +821,9 @@ CREATE TABLE [dbo].[c_role]
     state BIT DEFAULT 1,
     readonly_ BIT DEFAULT 0,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     PRIMARY KEY
 (
     id
@@ -839,9 +839,9 @@ EXEC sp_addextendedproperty 'MS_Description', '描述', 'SCHEMA', dbo, 'table', 
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_role, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '内置角色', 'SCHEMA', dbo, 'table', c_role, 'column', readonly_;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_role, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_role, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_role, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_role, 'column', updated_time;
 
 
 CREATE UNIQUE INDEX uk_code ON c_role (code);
@@ -864,7 +864,7 @@ CREATE TABLE [dbo].[c_role_authority]
     10
 ) NOT NULL,
     role_id BIGINT NOT NULL,
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
     PRIMARY KEY
 (
@@ -880,7 +880,7 @@ EXEC sp_addextendedproperty 'MS_Description', '权限类型;
 #AuthorizeType{MENU:菜单;RESOURCE:资源;}', 'SCHEMA', dbo, 'table', c_role_authority, 'column', authority_type;
 EXEC sp_addextendedproperty 'MS_Description', '角色id;
 #c_role', 'SCHEMA', dbo, 'table', c_role_authority, 'column', role_id;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role_authority, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role_authority, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_role_authority, 'column', created_by;
 
 
@@ -902,7 +902,7 @@ CREATE TABLE [dbo].[c_role_org]
     BIGINT
     NOT
     NULL,
-    create_time
+    created_time
     DATETIME,
     created_by
     BIGINT,
@@ -917,7 +917,7 @@ EXEC sp_addextendedproperty 'MS_Description', '角色组织关系', 'SCHEMA', db
 EXEC sp_addextendedproperty 'MS_Description', 'ID', 'SCHEMA', dbo, 'table', c_role_org, 'column', id;
 EXEC sp_addextendedproperty 'MS_Description', '角色;#c_role', 'SCHEMA', dbo, 'table', c_role_org, 'column', role_id;
 EXEC sp_addextendedproperty 'MS_Description', '部门;#c_org', 'SCHEMA', dbo, 'table', c_role_org, 'column', org_id;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role_org, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_role_org, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_role_org, 'column', created_by;
 
 
@@ -942,9 +942,9 @@ CREATE TABLE [dbo].[c_station]
 (
     255
 ),
-    create_time DATETIME,
+    created_time DATETIME,
     created_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     updated_by BIGINT,
     created_org_id BIGINT,
     PRIMARY KEY
@@ -959,9 +959,9 @@ EXEC sp_addextendedproperty 'MS_Description', '名称', 'SCHEMA', dbo, 'table', 
 EXEC sp_addextendedproperty 'MS_Description', '组织;#c_org;@Echo(api = ORG_ID_CLASS,  beanClass = Org.class)', 'SCHEMA', dbo, 'table', c_station, 'column', org_id;
 EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', c_station, 'column', state;
 EXEC sp_addextendedproperty 'MS_Description', '描述', 'SCHEMA', dbo, 'table', c_station, 'column', describe_;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_station, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_station, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人', 'SCHEMA', dbo, 'table', c_station, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', c_station, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '修改时间', 'SCHEMA', dbo, 'table', c_station, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '修改人', 'SCHEMA', dbo, 'table', c_station, 'column', updated_by;
 EXEC sp_addextendedproperty 'MS_Description', '创建者所属机构', 'SCHEMA', dbo, 'table', c_station, 'column', created_org_id;
 
@@ -1034,9 +1034,9 @@ CREATE TABLE [dbo].[c_user]
 ) NOT NULL,
     last_login_time DATETIME,
     created_by BIGINT,
-    create_time DATETIME,
+    created_time DATETIME,
     updated_by BIGINT,
-    update_time DATETIME,
+    updated_time DATETIME,
     created_org_id BIGINT,
     PRIMARY KEY
 (
@@ -1067,9 +1067,9 @@ EXEC sp_addextendedproperty 'MS_Description', '密码', 'SCHEMA', dbo, 'table', 
 EXEC sp_addextendedproperty 'MS_Description', '密码盐', 'SCHEMA', dbo, 'table', c_user, 'column', salt;
 EXEC sp_addextendedproperty 'MS_Description', '最后登录时间', 'SCHEMA', dbo, 'table', c_user, 'column', last_login_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建人id', 'SCHEMA', dbo, 'table', c_user, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_user, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_user, 'column', created_time;
 EXEC sp_addextendedproperty 'MS_Description', '更新人id', 'SCHEMA', dbo, 'table', c_user, 'column', updated_by;
-EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_user, 'column', update_time;
+EXEC sp_addextendedproperty 'MS_Description', '更新时间', 'SCHEMA', dbo, 'table', c_user, 'column', updated_time;
 EXEC sp_addextendedproperty 'MS_Description', '创建者所属机构', 'SCHEMA', dbo, 'table', c_user, 'column', created_org_id;
 
 
@@ -1093,7 +1093,7 @@ CREATE TABLE [dbo].[c_user_role]
     NULL,
     created_by
     BIGINT,
-    create_time
+    created_time
     DATETIME,
     PRIMARY
     KEY
@@ -1107,7 +1107,7 @@ EXEC sp_addextendedproperty 'MS_Description', 'ID', 'SCHEMA', dbo, 'table', c_us
 EXEC sp_addextendedproperty 'MS_Description', '角色;#c_role', 'SCHEMA', dbo, 'table', c_user_role, 'column', role_id;
 EXEC sp_addextendedproperty 'MS_Description', '用户;#c_user', 'SCHEMA', dbo, 'table', c_user_role, 'column', user_id;
 EXEC sp_addextendedproperty 'MS_Description', '创建人ID', 'SCHEMA', dbo, 'table', c_user_role, 'column', created_by;
-EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_user_role, 'column', create_time;
+EXEC sp_addextendedproperty 'MS_Description', '创建时间', 'SCHEMA', dbo, 'table', c_user_role, 'column', created_time;
 
 
 CREATE UNIQUE INDEX uk_user_role ON c_user_role (role_id, user_id);

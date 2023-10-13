@@ -1,157 +1,93 @@
 package ${package.Entity};
 
-<#list table.importPackages as pkg>
+<#list entityImport as pkg>
     import ${pkg};
 </#list>
-<#if springdoc>
-    import io.swagger.v3.oas.annotations.media.Schema;
-<#elseif swagger>
-    import io.swagger.annotations.ApiModel;
-    import io.swagger.annotations.ApiModelProperty;
+<#if superEntityClass??>
+<#else>
+    import java.io.Serializable;
 </#if>
-<#if entityLombokModel>
-    import lombok.Getter;
-    import lombok.Setter;
-    <#if chainModel>
-        import lombok.experimental.Accessors;
-    </#if>
-</#if>
+
 
 /**
 * <p>
-    * ${table.comment!}
+    * 实体类
+    * ${table.comment!?replace("\n","\n * ")}
     * </p>
 *
 * @author ${author}
-* @since ${date}
+* @date ${datetime}
 */
-<#if entityLombokModel>
-    @Getter
-    @Setter
-    <#if chainModel>
+<#if table.isLombok>
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString(callSuper = true)
+    <#if table.isChain>
         @Accessors(chain = true)
     </#if>
+    @EqualsAndHashCode(callSuper = <#if superEntityClass??>true<#else>false</#if>)
+    @Builder
 </#if>
-<#if table.convert>
-    @TableName("${schemaName}${table.name}")
-</#if>
-<#if springdoc>
-    @Schema(name = "${entity}", description = "${table.comment!}")
-<#elseif swagger>
-    @ApiModel(value = "${entity}对象", description = "${table.comment!}")
-</#if>
+@TableName("${table.name}")
 <#if superEntityClass??>
-    public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
-<#elseif activeRecord>
-    public class ${entity} extends Model<${entity}> {
-<#elseif entitySerialVersionUID>
-    public class ${entity} implements Serializable {
+    public class ${table.entityName} extends ${superEntityClass}<<#if isTreeEntity>${table.entityName}, </#if>${pkField.javaType}> {
 <#else>
-    public class ${entity} {
+    public class ${table.entityName} implements Serializable {
 </#if>
-<#if entitySerialVersionUID>
-
     private static final long serialVersionUID = 1L;
-</#if>
-<#-- ----------  BEGIN 字段循环遍历  ---------->
-<#list table.fields as field>
-    <#if field.keyFlag>
-        <#assign keyPropertyName="${field.propertyName}"/>
-    </#if>
 
-    <#if field.comment!?length gt 0>
-        <#if springdoc>
-            @Schema(description = "${field.comment}")
-        <#elseif swagger>
-            @ApiModelProperty("${field.comment}")
-        <#else>
-            /**
-            * ${field.comment}
-            */
-        </#if>
-    </#if>
-    <#if field.keyFlag>
+<#list fields as field>
+    /**
+    * ${field.comment!?replace("\n","\n     * ")}
+    */
+    <#if field.isPk>
     <#-- 主键 -->
-        <#if field.keyIdentityFlag>
-            @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
-        <#elseif idType??>
-            @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-        <#elseif field.convert>
-            @TableId("${field.annotationColumnName}")
-        </#if>
-    <#-- 普通字段 -->
-    <#elseif field.fill??>
-    <#-- -----   存在字段填充设置   ----->
-        <#if field.convert>
-            @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
-        <#else>
-            @TableField(fill = FieldFill.${field.fill})
-        </#if>
-    <#elseif field.convert>
-        @TableField("${field.annotationColumnName}")
+        @TableId(value = "${field.name}"<#if field.isIncrement>, type = IdType.AUTO<#elseif entityConfig.idType??>, type = IdType.${entityConfig.idType}</#if>)
+    <#else>
+        @TableField(value = "${field.name}"<#if field.fill?? && field.fill?trim != ''>, fill = FieldFill.${field.fill}</#if><#if field.queryType?? && field.queryType?trim != ''>, condition = ${field.queryType}<#else></#if>)
     </#if>
 <#-- 乐观锁注解 -->
-    <#if field.versionField>
+    <#if field.isVersionField>
         @Version
     </#if>
 <#-- 逻辑删除注解 -->
-    <#if field.logicDeleteField>
+    <#if field.isLogicDeleteField>
         @TableLogic
     </#if>
-    private ${field.propertyType} ${field.propertyName};
+    private ${field.javaType} ${field.javaField};
 </#list>
-<#------------  END 字段循环遍历  ---------->
-<#if !entityLombokModel>
-    <#list table.fields as field>
-        <#if field.propertyType == "boolean">
-            <#assign getprefix="is"/>
-        <#else>
-            <#assign getprefix="get"/>
-        </#if>
 
-        public ${field.propertyType} ${getprefix}${field.capitalName}() {
-        return ${field.propertyName};
+<#if !table.isLombok>
+    <#list fields as field>
+        public ${field.javaType} get${field.javaField?cap_first}() {
+        return ${field.javaField};
         }
-
-        <#if chainModel>
-            public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-        <#else>
-            public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-        </#if>
-        this.${field.propertyName} = ${field.propertyName};
-        <#if chainModel>
+        public <#if table.isChain>${table.entityName}<#else>void</#if> set${field.javaField?cap_first}(${field.javaType} ${field.javaField}) {
+        this.${field.javaField} = ${field.javaField};
+        <#if table.isChain>
             return this;
         </#if>
         }
+
     </#list>
 </#if>
-<#if entityColumnConstant>
-    <#list table.fields as field>
 
+<#if table.isColumnConstant>
+    <#list fields as field>
         public static final String ${field.name?upper_case} = "${field.name}";
     </#list>
 </#if>
-<#if activeRecord>
 
-    @Override
-    public Serializable pkVal() {
-    <#if keyPropertyName??>
-        return this.${keyPropertyName};
-    <#else>
-        return null;
-    </#if>
-    }
-</#if>
-<#if !entityLombokModel>
-
+<#if !table.isLombok>
     @Override
     public String toString() {
-    return "${entity}{" +
-    <#list table.fields as field>
+    return "${table.entityName}{" +
+    <#list fields as field>
         <#if field_index==0>
-            "${field.propertyName} = " + ${field.propertyName} +
+            "${field.javaField}=" + ${field.javaField} +
         <#else>
-            ", ${field.propertyName} = " + ${field.propertyName} +
+            ", ${field.javaField}=" + ${field.javaField} +
         </#if>
     </#list>
     "}";

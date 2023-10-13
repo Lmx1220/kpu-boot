@@ -9,12 +9,16 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
-import static com.baomidou.mybatisplus.annotation.SqlCondition.EQUAL;
+
 
 /**
+ * <p>
+ * 实体类
+ * 代码生成字段
+ * </p>
+ *
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/27  09:27
+ * @date 2023/10/13 14:27
  */
 @Data
 @NoArgsConstructor
@@ -30,7 +34,7 @@ public class GenTableColumn extends Entity<Long> {
     /**
      * 所属表ID
      */
-    @TableField(value = "table_id", condition = EQUAL)
+    @TableField(value = "table_id")
     private Long tableId;
     /**
      * 列名称
@@ -43,7 +47,7 @@ public class GenTableColumn extends Entity<Long> {
     @TableField(value = "comment_", condition = LIKE)
     private String comment;
     /**
-     * 文档描述
+     * swagger 描述
      */
     @TableField(value = "swagger_comment", condition = LIKE)
     private String swaggerComment;
@@ -70,58 +74,57 @@ public class GenTableColumn extends Entity<Long> {
     /**
      * 长度
      */
-    @TableField(value = "size_", condition = EQUAL)
+    @TableField(value = "size_")
     private Long size;
     /**
      * 小数位数
      */
-    @TableField(value = "digit", condition = EQUAL)
+    @TableField(value = "digit")
     private Integer digit;
     /**
-     * 主键
+     * 是否主键
      */
-    @TableField(value = "is_pk", condition = EQUAL)
+    @TableField(value = "is_pk")
     private Boolean isPk;
     /**
-     * 自增
+     * 是否自增
      */
-    @TableField(value = "is_increment", condition = EQUAL)
+    @TableField(value = "is_increment")
     private Boolean isIncrement;
     /**
-     * 必填
+     * 是否必填
      */
-    @TableField(value = "is_required", condition = EQUAL)
+    @TableField(value = "is_required")
     private Boolean isRequired;
     /**
-     * 逻辑删除
+     * 是否为逻辑删除字段
      */
-    @TableField(value = "is_logic_delete_field", condition = EQUAL)
+    @TableField(value = "is_logic_delete_field")
     private Boolean isLogicDeleteField;
     /**
-     * 乐观锁
+     * 是否为乐观锁字段
      */
-    @TableField(value = "is_version_field", condition = EQUAL)
+    @TableField(value = "is_version_field")
     private Boolean isVersionField;
     /**
-     * 填充类型;
-     * #FieldFill{INSERT:1}
+     * 填充类型
      */
-    @TableField(value = "fill", condition = EQUAL)
+    @TableField(value = "fill", condition = LIKE)
     private FieldFill fill;
     /**
-     * 编辑
+     * 是否编辑字段
      */
-    @TableField(value = "is_edit", condition = EQUAL)
+    @TableField(value = "is_edit")
     private Boolean isEdit;
     /**
-     * 列表
+     * 是否列表字段
      */
-    @TableField(value = "is_list", condition = EQUAL)
+    @TableField(value = "is_list")
     private Boolean isList;
     /**
-     * 查询
+     * 是否查询字段
      */
-    @TableField(value = "is_query", condition = EQUAL)
+    @TableField(value = "is_query")
     private Boolean isQuery;
     /**
      * 宽度
@@ -133,15 +136,17 @@ public class GenTableColumn extends Entity<Long> {
      * #SqlConditionEnum{EQUAL:01}
      * （等于、不等于、大于、小于、范围）
      */
-    @TableField(value = "query_type", condition = EQUAL)
+    @TableField(value = "query_type")
     private SqlConditionEnum queryType;
     /**
-     * 组件;（文本框、文本域、下拉框、复选框、单选框、日期控件）
+     * 显示组件;
+     * （文本框、文本域、下拉框、复选框、单选框、日期控件）
      */
     @TableField(value = "component", condition = LIKE)
     private String component;
     /**
-     * Vxe组件;（文本框、文本域、下拉框、复选框、单选框、日期控件）
+     * vxe表格组件;
+     * （文本框、文本域、下拉框、复选框、单选框、日期控件）
      */
     @TableField(value = "vxe_component", condition = LIKE)
     private String vxeComponent;
@@ -151,7 +156,7 @@ public class GenTableColumn extends Entity<Long> {
     @TableField(value = "dict_type", condition = LIKE)
     private String dictType;
     /**
-     * Echo
+     * @Echo
      */
     @TableField(value = "echo_str", condition = LIKE)
     private String echoStr;
@@ -163,20 +168,20 @@ public class GenTableColumn extends Entity<Long> {
     /**
      * 排序
      */
-    @TableField(value = "sort_value", condition = EQUAL)
+    @TableField(value = "sort_value")
     private Integer sortValue;
     /**
-     * 默认值
+     * 编辑页面默认值
      */
     @TableField(value = "edit_def_value", condition = LIKE)
     private String editDefValue;
     /**
-     * 提示信息
+     * 编辑页面提示信息
      */
     @TableField(value = "edit_help_message", condition = LIKE)
     private String editHelpMessage;
     /**
-     * 列表提示信息
+     * 主页提示信息
      */
     @TableField(value = "index_help_message", condition = LIKE)
     private String indexHelpMessage;

@@ -30,4 +30,5 @@ public interface DefValConstants {
      * 字典占位符
      */
     String DICT_PLACEHOLDER = "###";
+    String DEF_TENANT_ID = "0";
 }

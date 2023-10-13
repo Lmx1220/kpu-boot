@@ -5,9 +5,9 @@
     <resultMap id="SysRoleResultMap" type="cn.lmx.kpu.model.entity.base.SysRole">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="category" jdbcType="VARCHAR" property="category"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
@@ -18,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="SysRole_Column_List">
-        r.id,r.created_by,r.create_time,r.updated_by,r.update_time, r.category,
+        r.id,r.created_by,r.created_time,r.updated_by,r.updated_time, r.category,
         r.name, r.code, r.remarks, r.state, r.readonly_
     </sql>
 

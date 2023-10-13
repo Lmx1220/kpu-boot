@@ -50,6 +50,12 @@
             <groupId>cn.lmx.kpu</groupId>
             <artifactId>kpu-generator-controller</artifactId>
             <version>${kpu-project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>kpu-tenant-database-init</artifactId>
+                    <groupId>cn.lmx.kpu</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

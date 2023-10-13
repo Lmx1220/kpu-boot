@@ -8,9 +8,9 @@
         <result column="label" jdbcType="VARCHAR" property="label"/>
         <result column="sort_value" jdbcType="INTEGER" property="sortValue"/>
         <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
@@ -23,7 +23,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,label,sort_value,parent_id,create_time,created_by,update_time,updated_by,
+        id,label,sort_value,parent_id,created_time,created_by,updated_time,updated_by,
         code, full_name, longitude, latitude, level, source_, state
     </sql>
 

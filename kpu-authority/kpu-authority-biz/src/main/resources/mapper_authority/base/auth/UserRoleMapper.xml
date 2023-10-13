@@ -6,14 +6,14 @@
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.auth.UserRole">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="role_id" jdbcType="BIGINT" property="roleId"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_by,create_time,
+        id,created_by,created_time,
         role_id, user_id
     </sql>
 

@@ -46,4 +46,13 @@ public enum DriverEnum {
         }
         return null;
     }
+
+    public static DriverEnum findEnumByDriver(String driver) {
+        for (DriverEnum value : DriverEnum.values()) {
+            if (value.getDriver().equalsIgnoreCase(driver)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

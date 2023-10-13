@@ -111,14 +111,14 @@ public class Application extends Entity<Long> {
 
 
     @Builder
-    public Application(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
+    public Application(Long id, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime,
                        String clientId, String clientSecret, String website, String name, String icon,
                        ApplicationAppTypeEnum appType, String remarks, Boolean state) {
         this.id = id;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.updatedBy = updatedBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.website = website;

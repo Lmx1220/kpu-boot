@@ -63,13 +63,13 @@ public class ParameterResultVO extends Entity<Long> {
 
 
     @Builder
-    public ParameterResultVO(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
+    public ParameterResultVO(Long id, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime,
                              String key, String value, String name, String remarks, Boolean state, Boolean readonly) {
         this.id = id;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.updatedBy = updatedBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.key = key;
         this.value = value;
         this.name = name;

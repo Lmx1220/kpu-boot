@@ -3,6 +3,8 @@ package cn.lmx.kpu.generator.manager;
 import cn.lmx.basic.base.manager.SuperManager;
 import cn.lmx.kpu.generator.entity.GenTableColumn;
 
+import java.util.Collection;
+
 /**
  * @author lmx
  * @version v1.0.0
@@ -10,4 +12,5 @@ import cn.lmx.kpu.generator.entity.GenTableColumn;
  */
 public interface GenTableColumnManager extends SuperManager<GenTableColumn> {
 
+    boolean removeByTableIds(Collection<?> idList);
 }

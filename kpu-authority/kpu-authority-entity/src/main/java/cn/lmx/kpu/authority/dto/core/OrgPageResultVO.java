@@ -71,15 +71,15 @@ public class OrgPageResultVO extends TreeEntity<OrgPageResultVO, Long> implement
 
 
     @Builder
-    public OrgPageResultVO(Long id, String name, Long parentId, Integer sortValue, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public OrgPageResultVO(Long id, String name, Long parentId, Integer sortValue, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                            String type, String abbreviation, String treePath, Boolean state, String remarks) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
         this.sortValue = sortValue;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.type = type;
         this.abbreviation = abbreviation;

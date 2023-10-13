@@ -118,6 +118,7 @@ public class ResourceController extends SuperCacheController<ResourceService, Lo
             if (oldCodes.size() > 0) {
                 return fail("权限编码重复:%s", oldCodes);
             }
+
         }
 
         Resource resource = BeanPlusUtil.toBean(model, Resource.class);

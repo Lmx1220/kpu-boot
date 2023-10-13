@@ -1,28 +1,43 @@
-package ${package.ServiceImpl};
+package ${package.ManagerImpl};
 
-import ${package.Entity}.${entity};
-import ${package.Mapper}.${table.mapperName};
-<#if table.serviceInterface>
-    import ${package.Service}.${table.serviceName};
-</#if>
+<#list managerImplImport as pkg>
+    import ${pkg};
+</#list>
+<#if superManagerImplClass??>
+    import ${entityPackage};
 import ${superManagerImplClassPackage};
-import org.springframework.stereotype.Service;
+    import ${managerPackage};
+    import ${mapperPackage};
+</#if>
 
 /**
 * <p>
-    * ${table.comment!} 服务实现类
+    * 通用业务实现类
+    * ${table.comment!?replace("\n","\n * ")}
     * </p>
 *
 * @author ${author}
-* @since ${date}
+* @date ${datetime}
+* @create [${datetime}] [${author}] [代码生成器生成]
 */
+<#if table.isLombok>
+    @Slf4j
+    @RequiredArgsConstructor
+</#if>
 @Service
-<#if kotlin>
-    open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>()<#if table.serviceInterface>, ${table.serviceName}</#if> {
-
-    }
+<#if superManagerImplClass??>
+    public class ${managerImplName} extends ${superManagerImplClass}<${mapperName}, ${table.entityName}> implements ${managerName} {
 <#else>
-    public class ${entity}ManageImpl extends ${superManagerImplClass}<${table.mapperName}, ${entity}> implements ${entity}Manage {
+    public class ${managerImplName} {
+</#if>
 
+<#if superManagerImplClass?? && superManagerImplClass == superCacheManagerImplSimpleName>
+    @Override
+    protected CacheKeyBuilder cacheKeyBuilder() {
+    // TODO 需要自行新建一个 CacheKeyBuilder
+    return null;
     }
 </#if>
+}
+
+

@@ -2,7 +2,12 @@ package cn.lmx.kpu.generator.utils.inner;
 
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.utils.StrPool;
+import cn.lmx.kpu.generator.rules.echo.EchoDict;
+import cn.lmx.kpu.generator.rules.echo.EchoType;
+import cn.lmx.kpu.generator.rules.enumeration.EnumType;
+import cn.lmx.kpu.generator.rules.enumeration.EnumTypeKeyValue;
 import cn.lmx.kpu.generator.utils.GenCodeConstant;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +15,92 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static cn.lmx.kpu.generator.utils.inner.PackageUtils.getName;
+
 /**
+ * 解析注释中的内容
+ *
  * @author lmx
- * @version v1.0.0
- * @date 2023/08/27  11:00
+ * @date 2023/10/13 14:27
  */
 public class CommentUtils {
 
-    private static final Pattern ECHO_FIELD_PATTERN = Pattern.compile("(\\s*echo\\s*=\\s*\\{)(\\s*api\\s*=\\s*\"(.*?)\")?(\\s*,\\s*ref\\s*=\\s*\"(.*?)\")?(\\s*,\\s*beanClass\\s*=\\s*\"(.*?)\")?(\\s*,\\s*dictType\\s*=\\s*\"(.*?)\")?(\\s*})?");
-    private static final Pattern ENUM_FIELD_PATTERN = Pattern.compile("(\\s*enum\\s*=\\s*\\{)(\\s*name\\s*=\\s*\"(.*?)\")?(\\s*,\\s*keyValue\\s*=\\s*\"(.*?)\")?(\\s*})?");
-    private static final Pattern ENUM_KEY_VALUE_PATTERN = Pattern.compile("(\\s*\"(.*?)\"\\s*:\\s*\"(.*?)\")");
-    ;
+    /**
+     * Echo 注解解析 正则
+     *
+     * <p>
+     *
+     * @Echo() 内部的字段编写顺序一定是： api、ref、beanClass、dictType， 除了api必填，其他都可以不填
+     * api、ref、dictType 可以直接写字符串，也能写常量，但
+     * api 的常量只能存放在 EchoApi
+     * ref 的常量只能存放在 EchoRef
+     * dictType 的常量只能存放在 EchoDictType
+     * <p>
+     * api、ref、beanClass、dictType 中使用的类需要提前在 kpu.generator.constantsPackage 中配置
+     * <p>
+     * 如：
+     * 匹配： @Echo(api="")
+     * 匹配： @Echo(api="", dictType = "")
+     * 匹配： @Echo(api="", beanClass=Xxx.class)
+     * 匹配： @Echo(api="", ref="", beanClass=Xxx.class)
+     * 匹配： @Echo(api="orgApi", ref="" beanClass=Org.class, dictType="")
+     */
+    public final static Pattern ECHO_FIELD_PATTERN = Pattern.compile("(@Echo[(](api|feign)? *= *([a-zA-Z\\d\"._]+)(, *ref *= *([a-zA-Z\\d\"._]+))?(, *beanClass *= *([a-zA-Z\\d\"._]+))?(, *dictType *= *([a-zA-Z\\d\"._]+))?[)])");
+    /**
+     * 字典列表解析
+     * <p>
+     * 注释模板1： 注释内容 [key-value ...]
+     */
+    public final static Pattern ECHO_DICT_ITEM_PATTERN = Pattern.compile("\\[(.*?)?]");
+
+    /**
+     * 字典列表解析 正则
+     * 匹配 key-value 形式的注释
+     */
+    public final static Pattern ECHO_DICT_ITEM_KEY_VALUE_PATTERN = Pattern.compile("(.*?)-(.*?)? ");
+
+    /**
+     * 枚举类型 正则
+     * 匹配 xx:xx; 形式的注释
+     */
+    public final static Pattern ENUM_KEY_VALUE_PATTERN = Pattern.compile("([A-Za-z1-9_-]+):(.*?)?;");
+    /**
+     * 枚举类型解析
+     * <p>
+     * 注释模板1： 注释内容 #枚举类名{枚举值英文名:"枚举值英文注释";  ...}
+     * 注释模板2： 注释内容 #枚举类名{枚举值英文名:val,"枚举值英文注释";  ...}
+     * 注释模板3： 注释内容 #枚举类名{枚举值英文名:val,"枚举值英文注释",val2;  ...}
+     * 注释模板4： 注释内容 #{枚举值英文名:"枚举值英文注释";  ...}
+     */
+    public final static Pattern ENUM_FIELD_PATTERN = Pattern.compile("(#([a-zA-Z\\d\"._]+)?[{](.*?)?[}])");
+
+    public static EchoDict getEchoDict(String dictType, String fieldComment, String comment) {
+        if (StrUtil.isEmpty(dictType)) {
+            return null;
+        }
+        Matcher dictMatcher = ECHO_DICT_ITEM_PATTERN.matcher(comment);
+        if (dictMatcher.find()) {
+            String dictComment = dictMatcher.group(0);
+            String dictItemStr = dictMatcher.group(1);
+            EchoDict dict = EchoDict.of(dictComment, dictType, StrUtil.isEmpty(fieldComment) ? dictType : fieldComment);
+            if (StrUtil.isEmpty(dictItemStr)) {
+                return dict;
+            }
+            dictItemStr = StrUtil.endWith(dictItemStr, StrPool.SPACE) ? dictItemStr : dictItemStr + StrPool.SPACE;
+
+            Matcher kvMatcher = ECHO_DICT_ITEM_KEY_VALUE_PATTERN.matcher(dictItemStr);
+            List<EchoDict> itemList = new ArrayList<>();
+            while (kvMatcher.find()) {
+                String key = trim(kvMatcher.group(1));
+                String value = trim(kvMatcher.group(2));
+                EchoDict kv = EchoDict.of(key, value);
+                itemList.add(kv);
+            }
+            dict.setItemList(itemList);
+            return dict;
+        }
+        return null;
+    }
 
     public static EchoType getEchoType(String comment) {
         if (StrUtil.isEmpty(comment)) {
@@ -46,8 +126,15 @@ public class CommentUtils {
         return null;
     }
 
-    private static String trim(String group) {
-        return StrUtil.isEmpty(group) ? null : group.trim();
+    public static String getEchoAnnotation(String comment) {
+        if (StrUtil.isEmpty(comment)) {
+            return StrPool.EMPTY;
+        }
+        Matcher matcher = ECHO_FIELD_PATTERN.matcher(comment);
+        if (matcher.find()) {
+            return trim(matcher.group(1));
+        }
+        return StrPool.EMPTY;
     }
 
     public static EnumType getEnumStr(String entityName, String javaField, String formatEnumFileName, String swaggerComment, String comment) {
@@ -91,10 +178,7 @@ public class CommentUtils {
         return null;
     }
 
-    private static String getName(String entityName, String formatEnumFileName, String suffix) {
-        String name = StrUtil.format(formatEnumFileName, entityName);
-        return StrUtil.upperFirst(name) + suffix;
+    public static String trim(String val) {
+        return val == null ? StringPool.EMPTY : val.trim();
     }
-
 }
-

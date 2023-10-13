@@ -56,11 +56,11 @@ public class UserRole extends SuperEntity<Long> {
 
 
     @Builder
-    public UserRole(Long id, Long createdBy, LocalDateTime createTime,
+    public UserRole(Long id, Long createdBy, LocalDateTime createdTime,
                     Long roleId, Long userId) {
         this.id = id;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.roleId = roleId;
         this.userId = userId;
     }

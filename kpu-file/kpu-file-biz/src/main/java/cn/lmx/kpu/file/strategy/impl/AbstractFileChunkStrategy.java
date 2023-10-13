@@ -1,10 +1,6 @@
 package cn.lmx.kpu.file.strategy.impl;
 
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import cn.lmx.basic.base.R;
 import cn.lmx.basic.utils.StrPool;
 import cn.lmx.kpu.file.dao.FileMapper;
@@ -14,6 +10,10 @@ import cn.lmx.kpu.file.properties.FileServerProperties;
 import cn.lmx.kpu.file.strategy.FileChunkStrategy;
 import cn.lmx.kpu.file.strategy.FileLock;
 import cn.lmx.kpu.file.utils.FileTypeUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -64,8 +64,8 @@ public abstract class AbstractFileChunkStrategy implements FileChunkStrategy {
 
         file.setId(null)
                 .setCreatedBy(accountId)
-                .setCreateTime(LocalDateTime.now());
-        file.setUpdateTime(LocalDateTime.now())
+                .setCreatedTime(LocalDateTime.now());
+        file.setUpdatedTime(LocalDateTime.now())
                 .setUpdatedBy(accountId);
 
         fileMapper.insert(file);

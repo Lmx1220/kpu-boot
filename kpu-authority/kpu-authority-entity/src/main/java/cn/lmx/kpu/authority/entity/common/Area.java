@@ -122,16 +122,16 @@ public class Area extends TreeEntity<Area, Long> implements EchoVO {
 
 
     @Builder
-    public Area(Long id, String label, Integer sortValue, Long parentId, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public Area(Long id, String label, Integer sortValue, Long parentId, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                 String code, String fullName, String longitude, String latitude, String level,
                 String source, Boolean state) {
         this.id = id;
         this.label = label;
         this.sortValue = sortValue;
         this.parentId = parentId;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.code = code;
         this.fullName = fullName;

@@ -1,8 +1,6 @@
 package cn.lmx.kpu.generator.vo.query;
 
-import cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.GenTypeEnum;
-import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
+import cn.lmx.kpu.generator.enumeration.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -35,6 +33,11 @@ public class GenTablePageQuery implements Serializable {
      */
     @ApiModelProperty(value = "表名称")
     private String name;
+
+
+    @ApiModelProperty(value = "数据源名称")
+    private Long dsId;
+
     /**
      * 表描述
      */
@@ -45,11 +48,7 @@ public class GenTablePageQuery implements Serializable {
      */
     @ApiModelProperty(value = "swagger描述")
     private String swaggerComment;
-    /**
-     * 数据源
-     */
-    @ApiModelProperty(value = "数据源")
-    private Long dsId;
+
     /**
      * 作者
      */
@@ -160,16 +159,16 @@ public class GenTablePageQuery implements Serializable {
      */
     @ApiModelProperty(value = "前端生成路径")
     private String frontOutputDir;
-//    /**
-//     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
-//     */
-//    @ApiModelProperty(value = "使用的模板")
-//    private TplEnum tplType;
-//    /**
-//     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
-//     */
-//    @ApiModelProperty(value = "弹窗方式")
-//    private PopupTypeEnum popupType;
+    /**
+     * 使用的模板; #TplEnum{SIMPLE:01,单表;TREE:02,树结构;MAIN_SUB:03,主从结构}
+     */
+    @ApiModelProperty(value = "使用的模板")
+    private TplEnum tplType;
+    /**
+     * 弹窗方式; #PopupTypeEnum{MODAL:01,对话框;DRAWER:02,抽屉;}
+     */
+    @ApiModelProperty(value = "弹窗方式")
+    private PopupTypeEnum popupType;
     /**
      * 新增按钮权限编码
      */

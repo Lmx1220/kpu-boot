@@ -61,10 +61,10 @@ public class OptLogExt extends SuperEntity<Long> {
 
 
     @Builder
-    public OptLogExt(Long id, LocalDateTime createTime, Long createdBy,
+    public OptLogExt(Long id, LocalDateTime createdTime, Long createdBy,
                      String params, String result, String exDetail) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.params = params;
         this.result = result;

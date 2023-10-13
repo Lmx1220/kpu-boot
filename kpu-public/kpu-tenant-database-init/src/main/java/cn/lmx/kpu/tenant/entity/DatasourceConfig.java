@@ -95,12 +95,12 @@ public class DatasourceConfig extends Entity<Long> {
     private TenantConnectTypeEnum type;
 
     @Builder
-    public DatasourceConfig(Long id, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public DatasourceConfig(Long id, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                             String name, String username, String password, String url, String driverClassName) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.name = name;
         this.username = username;

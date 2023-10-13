@@ -2,8 +2,9 @@ package cn.lmx.kpu.generator.manager;
 
 import cn.lmx.basic.base.manager.SuperManager;
 import cn.lmx.kpu.generator.entity.GenTable;
+import com.baomidou.mybatisplus.annotation.DbType;
 
-import java.util.List;
+import javax.sql.DataSource;
 
 /**
  * @author lmx
@@ -12,5 +13,8 @@ import java.util.List;
  */
 public interface GenTableManager extends SuperManager<GenTable> {
 
-    List<GenTable> selectTableList();
+
+    DataSource getDs(Long dsId);
+
+    DbType getDbType();
 }

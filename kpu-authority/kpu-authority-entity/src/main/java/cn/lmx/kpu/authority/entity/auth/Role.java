@@ -96,13 +96,13 @@ public class Role extends Entity<Long> implements EchoVO {
     private Boolean readonly;
 
     @Builder
-    public Role(Long id, Long createdBy, LocalDateTime createTime, Long updatedBy, LocalDateTime updateTime,
+    public Role(Long id, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime,
                 String name, String code, String remarks, Boolean state, Boolean readonly, String category) {
         this.id = id;
         this.createdBy = createdBy;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.updatedBy = updatedBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.name = name;
         this.code = code;
         this.remarks = remarks;

@@ -61,10 +61,10 @@ public class TenantDatasourceConfig extends SuperEntity<Long> {
 
 
     @Builder
-    public TenantDatasourceConfig(Long id, LocalDateTime createTime, Long createdBy,
+    public TenantDatasourceConfig(Long id, LocalDateTime createdTime, Long createdBy,
                                   Long tenantId, Long datasourceConfigId, String dbPrefix) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.tenantId = tenantId;
         this.datasourceConfigId = datasourceConfigId;

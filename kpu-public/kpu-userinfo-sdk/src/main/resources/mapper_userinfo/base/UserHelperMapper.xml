@@ -6,9 +6,9 @@
     <resultMap id="SysUserResultMap" type="cn.lmx.kpu.model.entity.base.SysUser">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
         <result column="org_id" jdbcType="BIGINT" property="orgId"/>
@@ -32,7 +32,7 @@
     <!-- 通用查询结果列 -->
     <sql id="SysUser_Column_List">
         u.id
-        ,u.created_by,u.create_time,u.updated_by,u.update_time,
+        ,u.created_by,u.created_time,u.updated_by,u.updated_time,
         u.username, u.nick_name, u.org_id, u.station_id, u.readonly, u.email, u.mobile, u.sex, u.state, u.avatar,
         u.nation, u.education, u.position_status,
         u.work_describe, u.password_error_last_time, u.password_error_num, u.password_expire_time, u.last_login_time

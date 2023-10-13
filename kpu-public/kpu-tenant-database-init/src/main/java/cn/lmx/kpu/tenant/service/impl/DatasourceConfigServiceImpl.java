@@ -40,13 +40,13 @@ public class DatasourceConfigServiceImpl extends SuperServiceImpl<DatasourceConf
             return false;
         }
 
-        DriverEnum dbTypeEnum = DriverEnum.findEnumByType(datasourceConfig.getDriverClassName());
+        DriverEnum dbTypeEnum = DriverEnum.findEnumByDriver(datasourceConfig.getDriverClassName());
         if (dbTypeEnum == null) {
             throw new ArgumentException("不识别的类型");
         } else {
             testConnectionDriver(datasourceConfig, dbTypeEnum.getDriver());
         }
-        return false;
+        return true;
     }
 
     private void testConnectionDriver(DatasourceConfig datasourceConfig, String driver) {
@@ -72,6 +72,7 @@ public class DatasourceConfigServiceImpl extends SuperServiceImpl<DatasourceConf
                 throw new ArgumentException("该连接下没有库");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new ArgumentException("连接数据库失败");
         }
     }

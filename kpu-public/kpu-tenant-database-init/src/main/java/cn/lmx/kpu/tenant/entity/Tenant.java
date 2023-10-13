@@ -136,13 +136,13 @@ public class Tenant extends Entity<Long> {
 
 
     @Builder
-    public Tenant(Long id, LocalDateTime createTime, Long createdBy, LocalDateTime updateTime, Long updatedBy,
+    public Tenant(Long id, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                   String code, String name, TenantTypeEnum type, TenantConnectTypeEnum connectType, TenantStatusEnum status,
                   Boolean readonly, String duty, LocalDateTime expirationTime, String logo, String remarks) {
         this.id = id;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.createdBy = createdBy;
-        this.updateTime = updateTime;
+        this.updatedTime = updatedTime;
         this.updatedBy = updatedBy;
         this.code = code;
         this.name = name;
