@@ -81,7 +81,7 @@ public class SourceCodeUtils {
         map.put("parent", genTable.getParent());
         map.put("utilParent", genTable.getParent());
         map.put("moduleName", genTable.getModuleName());
-
+        map.put("plusName",StrHelper.convertUriToCamelCase(genTable.getPlusModuleName()));
         // 导包信息
         Map<String, Object> packageMap = PackageUtils.getPackage(genTable, generatorConfig);
         map.put("package", packageMap);
@@ -209,25 +209,26 @@ public class SourceCodeUtils {
         map.put("parentMenuId", genTable.getMenuParentId());
         map.put("createdBy", ContextUtil.getUserId());
         map.put("menuId", uidGenerator.getUid());
+        if (genTable.getPopupType().eq(PopupTypeEnum.JUMP)) {
+            map.put("menuListId", uidGenerator.getUid());
+            map.put("menuEditId", uidGenerator.getUid());
+        }
+        map.put("menuId", uidGenerator.getUid());
         map.put("buttonAddId", uidGenerator.getUid());
         map.put("buttonEditId", uidGenerator.getUid());
         map.put("buttonCopyId", uidGenerator.getUid());
         map.put("buttonDeleteId", uidGenerator.getUid());
         map.put("buttonViewId", uidGenerator.getUid());
-        map.put("apiPageId", uidGenerator.getUid());
-        map.put("apiDetailId", uidGenerator.getUid());
-        map.put("apiAddId", uidGenerator.getUid());
-        map.put("apiEditId", uidGenerator.getUid());
-        map.put("apiDeleteId", uidGenerator.getUid());
-        map.put("apiCopyId", uidGenerator.getUid());
 
-        map.put("defTenantId", DefValConstants.DEF_TENANT_ID);
-        map.put("trMenuId", uidGenerator.getUid());
-        map.put("trButtonAddId", uidGenerator.getUid());
-        map.put("trButtonEditId", uidGenerator.getUid());
-        map.put("trButtonCopyId", uidGenerator.getUid());
-        map.put("trButtonDeleteId", uidGenerator.getUid());
-        map.put("trButtonViewId", uidGenerator.getUid());
+        map.put("roleId", DefValConstants.DEF_ROLE_ID);
+        map.put("rrMenuId", uidGenerator.getUid());
+        map.put("rrMenuListId", uidGenerator.getUid());
+        map.put("rrMenuEditId", uidGenerator.getUid());
+        map.put("rrButtonAddId", uidGenerator.getUid());
+        map.put("rrButtonEditId", uidGenerator.getUid());
+        map.put("rrButtonCopyId", uidGenerator.getUid());
+        map.put("rrButtonDeleteId", uidGenerator.getUid());
+        map.put("rrButtonViewId", uidGenerator.getUid());
         map.put("uidGenerator", uidGenerator);
         return map;
     }

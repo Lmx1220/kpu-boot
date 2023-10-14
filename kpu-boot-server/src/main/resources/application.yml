@@ -189,9 +189,9 @@ kpu:
     author: lmx
     # 默认项目
     projectType: BOOT
-    #  # 去除表前缀
-    #  tablePrefix:
-    #    - xxx_
+#       去除表前缀
+    tablePrefix:
+        - c_
     #  # 去除字段前缀
     #  fieldPrefix:
     #    - xxx_

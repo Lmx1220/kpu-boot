@@ -31,4 +31,5 @@ public interface DefValConstants {
      */
     String DICT_PLACEHOLDER = "###";
     String DEF_TENANT_ID = "0";
+    String DEF_ROLE_ID = "1";
 }
