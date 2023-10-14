@@ -1,5 +1,7 @@
 package cn.lmx.kpu.generator.utils;
 
+import cn.lmx.basic.utils.StrHelper;
+
 import java.io.IOException;
 
 /**
@@ -33,7 +35,16 @@ public class FileInsertUtilTest {
 //        Field[] fields = ReflectUtil.getFields(EchoApi.class);
 //
 //        System.out.println(fields);
-
+        System.out.println(StrHelper.convertUriToCamelCase("/api-echo/echo-api"));
+//        try (StringWriter stringWriter = new StringWriter()) {
+//            Template tpl = TemplateUtils.getTemplate("templates/backend/test.ftl");
+//            tpl.process(null, stringWriter);
+//
+//            String result = stringWriter.toString();
+//            System.out.println(result);
+//        } catch (IOException | TemplateException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

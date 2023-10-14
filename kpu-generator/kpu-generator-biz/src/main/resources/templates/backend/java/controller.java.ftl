@@ -1,50 +1,50 @@
 package ${package.Controller};
 
 <#list controllerImport as pkg>
-    import ${pkg};
+import ${pkg};
 </#list>
 <#if superControllerClass??>
-    import ${superControllerClassPackage};
-    import ${servicePackage};
-    import ${entityPackage};
-    import ${saveVoPackage};
-    import ${updateVoPackage};
-    import ${resultVoPackage};
-    import ${pageQueryPackage};
+import ${superControllerClassPackage};
+import ${servicePackage};
+import ${entityPackage};
+import ${saveVoPackage};
+import ${updateVoPackage};
+import ${resultVoPackage};
+import ${pageQueryPackage};
 </#if>
 <#if controllerConfig.restStyle>
-    import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController;
 <#else>
-    import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 </#if>
 
 /**
-* <p>
-    * 前端控制器
-    * ${table.comment!?replace("\n","\n * ")}
-    * </p>
-*
-* @author ${author}
-* @date ${datetime}
-* @create [${datetime}] [${author}] [代码生成器生成]
-*/
+ * <p>
+ * 前端控制器
+ * ${table.comment!?replace("\n","\n * ")}
+ * </p>
+ *
+ * @author ${author}
+ * @date ${datetime}
+ * @create [${datetime}] [${author}] [代码生成器生成]
+ */
 <#if table.isLombok>
-    @Slf4j
-    @RequiredArgsConstructor
+@Slf4j
+@RequiredArgsConstructor
 </#if>
 @Validated
 <#if controllerConfig.restStyle>
-    @RestController
+@RestController
 <#else>
-    @Controller
+@Controller
 </#if>
 @RequestMapping("/<#if controllerConfig.hyphenStyle>${mappingHyphen}<#else>${table.entityName?uncap_first}</#if>")
 @Api(value = "${table.entityName}", tags = "${table.swaggerComment}")
 <#if superControllerClass??>
-    public class ${controllerName} extends ${superControllerClass}<${serviceName}, ${pkField.javaType}, ${table.entityName}, ${saveVoName},
+public class ${controllerName} extends ${superControllerClass}<${serviceName}, ${pkField.javaType}, ${table.entityName}, ${saveVoName},
     ${updateVoName}, ${pageQueryName}, ${resultVoName}> {
 <#else>
-    public class ${controllerName} {
+public class ${controllerName} {
 </#if>
 <#if table.isLombok>
     private final EchoService echoService;
@@ -55,23 +55,22 @@ package ${package.Controller};
 <#if superControllerClass?? && superControllerClass != superSimpleControllerSimpleName>
     @Override
     public EchoService getEchoService() {
-    return echoService;
+        return echoService;
     }
 </#if>
 
 <#if isTreeEntity>
     /**
-    * 按树结构查询
-    *
-    * @param pageQuery 查询参数
-    * @return 查询结果
-    */
+     * 按树结构查询
+     *
+     * @param pageQuery 查询参数
+     * @return 查询结果
+     */
     @ApiOperation(value = "按树结构查询", notes = "按树结构查询")
     @PostMapping("/tree")
     @WebLog("级联查询")
-    public R
-    <List<${table.entityName}>> tree(@RequestBody ${pageQueryName} pageQuery) {
-    return success(superService.findTree(pageQuery));
+    public R<List<${table.entityName}>> tree(@RequestBody ${pageQueryName} pageQuery) {
+        return success(superService.findTree(pageQuery));
     }
 </#if>
 }

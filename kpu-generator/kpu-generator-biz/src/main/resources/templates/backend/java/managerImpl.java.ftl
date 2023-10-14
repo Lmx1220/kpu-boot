@@ -1,41 +1,41 @@
 package ${package.ManagerImpl};
 
 <#list managerImplImport as pkg>
-    import ${pkg};
+import ${pkg};
 </#list>
 <#if superManagerImplClass??>
-    import ${entityPackage};
+import ${entityPackage};
 import ${superManagerImplClassPackage};
-    import ${managerPackage};
-    import ${mapperPackage};
+import ${managerPackage};
+import ${mapperPackage};
 </#if>
 
 /**
-* <p>
-    * 通用业务实现类
-    * ${table.comment!?replace("\n","\n * ")}
-    * </p>
-*
-* @author ${author}
-* @date ${datetime}
-* @create [${datetime}] [${author}] [代码生成器生成]
-*/
+ * <p>
+ * 通用业务实现类
+ * ${table.comment!?replace("\n","\n * ")}
+ * </p>
+ *
+ * @author ${author}
+ * @date ${datetime}
+ * @create [${datetime}] [${author}] [代码生成器生成]
+ */
 <#if table.isLombok>
-    @Slf4j
-    @RequiredArgsConstructor
+@Slf4j
+@RequiredArgsConstructor
 </#if>
 @Service
 <#if superManagerImplClass??>
-    public class ${managerImplName} extends ${superManagerImplClass}<${mapperName}, ${table.entityName}> implements ${managerName} {
+public class ${managerImplName} extends ${superManagerImplClass}<${mapperName}, ${table.entityName}> implements ${managerName} {
 <#else>
-    public class ${managerImplName} {
+public class ${managerImplName} {
 </#if>
 
 <#if superManagerImplClass?? && superManagerImplClass == superCacheManagerImplSimpleName>
     @Override
     protected CacheKeyBuilder cacheKeyBuilder() {
-    // TODO 需要自行新建一个 CacheKeyBuilder
-    return null;
+        // TODO 需要自行新建一个 CacheKeyBuilder
+        return null;
     }
 </#if>
 }
