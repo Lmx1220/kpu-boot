@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Map;
 
@@ -36,6 +37,14 @@ public class SysOrg extends TreeEntity<SysOrg, Long> implements EchoVO {
     private static final long serialVersionUID = 1L;
     @TableField(exist = false)
     private Map<String, Object> echoMap = MapUtil.newHashMap();
+    /**
+     * 名称
+     */
+    @ApiModelProperty(value = "名称")
+    @NotEmpty(message = "名称不能为空")
+    @Size(max = 255, message = "名称长度不能超过255")
+    @TableField(value = "name")
+    protected String name;
     /**
      * 类型
      *

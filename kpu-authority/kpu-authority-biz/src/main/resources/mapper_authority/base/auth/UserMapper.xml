@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lmx.kpu.authority.dao.auth.UserMapper">
-
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.auth.User">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="created_org_id" jdbcType="BIGINT" property="createdOrgId"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="username" jdbcType="VARCHAR" property="username"/>
-        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
-        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
-        <result column="station_id" jdbcType="BIGINT" property="stationId"/>
-        <result column="readonly" jdbcType="BIT" property="readonly"/>
-        <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
-        <result column="sex" jdbcType="VARCHAR" property="sex"/>
-        <result column="state" jdbcType="BIT" property="state"/>
-        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
-        <result column="nation" jdbcType="CHAR" property="nation"/>
-        <result column="education" jdbcType="CHAR" property="education"/>
-        <result column="position_status" jdbcType="CHAR" property="positionStatus"/>
-        <result column="work_describe" jdbcType="VARCHAR" property="workDescribe"/>
-        <result column="password_error_last_time" jdbcType="TIMESTAMP" property="passwordErrorLastTime"/>
-        <result column="password_error_num" jdbcType="INTEGER" property="passwordErrorNum"/>
-        <result column="password_expire_time" jdbcType="TIMESTAMP" property="passwordExpireTime"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="salt" jdbcType="VARCHAR" property="salt"/>
-        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="org_id" property="orgId"/>
+        <result column="station_id" property="stationId"/>
+        <result column="readonly" property="readonly"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
+        <result column="sex" property="sex"/>
+        <result column="state" property="state"/>
+        <result column="avatar" property="avatar"/>
+        <result column="nation" property="nation"/>
+        <result column="education" property="education"/>
+        <result column="position_status" property="positionStatus"/>
+        <result column="work_describe" property="workDescribe"/>
+        <result column="password_error_last_time" property="passwordErrorLastTime"/>
+        <result column="password_error_num" property="passwordErrorNum"/>
+        <result column="password_expire_time" property="passwordExpireTime"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="created_org_id" property="createdOrgId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        ,created_by,created_time,updated_by,updated_time, created_org_id,
-        username, nick_name, org_id, station_id, readonly, email, mobile, sex, state, avatar, nation, education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time, password, salt, last_login_time
+        id, username, nick_name, org_id, station_id, readonly,
+        email, mobile, sex, state, avatar, nation,
+        education, position_status, work_describe, password_error_last_time, password_error_num, password_expire_time,
+        password, salt, last_login_time, created_by, created_time, updated_by,
+        updated_time, created_org_id
     </sql>
 
 </mapper>

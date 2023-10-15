@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lmx.kpu.authority.dao.common.DictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.Dict">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="parent_key" property="parentKey"/>
+        <result column="classify" property="classify"/>
+        <result column="key_" property="key"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="sort_value" property="sortValue"/>
+        <result column="icon" property="icon"/>
+        <result column="css_style" property="cssStyle"/>
+        <result column="css_class" property="cssClass"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, parent_key, classify, key_, name,
+        state, remark, sort_value, icon, css_style, css_class,
+        created_by, created_time, updated_by, updated_time
+    </sql>
+
+</mapper>

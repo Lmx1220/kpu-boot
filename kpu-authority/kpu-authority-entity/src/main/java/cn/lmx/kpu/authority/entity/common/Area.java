@@ -20,6 +20,7 @@ import java.util.Map;
 
 import static cn.lmx.kpu.model.constant.Condition.LIKE;
 import static cn.lmx.kpu.model.constant.EchoApi.DICT_ITEM_CLASS;
+import static com.baomidou.mybatisplus.annotation.SqlCondition.EQUAL;
 
 
 /**
@@ -51,8 +52,8 @@ public class Area extends TreeEntity<Area, Long> implements EchoVO {
     @ApiModelProperty(value = "名称")
     @NotEmpty(message = "名称不能为空")
     @Size(max = 255, message = "名称长度不能超过255")
-    @TableField(value = "label")
-    protected String label;
+    @TableField(value = "name")
+    protected String name;
 
     /**
      * 编码
@@ -63,7 +64,11 @@ public class Area extends TreeEntity<Area, Long> implements EchoVO {
     @TableField(value = "code", condition = LIKE)
     @Excel(name = "编码")
     private String code;
-
+    /**
+     * 城乡划分代码
+     */
+    @TableField(value = "division_code", condition = LIKE)
+    private String divisionCode;
     /**
      * 全名
      */
@@ -120,13 +125,24 @@ public class Area extends TreeEntity<Area, Long> implements EchoVO {
     @Excel(name = "状态", replace = {"是_true", "否_false", "_null"})
     private Boolean state;
 
-
+    /**
+     *
+     */
+    @TableField(value = "tree_grade", condition = EQUAL)
+    private Integer treeGrade;
+    /**
+     *
+     */
+    @TableField(value = "tree_path", condition = LIKE)
+    private String treePath;
     @Builder
-    public Area(Long id, String label, Integer sortValue, Long parentId, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
+    public Area(Long id, String name,String divisionCode, Integer sortValue, Long parentId, LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy,
                 String code, String fullName, String longitude, String latitude, String level,
-                String source, Boolean state) {
+                String source, Boolean state,
+                Integer treeGrade,String treePath) {
         this.id = id;
-        this.label = label;
+        this.name = name;
+        this.divisionCode = divisionCode;
         this.sortValue = sortValue;
         this.parentId = parentId;
         this.createdTime = createdTime;
@@ -140,6 +156,8 @@ public class Area extends TreeEntity<Area, Long> implements EchoVO {
         this.level = level;
         this.source = source;
         this.state = state;
+        this.treeGrade = treeGrade;
+        this.treePath = treePath;
     }
 
 }

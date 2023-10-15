@@ -4,25 +4,27 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.auth.Application">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
-        <result column="client_secret" jdbcType="VARCHAR" property="clientSecret"/>
-        <result column="website" jdbcType="VARCHAR" property="website"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="icon" jdbcType="VARCHAR" property="icon"/>
-        <result column="app_type" jdbcType="VARCHAR" property="appType"/>
-        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
-        <result column="state" jdbcType="BIT" property="state"/>
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="client_secret" property="clientSecret"/>
+        <result column="website" property="website"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="app_type" property="appType"/>
+        <result column="remarks" property="remarks"/>
+        <result column="state" property="state"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_by,created_time,updated_by,updated_time,
-        client_id, client_secret, website, name, icon, app_type, remarks, state
+        id, client_id, client_secret, website, name, icon,
+        app_type, remarks, state, created_by, created_time, updated_by,
+        updated_time
     </sql>
+
 
 </mapper>

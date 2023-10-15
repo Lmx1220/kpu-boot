@@ -2,29 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lmx.kpu.authority.dao.common.AreaMapper">
 
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.Area">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="label" jdbcType="VARCHAR" property="label"/>
-        <result column="sort_value" jdbcType="INTEGER" property="sortValue"/>
-        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="updated_by" jdbcType="BIGINT" property="updatedBy"/>
-        <result column="code" jdbcType="VARCHAR" property="code"/>
-        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
-        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
-        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
-        <result column="level" jdbcType="VARCHAR" property="level"/>
-        <result column="source_" jdbcType="VARCHAR" property="source"/>
-        <result column="state" jdbcType="BIT" property="state"/>
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="division_code" property="divisionCode"/>
+        <result column="name" property="name"/>
+        <result column="full_name" property="fullName"/>
+        <result column="sort_value" property="sortValue"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="level_" property="level"/>
+        <result column="source_" property="source"/>
+        <result column="state" property="state"/>
+        <result column="tree_grade" property="treeGrade"/>
+        <result column="tree_path" property="treePath"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,label,sort_value,parent_id,created_time,created_by,updated_time,updated_by,
-        code, full_name, longitude, latitude, level, source_, state
+        id, code, division_code, name, full_name, sort_value,
+        longitude, latitude, level_, source_, state, tree_grade,
+        tree_path, parent_id, created_by, created_time, updated_by, updated_time
+
     </sql>
 
 </mapper>

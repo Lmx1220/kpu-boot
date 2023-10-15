@@ -3,7 +3,7 @@ package cn.lmx.kpu.authority.entity.common;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.hutool.core.map.MapUtil;
 import cn.lmx.basic.annotation.echo.Echo;
-import cn.lmx.basic.base.entity.SuperEntity;
+import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.basic.interfaces.echo.EchoVO;
 import cn.lmx.kpu.authority.enumeration.common.LogType;
 import cn.lmx.kpu.model.enumeration.HttpMethod;
@@ -38,7 +38,7 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
 @TableName("c_opt_log")
 @ApiModel(value = "OptLog", description = "系统日志")
 @AllArgsConstructor
-public class OptLog extends SuperEntity<Long> implements EchoVO {
+public class OptLog extends Entity<Long> implements EchoVO {
 
     private static final long serialVersionUID = 1L;
     @TableField(exist = false)

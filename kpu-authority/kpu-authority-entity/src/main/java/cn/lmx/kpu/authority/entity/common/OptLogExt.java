@@ -1,7 +1,7 @@
 package cn.lmx.kpu.authority.entity.common;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import cn.lmx.basic.base.entity.SuperEntity;
+import cn.lmx.basic.base.entity.Entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @TableName("c_opt_log_ext")
 @ApiModel(value = "OptLogExt", description = "系统日志扩展")
 @AllArgsConstructor
-public class OptLogExt extends SuperEntity<Long> {
+public class OptLogExt extends Entity<Long> {
 
     private static final long serialVersionUID = 1L;
 

@@ -4,27 +4,29 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.OptLog">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="request_ip" jdbcType="VARCHAR" property="requestIp"/>
-        <result column="type" jdbcType="VARCHAR" property="type"/>
-        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="class_path" jdbcType="VARCHAR" property="classPath"/>
-        <result column="action_method" jdbcType="VARCHAR" property="actionMethod"/>
-        <result column="request_uri" jdbcType="VARCHAR" property="requestUri"/>
-        <result column="http_method" jdbcType="VARCHAR" property="httpMethod"/>
-        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
-        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
-        <result column="consuming_time" jdbcType="BIGINT" property="consumingTime"/>
-        <result column="ua" jdbcType="VARCHAR" property="ua"/>
+        <id column="id" property="id"/>
+        <result column="request_ip" property="requestIp"/>
+        <result column="type" property="type"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="description" property="description"/>
+        <result column="class_path" property="classPath"/>
+        <result column="action_method" property="actionMethod"/>
+        <result column="request_uri" property="requestUri"/>
+        <result column="http_method" property="httpMethod"/>
+        <result column="start_time" property="startTime"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="consuming_time" property="consumingTime"/>
+        <result column="ua" property="ua"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_time,created_by,
-        request_ip, type, user_name, description, class_path, action_method, request_uri, http_method, start_time, finish_time, consuming_time, ua
+        id, request_ip, type, nick_name, description, class_path,
+        action_method, request_uri, http_method, start_time, finish_time, consuming_time,
+        ua, created_by, created_time, updated_by, updated_time
     </sql>
-
 </mapper>

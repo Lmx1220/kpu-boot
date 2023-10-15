@@ -1,10 +1,7 @@
 package cn.lmx.kpu.authority.dao.common;
 
 import cn.lmx.basic.base.mapper.SuperMapper;
-import cn.lmx.kpu.authority.dto.common.DictPageQuery;
 import cn.lmx.kpu.authority.entity.common.Dict;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,12 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DictMapper extends SuperMapper<Dict> {
-    /**
-     * 分页查询字典类型
-     *
-     * @param page  分页参数
-     * @param query 查询条件
-     * @return 分页数据
-     */
-    IPage<Dict> pageType(IPage<Dict> page, @Param("query") DictPageQuery query);
+
 }

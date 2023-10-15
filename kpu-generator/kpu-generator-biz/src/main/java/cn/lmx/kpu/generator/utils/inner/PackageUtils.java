@@ -35,6 +35,7 @@ import cn.lmx.kpu.generator.rules.echo.EchoType;
 import cn.lmx.kpu.generator.rules.enumeration.EnumType;
 import cn.lmx.kpu.generator.utils.GenCodeConstant;
 import cn.lmx.kpu.model.constant.EchoApi;
+import cn.lmx.kpu.model.constant.EchoDictType;
 import cn.lmx.kpu.model.constant.EchoRef;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.annotation.*;
@@ -88,8 +89,8 @@ public class PackageUtils {
             ECHO_REF_LIST.add(field.getName());
         }
 
-//        putDictType(EchoDictType.class);
-//        putDictType(EchoDictType.Global.class);
+        putDictType(EchoDictType.class);
+        putDictType(EchoDictType.Global.class);
 //        putDictType(EchoDictType.Base.class);
 //        putDictType(EchoDictType.System.class);
 //        putDictType(EchoDictType.Oauth.class);

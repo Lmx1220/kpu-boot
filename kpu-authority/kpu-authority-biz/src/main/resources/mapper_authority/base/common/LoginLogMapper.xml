@@ -2,29 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lmx.kpu.authority.dao.common.LoginLogMapper">
 
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.common.LoginLog">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="request_ip" jdbcType="VARCHAR" property="requestIp"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
-        <result column="username" jdbcType="VARCHAR" property="username"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="login_date" jdbcType="CHAR" property="loginDate"/>
-        <result column="ua" jdbcType="VARCHAR" property="ua"/>
-        <result column="browser" jdbcType="VARCHAR" property="browser"/>
-        <result column="browser_version" jdbcType="VARCHAR" property="browserVersion"/>
-        <result column="operating_system" jdbcType="VARCHAR" property="operatingSystem"/>
-        <result column="location" jdbcType="VARCHAR" property="location"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <id column="id" property="id"/>
+        <result column="request_ip" property="requestIp"/>
+        <result column="user_id" property="userId"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="username" property="username"/>
+        <result column="description" property="description"/>
+        <result column="login_date" property="loginDate"/>
+        <result column="ua" property="ua"/>
+        <result column="browser" property="browser"/>
+        <result column="browser_version" property="browserVersion"/>
+        <result column="operating_system" property="operatingSystem"/>
+        <result column="location" property="location"/>
+        <result column="status" property="status"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_time,created_by,
-        request_ip, user_id, nick_name, username, description, login_date, ua, browser, browser_version, operating_system, location,status
+        id, request_ip, user_id, nick_name, username, description,
+        login_date, ua, browser, browser_version, operating_system, location,
+        status, created_by, created_time, updated_by, updated_time
     </sql>
 
 </mapper>

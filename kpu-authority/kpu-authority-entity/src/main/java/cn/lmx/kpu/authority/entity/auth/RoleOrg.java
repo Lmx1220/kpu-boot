@@ -1,7 +1,7 @@
 package cn.lmx.kpu.authority.entity.auth;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import cn.lmx.basic.base.entity.SuperEntity;
+import cn.lmx.basic.base.entity.Entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 @TableName("c_role_org")
 @ApiModel(value = "RoleOrg", description = "角色组织关系")
 @AllArgsConstructor
-public class RoleOrg extends SuperEntity<Long> {
+public class RoleOrg extends Entity<Long> {
 
     private static final long serialVersionUID = 1L;
 

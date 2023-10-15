@@ -4,17 +4,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.authority.entity.auth.RoleResource">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
-        <result column="resource_id" jdbcType="BIGINT" property="resourceId"/>
-        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <id column="id" property="id"/>
+        <result column="role_id" property="roleId"/>
+        <result column="resource_id" property="resourceId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,created_time,created_by,
-        resource_id, authority_type, role_id
+        id, role_id, resource_id, created_by, created_time, updated_by,
+        updated_time
     </sql>
-
 </mapper>

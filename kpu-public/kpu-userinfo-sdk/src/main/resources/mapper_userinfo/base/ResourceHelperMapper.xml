@@ -4,46 +4,41 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.model.entity.base.SysResource">
-        <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="code" column="code" jdbcType="VARCHAR"/>
-        <result property="title" column="title" jdbcType="VARCHAR"/>
-        <result property="name" column="name" jdbcType="VARCHAR"/>
-        <result property="resourceType" column="resource_type" jdbcType="CHAR"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="isGeneral" column="is_general" jdbcType="BIT"/>
-        <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
-        <result property="path" column="path" jdbcType="VARCHAR"/>
-        <result property="component" column="component" jdbcType="VARCHAR"/>
-        <result property="state" column="state" jdbcType="BIT"/>
-        <result property="sortValue" column="sort_value" jdbcType="INTEGER"/>
-        <result property="icon" column="icon" jdbcType="VARCHAR"/>
-        <result property="activeIcon" column="active_icon" jdbcType="VARCHAR"/>
-        <result property="group" column="group_" jdbcType="VARCHAR"/>
-        <result property="dataScope" column="data_scope" jdbcType="CHAR"/>
-        <result property="customClass" column="custom_class" jdbcType="VARCHAR"/>
-        <result property="isDef" column="is_def" jdbcType="BIT"/>
-        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
-        <result property="treeGrade" column="tree_grade" jdbcType="INTEGER"/>
-        <result property="treePath" column="tree_path" jdbcType="VARCHAR"/>
-        <result property="metaJson" column="meta_json" jdbcType="VARCHAR"/>
-        <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
-        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
-        <result property="updatedBy" column="updated_by" jdbcType="BIGINT"/>
-        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="title" property="title"/>
+        <result column="name" property="name"/>
+        <result column="resource_type" property="resourceType"/>
+        <result column="remarks" property="remarks"/>
+        <result column="is_general" property="isGeneral"/>
+        <result column="redirect" property="redirect"/>
+        <result column="path" property="path"/>
+        <result column="component" property="component"/>
+        <result column="state" property="state"/>
+        <result column="sort_value" property="sortValue"/>
+        <result column="icon" property="icon"/>
+        <result column="active_icon" property="activeIcon"/>
+        <result column="group_" property="group"/>
+        <result column="data_scope" property="dataScope"/>
+        <result column="custom_class" property="customClass"/>
+        <result column="is_def" property="isDef"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="tree_grade" property="treeGrade"/>
+        <result column="tree_path" property="treePath"/>
+        <result column="meta_json" property="metaJson"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        ,code,title,
-        name,resource_type,remarks,
-        is_general,`redirect`,path,component,
-        state,sort_value,icon,
-        active_icon,group_,data_scope,
-        custom_class,is_def,parent_id,
-        tree_grade,tree_path,meta_json,
-        created_by,created_time,updated_by,
-        updated_time
+        id, code, title, name, resource_type, remarks,
+        is_general, redirect, path, component, state, sort_value,
+        icon, active_icon, group_, data_scope, custom_class, is_def,
+        parent_id, tree_grade, tree_path, meta_json, created_by, created_time,
+        updated_by, updated_time
     </sql>
 
 </mapper>

@@ -1,7 +1,7 @@
 package cn.lmx.kpu.authority.entity.common;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import cn.lmx.basic.base.entity.SuperEntity;
+import cn.lmx.basic.base.entity.Entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -31,7 +31,7 @@ import static cn.lmx.kpu.model.constant.Condition.LIKE;
 @ApiModel(value = "LoginLog", description = "登录日志")
 @AllArgsConstructor
 @Builder
-public class LoginLog extends SuperEntity<Long> {
+public class LoginLog extends Entity<Long> {
 
     private static final long serialVersionUID = 1L;
 
