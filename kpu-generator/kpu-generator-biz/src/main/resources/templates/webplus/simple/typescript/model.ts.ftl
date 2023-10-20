@@ -1,20 +1,46 @@
-import type { BaseModel, ReduceForSaveVO, ReduceForUpdateVO, ReduceForPageQuery } from '/@/api/model/baseModel'
-
-export interface ${baseVoName} extends BaseModel {
+export interface ${pageQueryName} {
 <#list fields as field>
-    ${field.javaField}: ${field.tsType}; // ${field.swaggerComment!}
+  ${field.javaField}?: ${field.tsType} // ${field.swaggerComment!}
 </#list>
 <#if isTreeEntity>
-    parentId: ${pkField.tsType};
-    sortValue: number;
+  parentId: ${pkField.tsType}
+  sortValue: number
 </#if>
 }
 
-export interface ${resultVoName} = Partial<${baseVoName}>
+export interface ${saveVoName} {
+<#list fields as field>
+  ${field.javaField}?: ${field.tsType} // ${field.swaggerComment!}
+</#list>
+<#if isTreeEntity>
+  parentId: ${pkField.tsType}
+  sortValue: number
+</#if>
+}
 
-export interface ${saveVoName} = Omit<${baseVoName}, ReduceForSaveVO>
+export interface ${updateVoName} {
+  id: ${pkField.tsType}
+<#list fields as field>
+  ${field.javaField}?: ${field.tsType} // ${field.swaggerComment!}
+</#list>
+<#if isTreeEntity>
+  parentId: ${pkField.tsType}
+  sortValue: number
+</#if>
+}
 
-export interface ${updateVoName} = Omit<${baseVoName}, ReduceForUpdateVO>
-
-export interface ${pageQueryName} = Partial
-<Omit<${baseVoName}, ReduceForPageQuery>>
+export interface ${resultVoName} {
+<#if superEntityClass??  && superEntityClass !="NONE">
+  echoMap?: any
+</#if>
+<#list commonFields as field>
+  ${field.javaField}?: ${field.tsType} // ${field.swaggerComment!}
+</#list>
+<#list fields as field>
+  ${field.javaField}?: ${field.tsType} // ${field.swaggerComment!}
+</#list>
+<#if isTreeEntity>
+  parentId: ${pkField.tsType}
+  sortValue: number
+</#if>
+}

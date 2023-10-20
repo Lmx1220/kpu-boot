@@ -124,7 +124,7 @@ public class GenTableController extends SuperController<GenTableService, Long, G
     }
 
     @ApiOperation(value = "获取生成代码是否覆盖的默认配置", notes = "获取生成代码是否覆盖的默认配置")
-    @GetMapping("/getDefFileOverrideStrategy")
+    @GetMapping("/getFileOverrideStrategy")
     @SysLog(value = "'获取生成代码是否覆盖的默认配置")
     public R<Map<String, FileOverrideStrategyEnum>> getDefFileOverrideStrategy() {
         return R.success(superService.getFileOverrideStrategy());
