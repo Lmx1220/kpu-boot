@@ -9,7 +9,7 @@ kpu:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: 'root'
     password: 'lmx123125'
-    url: jdbc:mysql://127.0.0.1:3306/kpu_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://127.0.0.1:3306/kpu_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
 
   system:
     # 登录时否验证密码有效性 （常用于开发环境快速登录）
@@ -29,11 +29,6 @@ kpu:
     port: 5672
     username: kpu
     password: kpu
-  druid:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: 'root'
-    password: 'root'
-    url: jdbc:mysql://127.0.0.1:3306/kpu_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
 
     dbType: MYSQL
@@ -86,26 +81,28 @@ kpu:
     enabled: true
     requestBodyEnabled: false
   file:
-    storageType: LOCAL #  FAST_DFS LOCAL MIN_IO ALI_OSS HUAWEI_OSS QINIU_OSS
+    storageType: MIN_IO #  FAST_DFS LOCAL MIN_IO ALI_OSS HUAWEI_OSS QINIU_OSS
     delFile: false
+    publicBucket:
+      - public
     local:
       storage-path: /Users/lmx/Documents/kpu/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
-      endpoint: http://127.0.0.1/file/   # 文件访问 （部署nginx后，配置nginx的ip，并配置nginx静态代理storage-path地址的静态资源）
-      inner-uri-prefix: null  #  内网的url前缀
+      url-prefix: http://127.0.0.1/file/   # 文件访问 （部署nginx后，配置nginx的ip，并配置nginx静态代理storage-path地址的静态资源）
+      inner-url-prefix: null  #  内网的url前缀
     ali:
       # 请填写自己的阿里云存储配置
-      uriPrefix: "http://lmx-admin-cloud.oss-cn-beijing.aliyuncs.com/"
-      bucket-name: "lmx-admin-cloud"
-      endpoint: "oss-cn-beijing.aliyuncs.com"
-      access-key-id: "填写你的id"
-      access-key-secret: "填写你的秘钥"
+      urlPrefix: "http://dblog-e.oss-cn-hangzhou.aliyuncs.com/"
+      bucket: "dblog-e"
+      endpoint: "oss-cn-hangzhou.aliyuncs.com"
+      access-key-id: "LTAI5tNzPM9bXQJJF9v2Cm2t"
+      access-key-secret: "D5xll1Jur8csMj9ABIRae7YA96AzbD"
     minIo:
-      endpoint: "http://127.0.0.1:9000/"
-      accessKey: "kpu"
-      secretKey: "kpu"
-      bucket: "dev"
+      endpoint: "http://47.114.137.78:9000/"
+      accessKey: "root"
+      secretKey: "lmx123125"
+      bucket: "kpu"
     huawei:
-      uriPrefix: "dev.obs.cn-southwest-2.myhuaweicloud.com"
+      urlPrefix: "dev.obs.cn-southwest-2.myhuaweicloud.com"
       endpoint: "obs.cn-southwest-2.myhuaweicloud.com"
       accessKey: "1"
       secretKey: "2"
@@ -470,7 +467,7 @@ info:
 
 logging:
   file:
-    path: /Users/lmx/Documents/IdeaProjects/kpu-boot/logs
+    path: '@logging.file.path@'
     name: ${logging.file.path}/${spring.application.name}/root.log
   config: classpath:logback-spring.xml
   level:

@@ -2,13 +2,13 @@ package cn.lmx.kpu.file.properties;
 
 
 import cn.hutool.core.util.StrUtil;
+import cn.lmx.basic.utils.StrPool;
+import cn.lmx.kpu.file.enumeration.FileStorageType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import cn.lmx.basic.utils.StrPool;
-import cn.lmx.kpu.file.enumeration.FileStorageType;
 
 import java.io.File;
 import java.util.HashSet;
