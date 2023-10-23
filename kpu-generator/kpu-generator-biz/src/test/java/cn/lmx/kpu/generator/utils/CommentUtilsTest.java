@@ -4,20 +4,19 @@ import cn.hutool.core.util.StrUtil;
 import cn.lmx.kpu.generator.rules.echo.EchoDict;
 import cn.lmx.kpu.generator.rules.echo.EchoType;
 import cn.lmx.kpu.generator.utils.inner.CommentUtils;
+import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
 
 /**
- * @author lmx
- * @version v1.0.0
- * @date 2023/10/13 14:27
+ * @author tangyh
+ * @version v1.0
+ * @date 2022/4/2 7:40 PM
+ * @create [2022/4/2 7:40 PM ] [tangyh] [初始创建]
  */
 public class CommentUtilsTest {
-    public static void main(String[] args) {
-        CommentUtilsTest commentUtilsTest = new CommentUtilsTest();
-        commentUtilsTest.testEcho();
-    }
 
+    @Test
     public void testEnum() {
 //        String comment = "注释内容 #UserEnum{MAN:123; WOMAN:\"女\"}";
 //        String comment = "注释内容 #UserEnum{MAN_M:\"枚举值英文注释\"}";
@@ -42,6 +41,7 @@ public class CommentUtilsTest {
         }
     }
 
+    @Test
     public void testEcho() {
 //        String comment = "@Echo(api=\"xxxx\", ref=\"bbbbb\", beanClass=1) RemoteData<Long, Org>";
 //        String comment = "@Echo(api = \"userApi\",   ref = USER_ID_NAME_METHOD) ";
@@ -64,6 +64,7 @@ public class CommentUtilsTest {
         System.out.println(echoType);
     }
 
+    @Test
     public void testDictItem() {
         String comment = "士大夫; [1-女生 2-男生] @Echo(api=EchoApi.dddd, beanClass= com.aa.ded.EchoDictType.class, dictType = EchoDictType.NATION) RemoteData<Long, Org>";
 //        String comment = "@Echo(api=EchoDictType.dddd, ref=EchoDictType.AAA, beanClass= EchoDictType.class, dictType = EchoDictType.NATION) RemoteData<Long, Org>";

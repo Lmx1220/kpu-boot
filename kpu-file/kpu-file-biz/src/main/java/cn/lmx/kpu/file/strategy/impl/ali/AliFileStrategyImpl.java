@@ -94,8 +94,8 @@ public class AliFileStrategyImpl extends AbstractFileStrategy {
             try {
                 if (CollUtil.isNotEmpty(publicBucket) && publicBucket.contains(bucket)) {
                     StringBuilder url = new StringBuilder(ali.getUrlPrefix())
-                            .append(fileGet.getBucket())
-                            .append(StrPool.SLASH)
+//                            .append(fileGet.getBucket())
+//                            .append(StrPool.SLASH)
                             .append(fileGet.getPath());
                     map.put(fileGet.getPath(), url.toString());
                 } else {
