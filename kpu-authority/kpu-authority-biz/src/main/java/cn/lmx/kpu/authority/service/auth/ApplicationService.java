@@ -4,7 +4,7 @@ import cn.lmx.basic.base.service.SuperCacheService;
 import cn.lmx.kpu.authority.dto.auth.ApplicationPageQuery;
 import cn.lmx.kpu.authority.dto.auth.ApplicationResultVO;
 import cn.lmx.kpu.authority.dto.auth.ApplicationSaveVO;
-import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateVo;
+import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateVO;
 import cn.lmx.kpu.authority.entity.auth.Application;
 
 /**
@@ -16,7 +16,7 @@ import cn.lmx.kpu.authority.entity.auth.Application;
  * @author lmx
  * @date 2023/7/4 14:27
  */
-public interface ApplicationService extends SuperCacheService<Long, Application, ApplicationSaveVO, ApplicationUpdateVo, ApplicationPageQuery, ApplicationResultVO> {
+public interface ApplicationService extends SuperCacheService<Long, Application, ApplicationSaveVO, ApplicationUpdateVO, ApplicationPageQuery, ApplicationResultVO> {
     /**
      * 根据 clientId 和 clientSecret 查询
      *

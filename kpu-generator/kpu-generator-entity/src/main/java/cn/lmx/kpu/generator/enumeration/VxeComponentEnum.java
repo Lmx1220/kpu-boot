@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ComponentEnum", description = "生成方式")
+@ApiModel(value = "VxeComponentEnum", description = "生成方式")
 public enum VxeComponentEnum implements BaseEnum {
 
     INPUT("input", "原生输入框"),

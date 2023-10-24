@@ -77,3 +77,21 @@ export function importFile(params: UploadFileParams) {
   return defHttp.uploadFile<boolean>({ ...Api.Import }, params)
 }
 </#if>
+export default {
+  page,
+<#if table.addShow || table.copyShow>
+  save,
+</#if>
+<#if table.editShow>
+  update,
+</#if>
+<#if table.deleteShow>
+  remove,
+</#if>
+<#if table.tplType == TPL_TREE>
+  tree,
+</#if>
+  query,
+  detail,
+  copy,
+}

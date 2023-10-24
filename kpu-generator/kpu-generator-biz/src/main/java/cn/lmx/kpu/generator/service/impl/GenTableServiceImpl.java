@@ -100,7 +100,7 @@ public class GenTableServiceImpl extends SuperServiceImpl<GenTableManager, Long,
         TEMPLATE_FIELD_MAP.put("model", TEMPLATE_WEB_PRO_SIMPLE_MODEL);
         TEMPLATE_FIELD_MAP.put("langEn", TEMPLATE_WEB_PRO_SIMPLE_LANG_EN);
         TEMPLATE_FIELD_MAP.put("langZh", TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH);
-        TEMPLATE_FIELD_MAP.put("data", TEMPLATE_WEB_PRO_SIMPLE_DATA);
+        TEMPLATE_FIELD_MAP.put("formMode", TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE);
         TEMPLATE_FIELD_MAP.put("index", TEMPLATE_WEB_PRO_SIMPLE_INDEX);
         TEMPLATE_FIELD_MAP.put("edit", TEMPLATE_WEB_PRO_SIMPLE_EDIT);
         TEMPLATE_FIELD_MAP.put("jumpEdit", TEMPLATE_WEB_PRO_SIMPLE_JUMP_EDIT);
@@ -724,7 +724,7 @@ public class GenTableServiceImpl extends SuperServiceImpl<GenTableManager, Long,
         map.put("model", defStrategy.getApiModelFileOverride());
         map.put("langEn", defStrategy.getLangFileOverride());
         map.put("langZh", defStrategy.getLangFileOverride());
-        map.put("data", defStrategy.getDataFileOverride());
+        map.put("formMode", defStrategy.getDataFileOverride());
         map.put("index", defStrategy.getIndexEditTreeFileOverride());
         map.put("edit", defStrategy.getIndexEditTreeFileOverride());
         map.put("jumpEdit", defStrategy.getIndexEditTreeFileOverride());

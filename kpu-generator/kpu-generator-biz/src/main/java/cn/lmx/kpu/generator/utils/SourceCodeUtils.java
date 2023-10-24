@@ -14,10 +14,7 @@ import cn.lmx.kpu.generator.config.ControllerConfig;
 import cn.lmx.kpu.generator.config.GeneratorConfig;
 import cn.lmx.kpu.generator.entity.GenTable;
 import cn.lmx.kpu.generator.entity.GenTableColumn;
-import cn.lmx.kpu.generator.enumeration.EntitySuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.PopupTypeEnum;
-import cn.lmx.kpu.generator.enumeration.SuperClassEnum;
-import cn.lmx.kpu.generator.enumeration.TplEnum;
+import cn.lmx.kpu.generator.enumeration.*;
 import cn.lmx.kpu.generator.rules.echo.EchoDict;
 import cn.lmx.kpu.generator.rules.echo.EchoType;
 import cn.lmx.kpu.generator.utils.inner.CommentUtils;
@@ -200,6 +197,7 @@ public class SourceCodeUtils {
         map.put("POPUP_TYPE_DRAWER", PopupTypeEnum.DRAWER);
         map.put("POPUP_TYPE_JUMP", PopupTypeEnum.JUMP);
         map.put("SUPER_CLASS_SUPER_POI_CLASS", SuperClassEnum.SUPER_POI_CLASS);
+        map.put("COMPONENT_ENUM", ComponentEnum.values());
         return map;
     }
 

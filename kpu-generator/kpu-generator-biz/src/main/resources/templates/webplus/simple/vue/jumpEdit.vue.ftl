@@ -1,100 +1,78 @@
-<template>
-  <PageWrapper class="high-form" title="编辑${table.menuName}" contentBackground contentClass="p-4">
-    <template #extra>
-      <a-button
-        :loading="loading"
-        v-if="type !== ActionEnum.VIEW"
-        type="primary" @click="handleSubmit" class="ml-4">
-        保存
-      </a-button>
-    </template>
-    <BasicForm @register="registerForm" />
-  </PageWrapper>
-</template>
-<script lang="ts">
-  import { defineComponent, ref, unref, onMounted } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { PageWrapper } from '/@/components/Page';
-  import { useRouter } from 'vue-router';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { ActionEnum, VALIDATE_API } from '/@/enums/commonEnum';
-  import { Api, save, update, detail } from '/@/api/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}';
-  import { getValidateRules } from '/@/api/${projectPrefix}/common/formValidateService';
-  import { customFormSchemaRules, editFormSchema } from '../../../../../../../../../../../../../Downloads/lamp-generator/lamp-generator-server/src/main/resources/templates/webplus/simple/vue${table.entityName?uncap_first}.data';
+<script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
+import DetailForm from './components/DetailForm/index.vue'
+import useSettingsStore from '@/store/modules/settings'
+import eventBus from '@/util/eventBus'
 
-  export default defineComponent({
-    name: '编辑${table.menuName}',
-    components: { BasicForm, PageWrapper },
-    setup(_) {
-      const { t } = useI18n();
-      const type = ref<ActionEnum>(ActionEnum.ADD);
-      const loading = ref<boolean>(false);
-      const { createMessage } = useMessage();
-      const { replace, currentRoute } = useRouter();
-      const { closeCurrent } = useTabs();
+defineOptions({
+  name: '${plusName}${table.entityName}Detail',
+})
+const settingsStore = useSettingsStore()
+const route = useRoute()
+const router = useRouter()
+const tabbar = useTabbar()
+const { t } = useI18n()
+const form = ref<InstanceType<typeof DetailForm>>()
 
-      const [registerForm, { setFieldsValue, resetFields, updateSchema, validate }] =
-        useForm({
-          name: '${table.entityName}Edit',
-          labelWidth: 100,
-          schemas: editFormSchema(type),
-          showActionButtonGroup: false,
-          disabled: (_) => {
-            return unref(type) === ActionEnum.VIEW;
-          },
-          baseColProps: { span: 24 },
-          actionColOptions: {
-            span: 23,
-          },
-        });
+const type = computed(() => {
+  return route.params.type as 'add' | 'edit' | 'view'
+})
+const tiltel = computed(() => {
+  return `${r'${'}t(`common.title.${r'${type}'}`)}${table.comment}`
+})
+function onSubmit() {
+  form.value?.submit(() => {
+    eventBus.emit('get-data-list')
+    goBack()
+  })
+}
 
-      onMounted(async () => {
-        const { params, query } = currentRoute.value;
-        const id = params.id;
-        await load({ type: query?.type, id });
-      });
+function onCancel() {
+  goBack()
+}
 
-      const load = async (data: Recordable) => {
-        await resetFields();
-        type.value = data?.type || ActionEnum.ADD;
-
-        if (![ActionEnum.ADD].includes(unref(type))) {
-          const record = await detail(data?.id);
-          await setFieldsValue({ ...record });
-        }
-
-        if ([ActionEnum.ADD, ActionEnum.EDIT, ActionEnum.COPY].includes(unref(type))) {
-          let validateApi = Api[VALIDATE_API[unref(type)]];
-          const rules = await getValidateRules(validateApi, customFormSchemaRules(type));
-          rules && rules.length > 0 && (await updateSchema(rules));
-        }
-      };
-
-      async function handleSubmit() {
-        try {
-          const params = await validate();
-          loading.value = true;
-
-          if (unref(type) !== ActionEnum.VIEW) {
-            if (unref(type) === ActionEnum.EDIT) {
-              await update(params);
-            } else {
-              params.id = null;
-              await save(params);
-            }
-            createMessage.success(t(`common.tips.${r'${'}type.value${r'}'}Success`));
-          }
-
-          await closeCurrent();
-          replace({ name: '${table.menuName}' });
-        } finally {
-          loading.value = false;
-        }
-      }
-
-      return { type, t, loading, registerForm, handleSubmit, ActionEnum };
-    },
-  });
+// 返回列表页
+function goBack() {
+  if (settingsStore.settings.tabbar.enable && settingsStore.settings.tabbar.mergeTabsBy !== 'activeMenu') {
+    tabbar.close({ name: '${plusName}${table.entityName}List' })
+  }
+  else {
+    router.push({ name: '${plusName}${table.entityName}List' })
+  }
+}
 </script>
+
+<template>
+  <div>
+    <page-header :title="tiltel">
+      <el-button round size="default" @click="goBack">
+        <template #icon>
+          <svg-icon name="ep:arrow-left" />
+        </template>
+        {{ t('common.back') }}
+      </el-button>
+    </page-header>
+    <page-main>
+      <el-row>
+        <el-col :lg="16" :md="24">
+          <DetailForm
+            :id="route.params.id as string" ref="form"
+            :type="type"
+          />
+        </el-col>
+      </el-row>
+    </page-main>
+    <fixed-action-bar>
+      <el-button size="large" type="primary" @click="onSubmit">
+        {{ t('common.okText') }}
+      </el-button>
+      <el-button size="large" @click="onCancel">
+        {{ t('common.cancelText') }}
+      </el-button>
+    </fixed-action-bar>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+// scss
+</style>

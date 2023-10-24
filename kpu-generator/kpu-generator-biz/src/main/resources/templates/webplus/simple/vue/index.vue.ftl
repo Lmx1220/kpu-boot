@@ -4,6 +4,8 @@ import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { get } from 'lodash-es'
 import { useI18n } from 'vue-i18n'
 import FormMode from './components/FormMode/index.vue'
+import yesOrNoEnum from '@/enums/common/yesOrNoEnum'
+import { enumComponentProps, dictComponentProps } from '@/util/common'
 import type { ${table.entityName}PageQuery, ${table.entityName}ResultVO } from '@/api/modules/${table.plusModuleName}/model/${table.entityName?uncap_first}Model'
 import crud${table.entityName} from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
 import eventBus from '@/util/eventBus'
@@ -55,6 +57,7 @@ const data: Ref<DataConfig<${table.entityName}PageQuery, ${table.entityName}Resu
   dataList: [],
   dicts: new Map(),
 })
+data.value.dicts?.set('YesOrNoEnum', yesOrNoEnum.enum())
 
 const table = ref<InstanceType<typeof ElTable>>()
 
@@ -171,10 +174,10 @@ function onDel(row?: any) {
     ids = data.value.batch.selectionDataList.map(item => item.id ?? '')
   }
   ElMessageBox.confirm(`确认删除数量「${r"${"}ids.length}」吗？`, '确认信息').then(() => {
-    crud${table.entityName}.delete(ids).then(() => {
+    crud${table.entityName}.remove(ids).then(() => {
       getDataList()
       ElMessage.success({
-        message: '删除成功',
+        message: t('common.tips.deleteSuccess'),
         center: true,
       })
     })
@@ -192,51 +195,53 @@ function onDel(row?: any) {
         :show-toggle="false"
       >
         <template #default="{ fold }">
-          <el-form class="search-form" :model="data.search" size="default" inline-message label-width="100px" label-suffix="：">
+          <el-form class="search-form" :model="data.search" size="default" inline-message label-width="120" label-suffix="：">
             <el-row>
             <#list fields as field>
               <#if field.isQuery && !field.isLogicDeleteField>
               <el-col :span="6">
-                <el-form-item :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.meta.${field.javaField}')">
-                  <#if field.javaType =="LocalDateTime">
-                  <el-date-picker v-model="data.search.${field.javaField}" type="datetime" value-format="YYYY-MM-DD HH:mm:ss" />
-                  <#elseif field.javaType =="LocalDate">
-                  <el-date-picker v-model="data.search.${field.javaField}" type="date" value-format="YYYY-MM-DD" />
-                  <#elseif field.javaType =="LocalTime">
-                  <el-time-picker v-model="data.search.${field.javaField}" format="HH:mm:ss" />
-                  <#elseif field.javaType =="Boolean">
-                  <el-radio-group v-model="data.search.${field.javaField}">
-                    <el-radio v-for="(item, index) in data.dicts?.get('YesOrNo')" :key="index" :label="item?.value">
+                <el-form-item class="el-row" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')">
+                  <<#if field.component?starts_with("Api")>${field.component}<#elseif field.component?ends_with("TimePicker")>ElTimePicker<#elseif field.component?ends_with("Picker")>ElDatePicker<#elseif field.component=="IconPicker">${field.component}<#elseif field.component=="InputTextArea" || field.component == "InputPassword" >ElInput<#else>El${field.component}</#if> v-model="data.search.${field.javaField}"
+                    <#if field.component=="InputTextArea">
+                    type="textarea"
+                    <#elseif field.component=="InputPassword">
+                    type="password"
+                    </#if>
+                    <#if field.javaType =="LocalDateTime">
+                    type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
+                    <#elseif field.javaType =="LocalDate">
+                    type="date" value-format="YYYY-MM-DD"
+                    <#elseif field.javaType =="LocalTime">
+                    format="HH:mm:ss"
+                    <#elseif field.enumStr?? && field.enumStr?trim != ''>
+  <#--                     生成的 EnumEnum 常量不存在时，请自行在 EnumEnum 中添加: ${field.javaType} = '${field.javaType}',-->
+  <#--                     请确保后端方法：OauthGeneralController#findEnumListByType 能扫描到后端的枚举类： ${field.javaType}，否则无法回显！-->
+  <#--                     ...enumDef.componentProps(${table.plusApplicationName?cap_first}EnumEnum.${field.javaType}),-->
+                    v-bind="enumComponentProps('${field.javaType}')"
+                    :placeholder="t('common.chooseText')"
+                    <#elseif field.dictType?? && field.dictType?trim != ''>
+                      <#if field.dictType?contains('"')>
+                    v-bind="dictComponentProps('${field.dictType}')"
+                    :placeholder="t('common.chooseText')"
+                      <#else>
+                        <#assign dotIndex=field.dictType?last_index_of('.') + 1 />
+                        <#assign dt=field.dictType?substring(dotIndex?number) />
+  <#--                      // 建议将魔法数参数移动到 DictEnum 中，并添加为: ${field.dictType!?replace(".","_")} = '${dt!?upper_case}';-->
+  <#--                      // '${dt!?upper_case}' 需要与 后端DictType类中的参数 以及 def_dict表中的key字段 保持一致，否则无法回显！-->
+  <#--                      // ...dictDef.componentProps(${table.plusApplicationName?cap_first}DictEnum.${field.dictType!?replace(".","_")}),-->
+                    v-bind="dictComponentProps('${dt!?upper_case}')"
+                    :placeholder="t('common.chooseText')"
+                      </#if>
+                    <#else>
+                    :placeholder="t('common.inputText')"
+                    </#if>
+                  <#if field.javaType == "Boolean" && field.component == 'RadioGroup'>
+                  >
+                    <el-radio v-for="(item, index) in data.dicts?.get('YesOrNoEnum')" :key="index" :label="item?.value">
                       {{ item?.label }}
                     </el-radio>
-                  </el-radio-group>
-                  <#elseif field.enumStr?? && field.enumStr?trim != ''>
-<#--                     生成的 EnumEnum 常量不存在时，请自行在 EnumEnum 中添加: ${field.javaType} = '${field.javaType}',-->
-<#--                     请确保后端方法：OauthGeneralController#findEnumListByType 能扫描到后端的枚举类： ${field.javaType}，否则无法回显！-->
-<#--                     ...enumDef.componentProps(${table.plusApplicationName?cap_first}EnumEnum.${field.javaType}),-->
-                  <el-select v-model="data.search.${field.javaField}" clearable placeholder="请选择" size="default" @change="currentChange()" >
-                    <el-option v-for="item in data.dicts.get('${field.javaType}') || []" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-
-                  <#elseif field.dictType?? && field.dictType?trim != ''>
-                    <#if field.dictType?contains('"')>
-                  <el-select v-model="data.search.${field.javaField}" clearable placeholder="请选择" size="default"  @change="currentChange()">
-                    <el-option v-for="item in data.dicts.get('${field.dictType}') || []" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                    <#else>
-                      <#assign dotIndex=field.dictType?last_index_of('.') + 1 />
-                      <#assign dt=field.dictType?substring(dotIndex?number) />
-<#--                      // 建议将魔法数参数移动到 DictEnum 中，并添加为: ${field.dictType!?replace(".","_")} = '${dt!?upper_case}';-->
-<#--                      // '${dt!?upper_case}' 需要与 后端DictType类中的参数 以及 def_dict表中的key字段 保持一致，否则无法回显！-->
-<#--                      // ...dictDef.componentProps(${table.plusApplicationName?cap_first}DictEnum.${field.dictType!?replace(".","_")}),-->
-                  <el-select v-model="data.search.${field.javaField}" clearable placeholder="请选择" size="default" @change="currentChange()">
-                    <el-option v-for="item in data.dicts.get('${dt!?upper_case}') || []" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
-                    </#if>
+                  </El${field.component}>
                   <#else>
-                  <el-input
-                    v-model="data.search.${field.javaField}" placeholder="请输入，支持模糊查询" clearable size="default"
-                    @keydown.enter="currentChange()" @clear="currentChange()"
                   />
                   </#if>
                 </el-form-item>
@@ -244,7 +249,7 @@ function onDel(row?: any) {
               </#if>
             </#list>
               <el-col :span="6">
-                <el-form-item v-show="!fold" label="创建时间">
+                <el-form-item v-show="!fold" :label="t('kpu.common.createdTime')">
                   <el-date-picker
                     v-model="data.search.daterange"
                     :default-time="[
@@ -252,9 +257,7 @@ function onDel(row?: any) {
                       new Date(2000, 2, 1, 23, 59, 59),
                     ]"
                     size="default"
-                    end-placeholder="结束时间"
                     range-separator=":"
-                    start-placeholder="开始时间"
                     style="width: 250px;"
                     type="daterange"
                     value-format="YYYY-MM-DD HH:mm:ss"
@@ -267,16 +270,16 @@ function onDel(row?: any) {
                     <template #icon>
                       <svg-icon name="ep:search" />
                     </template>
-                    筛选
+                    {{ t('common.queryText') }}
                   </el-button>
                   <el-button type="primary" @click="resetQuery()">
-                    重置
+                    {{ t('common.resetText') }}
                   </el-button>
                   <el-button type="primary" link @click="data.searchFold = !fold">
                     <template #icon>
                       <svg-icon :name="fold ? 'i-ep:caret-bottom' : 'i-ep:caret-top'" />
                     </template>
-                    {{ fold ? '展开' : '收起' }}
+                    {{ fold ? t('component.form.unfold') : t('component.form.putAway') }}
                   </el-button>
                 </el-form-item>
               </el-col>
@@ -290,13 +293,13 @@ function onDel(row?: any) {
           <template #icon>
             <svg-icon name="ep:plus" />
           </template>
-          新增
+          {{ t('common.title.add') }}
         </el-button>
         <el-button size="default" :disabled="!data.batch.selectionDataList.length" type="danger" @click="onDel()">
           <template #icon>
             <svg-icon name="ep:delete" />
           </template>
-          删除
+          {{ t('common.title.delete') }}
         </el-button>
       </el-space>
       <ElTable
@@ -304,27 +307,27 @@ function onDel(row?: any) {
         highlight-current-row @sort-change="sortChange" @selection-change="data.batch.selectionDataList = $event"
       >
         <el-table-column v-if="data.batch.enable" type="selection" align="center" fixed />
-        <el-table-column align="center" label="序号" width="100">
+        <el-table-column align="center" :label="t('component.table.index')" width="100">
           <template #default="{ $index }">
             {{ (pagination.size * (pagination.page - 1)) + $index + 1 }}
           </template>
         </el-table-column>
       <#list fields as field>
         <#if field.isList && !field.isLogicDeleteField>
-        <el-table-column key="${field.javaField}" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.meta.${field.javaField}')"<#if field.echoStr?? && field.echoStr?trim != ''> prop="echoMap.${field.javaField}"<#else> prop="${field.javaField}"</#if><#if field.width?? && field.width?trim != ''> width="${field.width}"</#if><#if field.indexHelpMessage?? && field.indexHelpMessage?trim != ''> helpMessage="${field.indexHelpMessage}"</#if> align="center" />
+        <el-table-column key="${field.javaField}" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')"<#if field.echoStr?? && field.echoStr?trim != ''> prop="echoMap.${field.javaField}"<#else> prop="${field.javaField}"</#if><#if field.width?? && field.width?trim != ''> width="${field.width}"</#if><#if field.indexHelpMessage?? && field.indexHelpMessage?trim != ''> helpMessage="${field.indexHelpMessage}"</#if> align="center" />
         </#if>
       </#list>
-        <el-table-column label="创建时间" prop="createdTime" width="180" sortable="custom" align="center" />
-        <el-table-column label="操作" width="250" align="center" fixed="right">
+        <el-table-column :label="t('kpu.common.createdTime')" prop="createdTime" width="180" sortable="custom" align="center" />
+        <el-table-column :label="t('common.column.action')" width="250" align="center" fixed="right">
           <template #default="scope">
             <el-button type="primary" size="small" plain @click="onView(scope.row)">
-              查 看
+              {{ t('common.title.view') }}
             </el-button>
             <el-button type="primary" size="small" plain @click="onEdit(scope.row)">
-              编 辑
+              {{ t('common.title.edit') }}
             </el-button>
             <el-button type="danger" size="small" plain @click="onDel(scope.row)">
-              删 除
+              {{ t('common.title.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -364,7 +367,7 @@ function onDel(row?: any) {
       display: flex;
       flex-wrap: wrap;
       margin-bottom: -18px;
-      :deep(.el-form-item) {
+      :deep(.el-col) {
         flex: 1 1 300px;
         &:last-child {
           margin-left: auto;

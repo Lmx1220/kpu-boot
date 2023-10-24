@@ -78,49 +78,51 @@ public class OutputFileUtils {
      */
     private static String getFrontOutputFile(GenTable genTable, GenTable subTable, String templatePath, boolean isAbsolute) {
         String outputDir = genTable.getFrontOutputDir();
-        String plusApplicationName = genTable.getPlusApplicationName();
+//        String plusApplicationName = genTable.getPlusApplicationName();
         String plusModuleName = genTable.getPlusModuleName();
         String entityName = StrUtil.lowerFirst(genTable.getEntityName());
 
         String frontOutputFile;
         switch (templatePath) {
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_API:
-                frontOutputFile = StrUtil.format("src/api/{}/{}/{}.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/api/modules/{}/{}.ts", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_MODEL:
-                frontOutputFile = StrUtil.format("src/api/{}/{}/model/{}Model.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/api/modules/{}/model/{}Model.ts", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_EN:
-                frontOutputFile = StrUtil.format("src/locales/lang/en/{}/{}/{}.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/locales/lang/en/{}/{}.ts", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH:
-                frontOutputFile = StrUtil.format("src/locales/lang/zh-CN/{}/{}/{}.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/locales/lang/zh-cn/{}/{}.ts", plusModuleName, entityName);
                 break;
-            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_SCHEMA:
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/schema.tsx", plusApplicationName, plusModuleName, entityName);
+            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE:
+                frontOutputFile = StrUtil.format("src/views/{}/{}/components/FormMode/index.vue", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_INDEX:
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_INDEX:
             case GenCodeConstant.TEMPLATE_WEB_PRO_TREE_INDEX:
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/index.vue", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/views/{}/{}/index.vue", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_EDIT:
-            case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_JUMP_EDIT:
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_EDIT:
-            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_JUMP_EDIT:
             case GenCodeConstant.TEMPLATE_WEB_PRO_TREE_EDIT:
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/Edit.vue", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/views/{}/{}/components/DetailForm/index.vue", plusModuleName, entityName);
+                break;
+            case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_JUMP_EDIT:
+            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_JUMP_EDIT:
+                frontOutputFile = StrUtil.format("src/views/{}/{}/edit.vue", plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_INDEX:
                 String subEntityName = StrUtil.lowerFirst(subTable.getEntityName());
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/{}/index.vue", plusApplicationName, plusModuleName, entityName, subEntityName);
+                frontOutputFile = StrUtil.format("src/views/{}/{}/index.vue", plusModuleName, entityName, subEntityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_DATA:
                 subEntityName = StrUtil.lowerFirst(subTable.getEntityName());
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/{}/{}.data.tsx", plusApplicationName, plusModuleName, entityName, subEntityName, subEntityName);
+                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/{}.data.tsx", plusModuleName, entityName, subEntityName, subEntityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_TREE_TREE:
-                frontOutputFile = StrUtil.format("src/views/{}/{}/{}/Tree.vue", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/views/{}/{}/Tree.vue", plusModuleName, entityName);
                 break;
             default:
                 return outputDir;
@@ -369,7 +371,7 @@ public class OutputFileUtils {
                 return CollUtil.isNotEmpty(fileOverrideConfig) && fileOverrideConfig.get(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_INDEX) != null ?
                         fileOverrideConfig.get(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_INDEX) :
                         defStrategy.getIndexEditTreeFileOverride();
-            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_SCHEMA:
+            case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE:
                 return defStrategy.getDataFileOverride();
             default:
                 return FileOverrideStrategyEnum.OVERRIDE;

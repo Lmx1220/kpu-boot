@@ -96,11 +96,10 @@ public interface GenCodeConstant {
      */
     String TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH = "/templates/webplus/simple/typescript/langZh.ts.ftl";
     /**
-     * 单表 tsx
+     * 单表 formMode
      */
-    String TEMPLATE_WEB_PRO_SIMPLE_DATA = "/templates/webplus/simple/typescript/data.tsx.ftl";
 
-    String TEMPLATE_WEB_PRO_SIMPLE_SCHEMA = "/templates/webplus/simple/typescript/schema.tsx.ftl";
+    String TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE = "/templates/webplus/simple/vue/formMode.vue.ftl";
     /**
      * 单表 列表页
      */

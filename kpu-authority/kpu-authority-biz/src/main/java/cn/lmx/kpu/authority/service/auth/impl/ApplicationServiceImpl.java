@@ -10,7 +10,7 @@ import cn.lmx.kpu.authority.dao.auth.ApplicationMapper;
 import cn.lmx.kpu.authority.dto.auth.ApplicationPageQuery;
 import cn.lmx.kpu.authority.dto.auth.ApplicationResultVO;
 import cn.lmx.kpu.authority.dto.auth.ApplicationSaveVO;
-import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateVo;
+import cn.lmx.kpu.authority.dto.auth.ApplicationUpdateVO;
 import cn.lmx.kpu.authority.entity.auth.Application;
 import cn.lmx.kpu.authority.manager.auth.ApplicationManager;
 import cn.lmx.kpu.authority.service.auth.ApplicationService;
@@ -37,7 +37,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class ApplicationServiceImpl extends SuperCacheServiceImpl<ApplicationManager, Long, Application, ApplicationSaveVO, ApplicationUpdateVo, ApplicationPageQuery, ApplicationResultVO> implements ApplicationService {
+public class ApplicationServiceImpl extends SuperCacheServiceImpl<ApplicationManager, Long, Application, ApplicationSaveVO, ApplicationUpdateVO, ApplicationPageQuery, ApplicationResultVO> implements ApplicationService {
 
 
     @Override
