@@ -58,7 +58,7 @@ public class TemplateUtils {
             templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_MODEL);
             templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_EN);
             templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH);
-            templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE);
+
 
             if (TplEnum.TREE.eq(tplType)) {
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_TREE_INDEX);
@@ -68,6 +68,7 @@ public class TemplateUtils {
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_JUMP_EDIT);
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_EDIT);
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_INDEX);
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE);
                 // 从表
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_INDEX);
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_MAIN_SUB_DATA);
@@ -76,6 +77,7 @@ public class TemplateUtils {
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_JUMP_EDIT);
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_EDIT);
                 templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_INDEX);
+                templates.add(GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE);
             }
         }
         return templates;

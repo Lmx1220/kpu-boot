@@ -5,16 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author tangyh
+ * @author lmx
  * @version v1.0
  * @date 2022/4/20 5:15 PM
- * @create [2022/4/20 5:15 PM ] [tangyh] [初始创建]
  */
 public class FileInsertUtilTest {
 
     //测试方法
     public static void main(String[] args) throws IOException {
-//        FileInsertUtil ic = FileInsertUtil.of("/Users/tangyh/Downloads/EchoDictType.java", "String sssss = \"asfasf\";", "123131a");
+//        FileInsertUtil ic = FileInsertUtil.of("/Users/lmx/Downloads/EchoDictType.java", "String sssss = \"asfasf\";", "123131a");
 //        ic.insertFile();
 //        String insert = ic.insert();
 

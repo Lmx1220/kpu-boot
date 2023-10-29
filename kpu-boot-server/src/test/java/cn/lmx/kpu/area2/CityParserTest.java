@@ -57,7 +57,7 @@ public class CityParserTest {
         获取统计局数据, 注意：areaLevel 抓取的层级 从0开始，0-省 1-市 2-区 3-镇 4-乡
         CityParser 122行： countyArea.setChildren(parseTowntr(fullName + countyName, COMMON_URL + href.subSequence(2, 5).toString() + "/" + href));
         */
-        List<Area> list = cityParser.parseProvinces(3);
+        List<Area> list = cityParser.parseProvinces(1);
 
         // 持久化
         sqlCityParserDecorator.parseProvinces(list);

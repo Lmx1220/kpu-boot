@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import DetailForm from './components/DetailForm/index.vue'
 import useSettingsStore from '@/store/modules/settings'
+import type { ActionEnum } from '@/enums/commonEnum'
 import eventBus from '@/util/eventBus'
 
 defineOptions({
@@ -15,7 +16,7 @@ const { t } = useI18n()
 const form = ref<InstanceType<typeof DetailForm>>()
 
 const type = computed(() => {
-  return route.params.type as 'add' | 'edit' | 'view'
+  return route.params.type as ActionEnum
 })
 const tiltel = computed(() => {
   return `${r'${'}t(`common.title.${r'${type}'}`)}${table.comment}`

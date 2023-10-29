@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { get } from 'lodash-es'
 import { useI18n } from 'vue-i18n'
 import FormMode from './components/FormMode/index.vue'
+import { ActionEnum } from '@/enums/commonEnum'
 import yesOrNoEnum from '@/enums/common/yesOrNoEnum'
 import { enumComponentProps, dictComponentProps } from '@/util/common'
 import type { ${table.entityName}PageQuery, ${table.entityName}ResultVO } from '@/api/modules/${table.plusModuleName}/model/${table.entityName?uncap_first}Model'
@@ -55,9 +56,7 @@ const data: Ref<DataConfig<${table.entityName}PageQuery, ${table.entityName}Resu
   },
   // 列表数据
   dataList: [],
-  dicts: new Map(),
 })
-data.value.dicts?.set('YesOrNoEnum', yesOrNoEnum.enum())
 
 const table = ref<InstanceType<typeof ElTable>>()
 
@@ -115,19 +114,19 @@ function sortChange({ prop, order }: any) {
   onSortChange(prop, order).then(() => getDataList())
 }
 
-function onCreate() {
+function onAdd() {
   if (data.value.formMode === 'router') {
     router.push({
-      name: '${plusName}${table.entityName}Create',
+      name: '${plusName}${table.entityName}Add',
       params: {
-        type: 'add',
+        type: ActionEnum.ADD,
       },
     })
   }
   else {
     data.value.formModeProps.id = ''
     data.value.formModeProps.visible = true
-    data.value.formModeProps.type = 'add'
+    data.value.formModeProps.type = ActionEnum.ADD
   }
 }
 
@@ -137,14 +136,14 @@ function onEdit(row: any) {
       name: '${plusName}${table.entityName}Edit',
       params: {
         id: row.id,
-        type: 'edit',
+        type: ActionEnum.EDIT,
       },
     })
   }
   else {
     data.value.formModeProps.id = row.id
     data.value.formModeProps.visible = true
-    data.value.formModeProps.type = 'edit'
+    data.value.formModeProps.type = ActionEnum.EDIT
   }
 }
 
@@ -154,14 +153,14 @@ function onView(row: any) {
       name: '${plusName}${table.entityName}Detail',
       params: {
         id: row.id,
-        type: 'view',
+        type: ActionEnum.VIEW,
       },
     })
   }
   else {
     data.value.formModeProps.id = row.id
     data.value.formModeProps.visible = true
-    data.value.formModeProps.type = 'view'
+    data.value.formModeProps.type = ActionEnum.VIEW
   }
 }
 
@@ -188,7 +187,7 @@ function onDel(row?: any) {
 
 <template>
   <div :class="{ 'absolute-container': data.tableAutoHeight }">
-    <page-header title="${table.swaggerComment}" />
+    <page-header :title="t('system.area.table.title')" />
     <page-main>
       <search-bar
         :fold="data.searchFold"
@@ -237,8 +236,8 @@ function onDel(row?: any) {
                     </#if>
                   <#if field.javaType == "Boolean" && field.component == 'RadioGroup'>
                   >
-                    <el-radio v-for="(item, index) in data.dicts?.get('YesOrNoEnum')" :key="index" :label="item?.value">
-                      {{ item?.label }}
+                    <el-radio v-for="(item, index) in yesOrNoEnum.enum()" :key="index" :label="item.value">
+                      {{ item.label }}
                     </el-radio>
                   </El${field.component}>
                   <#else>
@@ -289,7 +288,7 @@ function onDel(row?: any) {
       </search-bar>
       <el-divider border-style="dashed" />
       <el-space wrap>
-        <el-button type="primary" size="default" @click="onCreate">
+        <el-button type="primary" size="default" @click="onAdd">
           <template #icon>
             <svg-icon name="ep:plus" />
           </template>
@@ -334,7 +333,7 @@ function onDel(row?: any) {
       </ElTable>
       <el-pagination :current-page="pagination.page" :total="pagination.total" :page-size="pagination.size" :page-sizes="pagination.sizes" :layout="pagination.layout" :hide-on-single-page="false" class="pagination" background @size-change="sizeChange" @current-change="currentChange" />
     </page-main>
-    <FormMode v-if="['dialog', 'drawer'].includes(data.formMode)" :id="data.formModeProps.id" v-model="data.formModeProps.visible" :mode="data.formMode" @success="getDataList" />
+    <FormMode v-if="['dialog', 'drawer'].includes(data.formMode)" :id="data.formModeProps.id" v-model="data.formModeProps.visible" :type="data.formModeProps.type" :mode="data.formMode" @success="getDataList" />
   </div>
 </template>
 

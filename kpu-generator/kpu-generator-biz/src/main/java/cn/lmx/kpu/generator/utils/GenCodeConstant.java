@@ -130,9 +130,9 @@ public interface GenCodeConstant {
      */
     String TEMPLATE_WEB_PRO_MAIN_SUB_INDEX = "/templates/webplus/mainSub/vue/subIndex.vue.ftl";
     /**
-     * 主从页面 从表列表页tsx
+     * 主从页面 从表列表页ts
      */
-    String TEMPLATE_WEB_PRO_MAIN_SUB_DATA = "/templates/webplus/mainSub/typescript/subData.tsx.ftl";
+    String TEMPLATE_WEB_PRO_MAIN_SUB_DATA = "/templates/webplus/mainSub/typescript/subData.ts.ftl";
 
     /**
      * 树结构主页

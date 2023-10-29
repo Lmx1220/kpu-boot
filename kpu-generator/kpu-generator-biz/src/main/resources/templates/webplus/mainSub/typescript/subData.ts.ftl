@@ -1,16 +1,15 @@
-import { useI18n } from '/@/hooks/web/useI18n';
-import { VxeGridPropTypes } from 'vxe-table';
-import { FormSchemaExt } from '/@/api/${projectPrefix}/common/formValidateService';
+import type { VxeGridPropTypes } from 'vxe-table'
+import type { FormSchemaExt } from '@/api/modules/common/formValidateService'
 
-const { t } = useI18n();
+const { t } = useI18nL()
 
-export const formItems = () => {
+export function formItems(): Partial<any>[] {
   return [
 <#list sub.fields as field>
   <#if field.isQuery && !field.isLogicDeleteField>
     {
       field: '${field.javaField}',
-      title: t('${sub.table.plusApplicationName}.${sub.table.plusModuleName}.${sub.table.entityName?uncap_first}.${field.javaField}'),
+      title: t('${sub.table.plusModuleName}.${sub.table.entityName?uncap_first}.${field.javaField}'),
       span: 6,
       folding: <#if field_index gt 3>true<#else>false</#if>,
       itemRender: { name: '${field.vxeComponent!'$input'}', props: { placeholder: '请输入' } },
@@ -46,7 +45,7 @@ export const columns = (): VxeGridPropTypes.Columns => {
   <#if field.isList && !field.isLogicDeleteField>
     {
       field: '${field.javaField}',
-      title: t('${sub.table.plusApplicationName}.${sub.table.plusModuleName}.${sub.table.entityName?uncap_first}.${field.javaField}'),
+      title: t('${sub.table.plusModuleName}.${sub.table.entityName?uncap_first}.${field.javaField}'),
       editRender: { name: '${field.vxeComponent!'$input'}', attrs: { placeholder: '请输入' } },
     },
   </#if>

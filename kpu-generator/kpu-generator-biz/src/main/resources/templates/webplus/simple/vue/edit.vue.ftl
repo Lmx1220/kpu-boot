@@ -2,20 +2,27 @@
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import type { FormSchemaExt } from '@/api/modules/common/formValidateService'
+import { getValidateRuleObj } from '@/api/modules/common/formValidateService'
+import { ActionEnum, VALIDATE_API } from '@/enums/commonEnum'
 import yesOrNoEnum from '@/enums/common/yesOrNoEnum'
 import { enumComponentProps, dictComponentProps } from '@/util/common'
 import type { FormConfig } from '#/global'
-import crud${table.entityName} from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
+import crud${table.entityName}, { Api } from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
 
 export interface Props {
   id?: string
-  type?: 'add' | 'edit' | 'view'
+  type?: ActionEnum
 }
 
 const props = withDefaults(defineProps<Props>(), {
   id: '',
-  type: 'view',
+  type: ActionEnum.ADD,
 })
+
+function customFormSchemaRules(_: ActionEnum): Partial<FormSchemaExt>[] {
+  return []
+}
 
 defineOptions({
   name: 'DetailForm',
@@ -29,12 +36,19 @@ const data = ref<FormConfig>({
   },
   rules: {
   },
-  dicts: new Map(),
 })
-data.value.dicts?.set('YesOrNoEnum', yesOrNoEnum.enum())
 const form = ref<FormInstance>()
 
-onMounted(() => {
+onMounted(async () => {
+  if (unref(props.type) !== ActionEnum.VIEW) {
+    const validateApi = Api[VALIDATE_API[unref(props.type)]]
+    await getValidateRuleObj(validateApi, customFormSchemaRules(props.type)).then(async (rules) => {
+      rules && (data.value.rules = rules)
+      setTimeout(() => {
+        form.value?.clearValidate()
+      }, 200)
+    })
+  }
   if (data.value.form.id !== '') {
     getInfo()
   }
@@ -52,8 +66,8 @@ defineExpose({
   submit(callback: any) {
     form.value?.validate(async (valid) => {
       if (valid) {
-        if (props.type !== 'view') {
-          if (props.type === 'edit') {
+        if (props.type !== ActionEnum.VIEW) {
+          if (props.type === ActionEnum.EDIT) {
             await crud${table.entityName}.update(data.value.form)
           }
           else {
@@ -81,7 +95,7 @@ defineExpose({
       <#list fields as field>
         <#if field.isEdit && !field.isLogicDeleteField>
         <el-col>
-          <el-form-item :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')">
+          <el-form-item prop="${field.javaField}" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')">
             <<#if field.component?starts_with("Api")>${field.component}<#elseif field.component?ends_with("TimePicker")>ElTimePicker<#elseif field.component?ends_with("Picker")>ElDatePicker<#elseif field.component=="IconPicker">${field.component}<#elseif field.component=="InputTextArea" || field.component == "InputPassword" >ElInput<#else>El${field.component}</#if> v-model="data.form.${field.javaField}"
               <#if field.component=="InputTextArea">
               type="textarea"
@@ -119,8 +133,8 @@ defineExpose({
               :disabled="props.type === 'view'"
             <#if field.javaType == "Boolean" && field.component == 'RadioGroup'>
             >
-              <el-radio v-for="(item, index) in data.dicts?.get('YesOrNoEnum')" :key="index" :label="item?.value">
-                {{ item?.label }}
+              <el-radio v-for="(item, index) in yesOrNoEnum.enum()" :key="index" :label="item.value">
+                {{ item.label }}
               </el-radio>
             </El${field.component}>
             <#else>

@@ -1,418 +1,384 @@
-<template>
-  <PageWrapper dense contentFullHeight>
-    <BasicTable @register="registerTable">
-      <template #toolbar>
-<#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-        <a-button type="primary" @click="handleImport">{{ t('common.title.import') }}</a-button>
-        <a-button type="primary" @click="handleExport">{{ t('common.title.export') }}</a-button>
-</#if>
-        <#if table.deleteShow>
-        <a-button
-          type="primary"
-          color="error"
-          preIcon="ant-design:delete-outlined"
-          @click="handleBatchDelete"
-          <#if table.deleteAuth?? && table.deleteAuth != ''>
-          v-hasAnyPermission="['${table.deleteAuth}']"
-          </#if>
-        >
-          {{ t('common.title.delete') }}
-        </a-button>
-        </#if>
-        <#if table.addShow>
-        <a-button
-          type="primary"
-          preIcon="ant-design:plus-outlined"
-          @click="handleAdd"
-        <#if table.addAuth?? && table.addAuth != ''>
-          v-hasAnyPermission="['${table.addAuth}']"
-        </#if>
-        >
-          {{ t('common.title.add') }}
-        </a-button>
-        </#if>
-      </template>
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'action'">
-          <TableAction
-            :actions="[
-              <#if table.viewShow>
-              {
-                tooltip: t('common.title.view'),
-                icon: 'ant-design:search-outlined',
-                onClick: handleView.bind(null, record),
-              },
-              </#if>
-              <#if table.editShow>
-              {
-                tooltip: t('common.title.edit'),
-                icon: 'ant-design:edit-outlined',
-                onClick: handleEdit.bind(null, record),
-                <#if table.editAuth?? && table.editAuth != ''>
-                auth: '${table.editAuth}',
-                </#if>
-              },
-              </#if>
-              <#if table.copyShow>
-              {
-                tooltip: t('common.title.copy'),
-                icon: 'ant-design:copy-outlined',
-                <#if table.copyAuth?? && table.copyAuth != ''>
-                auth: '${table.copyAuth}',
-                </#if>
-                popConfirm: {
-                  title: t('common.tips.confirmCopy'),
-                  confirm: handleCopy.bind(null, record),
-                },
-              },
-              </#if>
-              <#if table.deleteShow>
-              {
-                tooltip: t('common.title.delete'),
-                icon: 'ant-design:delete-outlined',
-                color: 'error',
-                <#if table.deleteAuth?? && table.deleteAuth != ''>
-                auth: '${table.deleteAuth}',
-                </#if>
-                popConfirm: {
-                  title: t('common.tips.confirmDelete'),
-                  confirm: handleDelete.bind(null, record),
-                },
-              },
-              </#if>
-            ]"
-            :stopButtonPropagation="true"
-          />
-        </template>
-      </template>
-    </BasicTable>
-    <#if table.popupType == POPUP_TYPE_MODAL>
-    <EditModal @register="registerModal" @success="handleSuccess" />
-    <#elseif table.popupType == POPUP_TYPE_DRAWER>
-    <EditModal @register="registerDrawer" @success="handleSuccess" />
-    </#if>
-<#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-    <PreviewExcelModel
-      width="70%"
-      @register="exportRegister"
-      @success="handleExportSuccess"
-      :exportApi="exportFile"
-      :previewApi="exportPreview"
-    />
-    <ImpExcelModel
-      @register="importRegister"
-      @success="handleImportSuccess"
-      :api="importFile"
-      templateHref=""
-    />
-</#if>
-  </PageWrapper>
-</template>
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  <#if table.popupType == POPUP_TYPE_MODAL || table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-  import { useModal } from '/@/components/Modal';
-  </#if>
-  <#if table.popupType == POPUP_TYPE_DRAWER>
-  import { useDrawer } from '/@/components/Drawer';
-  <#elseif table.popupType == POPUP_TYPE_JUMP>
-  import { useRouter } from 'vue-router';
-  </#if>
-  <#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-  import { ImpExcelModel, PreviewExcelModel } from '/@/components/Poi';
-  </#if>
-  import { <#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>handleSearchInfoByCreateTime, </#if>handleFetchParams } from '/@/utils/${projectPrefix}/common';
-  import { ActionEnum } from '/@/enums/commonEnum';
-  <#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-  import { copy, page, remove, importFile, exportFile, exportPreview } from '/@/api/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}';
-  <#else>
-  import { copy, page, remove } from '/@/api/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}';
-  </#if>
-  import { columns, searchFormSchema } from '../../../../../../../../../../../../../Downloads/lamp-generator/lamp-generator-server/src/main/resources/templates/webplus/mainSub/vue${table.entityName?uncap_first}.data';
-  <#if table.popupType == POPUP_TYPE_MODAL || table.popupType == POPUP_TYPE_DRAWER >
-  import EditModal from './edit.vue.ftl';
-  </#if>
+<script lang="ts" setup>
+import type { Ref } from 'vue'
+import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
+import { get } from 'lodash-es'
+import { useI18n } from 'vue-i18n'
+import FormMode from './components/FormMode/index.vue'
+import { ActionEnum } from '@/enums/commonEnum'
+import yesOrNoEnum from '@/enums/common/yesOrNoEnum'
+import { enumComponentProps, dictComponentProps } from '@/util/common'
+import type { ${table.entityName}PageQuery, ${table.entityName}ResultVO } from '@/api/modules/${table.plusModuleName}/model/${table.entityName?uncap_first}Model'
+import crud${table.entityName} from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
+import eventBus from '@/util/eventBus'
+import usePagination from '@/util/usePagination.js'
+import type { DataConfig } from '@/types/global'
 
-  export default defineComponent({
-    // 若需要开启页面缓存，请将此参数跟菜单名保持一致
-    name: '${table.menuName}',
-    components: {
-      BasicTable,
-      PageWrapper,
-      TableAction,
-    <#if table.popupType == POPUP_TYPE_MODAL || table.popupType == POPUP_TYPE_DRAWER >
-      EditModal,
-    </#if>
-    <#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-      ImpExcelModel,
-      PreviewExcelModel,
-    </#if>
-    },
-    setup() {
-      const { t } = useI18n();
-      const { createMessage, createConfirm } = useMessage();
-      <#if table.popupType == POPUP_TYPE_MODAL>
-      const [registerModal, { openModal }] = useModal();
-      <#elseif table.popupType == POPUP_TYPE_DRAWER>
-      const [registerDrawer, { openDrawer }] = useDrawer();
-      <#elseif table.popupType == POPUP_TYPE_JUMP>
-      const { replace } = useRouter();
-      const menuName = '编辑${table.menuName}';
-      </#if>
+defineOptions({
+  name: '${plusName}${table.entityName}',
+})
+const {
+  pagination,
+  search,
+  getParams,
+  onSizeChange,
+  onCurrentChange,
+  onSortChange,
+  resetQuery,
+} = usePagination<${table.entityName}PageQuery>()
+const router = useRouter()
+const { t } = useI18n()
+// const route = useRoute()
+const defaultQuery = {
+  daterange: [],
+}
+const data: Ref<DataConfig<${table.entityName}PageQuery, ${table.entityName}ResultVO>> = ref({
+  loading: false,
+  tableAutoHeight: true,
+  /**
+   * 详情展示模式
+   * router 路由跳转
+   * dialog 对话框
+   * drawer 抽屉
+   */
+  formMode: '<#if table.popupType == POPUP_TYPE_MODAL>dialog<#elseif table.popupType == POPUP_TYPE_DRAWER>drawer<#else>router</#if>',
+  // 详情
+  formModeProps: {
+    visible: false,
+    id: '',
+  },
+  // 搜索
+  search,
+  searchFold: false,
+  // 批量操作
+  batch: {
+    enable: false,
+    selectionDataList: [],
+  },
+  // 列表数据
+  dataList: [],
+})
 
-      // 表格
-      const [registerTable, { reload, getSelectRowKeys<#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>, getForm</#if> }] = useTable({
-        title: t('${table.plusApplicationName}.${table.plusModuleName}.${table.entityName?uncap_first}.table.title'),
-        api: page,
-        columns: columns(),
-        formConfig: {
-          name: '${table.entityName}Search',
-          labelWidth: 120,
-          schemas: searchFormSchema(),
-          autoSubmitOnEnter: true,
-          resetButtonOptions: {
-            preIcon: 'ant-design:rest-outlined',
-          },
-          submitButtonOptions: {
-            preIcon: 'ant-design:search-outlined',
-          },
-        },
-        beforeFetch: handleFetchParams,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        rowKey: 'id',
-        rowSelection: {
-          type: 'checkbox',
-          columnWidth: 40,
-        },
-        actionColumn: {
-          width: 200,
-          title: t('common.column.action'),
-          dataIndex: 'action',
-        },
-      });
+const table = ref<InstanceType<typeof ElTable>>()
 
-      <#if table.copyShow>
-      // 直接复制
-      async function handleCopy(record: Recordable, e: Event) {
-        e?.stopPropagation();
-        await copy(record.id);
-        createMessage.success(t('common.tips.copySuccess'));
-        handleSuccess();
-      }
-      </#if>
-      <#if table.addShow>
-      // 弹出新增页面
-      function handleAdd() {
-        <#if table.popupType == POPUP_TYPE_MODAL>
-        openModal(true, {
-          type: ActionEnum.ADD,
-        });
-        <#elseif table.popupType == POPUP_TYPE_DRAWER>
-        openDrawer(true, {
-          type: ActionEnum.ADD,
-        });
-        <#else>
-        replace({
-          // name 一定要唯一，且跟存储在def_resource表中的name一致
-          name: menuName,
-          params: { id: '0' },
-          query: { type: ActionEnum.ADD },
-        });
-        </#if>
-      }
-      </#if>
+onMounted(() => {
+  getDataList()
+  if (data.value.formMode === 'router') {
+    eventBus.on('get-data-list', () => {
+      getDataList()
+    })
+  }
+})
 
-      <#if table.viewShow>
-      // 弹出查看页面
-      function handleView(record: Recordable, e: Event) {
-        e?.stopPropagation();
-        <#if table.popupType == POPUP_TYPE_MODAL>
-        openModal(true, {
-          record,
-          type: ActionEnum.VIEW,
-        });
-        <#elseif table.popupType == POPUP_TYPE_DRAWER>
-        openDrawer(true, {
-          record,
-          type: ActionEnum.VIEW,
-        });
-        <#else>
-        replace({
-          // name 一定要唯一，且跟存储在def_resource表中的name一致
-          name: menuName,
-          params: { id: record.id },
-          query: { type: ActionEnum.VIEW },
-        });
-        </#if>
-      }
-      </#if>
+onBeforeUnmount(() => {
+  if (data.value.formMode === 'router') {
+    eventBus.off('get-data-list')
+  }
+})
 
-      <#if table.editShow>
-      // 弹出编辑页面
-      function handleEdit(record: Recordable, e: Event) {
-        e?.stopPropagation();
-        <#if table.popupType == POPUP_TYPE_MODAL>
-        openModal(true, {
-          record,
-          type: ActionEnum.EDIT,
-        });
-        <#elseif table.popupType == POPUP_TYPE_DRAWER>
-        openDrawer(true, {
-          record,
-          type: ActionEnum.EDIT,
-        });
-        <#else>
-        replace({
-          // name 一定要唯一，且跟存储在def_resource表中的name一致
-          name: menuName,
-          params: { id: record.id },
-          query: { type: ActionEnum.EDIT },
-        });
-        </#if>
-      }
-      </#if>
+async function getDataList(current?: number) {
+  if (current && current === 1) {
+    pagination.value.page = current
+  }
+  data.value.loading = true
+  const params = getParams<${table.entityName}PageQuery>({
+    ...data.value.search,
+  },
+  {
+    type: 'daterange',
+    name: 'daterange',
+    prop: 'createdTime',
+  },
+  )
+  const res = await crud${table.entityName}.page(params)
+  data.value.dataList = get(res, 'records', [])
+  pagination.value.total = Number(res.total)
+  pagination.value.page = Number(get(res, 'current', 1))
+  // pagination.value.size = res.size
+  setTimeout(() => {
+    data.value.loading = false
+  }, 100)
+}
 
-      // 新增或编辑成功回调
-      function handleSuccess() {
-        reload();
-      }
+// 每页数量切换
+function sizeChange(size: number) {
+  onSizeChange(size).then(() => getDataList())
+}
 
-      <#if table.deleteShow>
-      async function batchDelete(ids: string[]) {
-        await remove(ids);
-        createMessage.success(t('common.tips.deleteSuccess'));
-        handleSuccess();
-      }
+// 当前页码切换（翻页）
+function currentChange(page = 1) {
+  onCurrentChange(page).then(() => getDataList())
+}
 
-      // 点击单行删除
-      function handleDelete(record: Recordable, e: Event) {
-        e?.stopPropagation();
-        if (record?.id) {
-          batchDelete([record.id]);
-        }
-      }
+// 字段排序
+function sortChange({ prop, order }: any) {
+  onSortChange(prop, order).then(() => getDataList())
+}
 
-      // 点击批量删除
-      function handleBatchDelete() {
-        const ids = getSelectRowKeys();
-        if (!ids || ids.length <= 0) {
-          createMessage.warning(t('common.tips.pleaseSelectTheData'));
-          return;
-        }
-        createConfirm({
-          iconType: 'warning',
-          content: t('common.tips.confirmDelete'),
-          onOk: async () => {
-            try {
-              await batchDelete(ids);
-            } catch (e) {}
-          },
-        });
-      }
-      </#if>
+function onAdd() {
+  if (data.value.formMode === 'router') {
+    router.push({
+      name: '${plusName}${table.entityName}Add',
+      params: {
+        type: ActionEnum.ADD,
+      },
+    })
+  }
+  else {
+    data.value.formModeProps.id = ''
+    data.value.formModeProps.visible = true
+    data.value.formModeProps.type = ActionEnum.ADD
+  }
+}
 
-      <#if table.superClass == SUPER_CLASS_SUPER_POI_CLASS>
-      // 导入弹窗
-      const [importRegister, importModal] = useModal();
-      // 导出弹窗
-      const [exportRegister, exportModel] = useModal();
-      // 导入成功
-      function handleImportSuccess(_data) {
-        reload();
-      }
+function onEdit(row: any) {
+  if (data.value.formMode === 'router') {
+    router.push({
+      name: '${plusName}${table.entityName}Edit',
+      params: {
+        id: row.id,
+        type: ActionEnum.EDIT,
+      },
+    })
+  }
+  else {
+    data.value.formModeProps.id = row.id
+    data.value.formModeProps.visible = true
+    data.value.formModeProps.type = ActionEnum.EDIT
+  }
+}
 
-      // 导出成功
-      function handleExportSuccess() {
-        reload();
-      }
+function onView(row: any) {
+  if (data.value.formMode === 'router') {
+    router.push({
+      name: '${plusName}${table.entityName}Detail',
+      params: {
+        id: row.id,
+        type: ActionEnum.VIEW,
+      },
+    })
+  }
+  else {
+    data.value.formModeProps.id = row.id
+    data.value.formModeProps.visible = true
+    data.value.formModeProps.type = ActionEnum.VIEW
+  }
+}
 
-      // 点击导出按钮
-      function handleExport() {
-        const form = getForm();
-        let params = { ...form.getFieldsValue() };
-        params = handleSearchInfoByCreateTime(params);
-        params.extra = {
-          ...{
-            fileName: t('${table.plusApplicationName}.${table.plusModuleName}.${table.entityName?uncap_first}.table.title'),
-          },
-          ...params?.extra,
-        };
-        params.size = 20000;
-
-        exportModel.openModal(true, {
-          params,
-        });
-      }
-
-      return {
-        t,
-        registerTable,
-        <#if table.popupType == POPUP_TYPE_MODAL>
-        registerModal,
-        <#elseif table.popupType == POPUP_TYPE_DRAWER>
-        registerDrawer,
-        </#if>
-        <#if table.viewShow>
-        handleView,
-        </#if>
-        <#if table.addShow>
-        handleAdd,
-        </#if>
-        <#if table.copyShow>
-        handleCopy,
-        </#if>
-        <#if table.editShow>
-        handleEdit,
-        </#if>
-        <#if table.deleteShow>
-        handleDelete,
-        handleBatchDelete,
-        </#if>
-        handleSuccess,
-        importRegister,
-        handleImport: importModal.openModal,
-        handleImportSuccess,
-        importFile,
-        exportRegister,
-        handleExport,
-        handleExportSuccess,
-        exportFile,
-        exportPreview,
-      };
-      <#else>
-      return {
-        t,
-        registerTable,
-        <#if table.popupType == POPUP_TYPE_MODAL>
-        registerModal,
-        <#elseif table.popupType == POPUP_TYPE_DRAWER>
-        registerDrawer,
-        </#if>
-        <#if table.viewShow>
-        handleView,
-        </#if>
-        <#if table.addShow>
-        handleAdd,
-        </#if>
-        <#if table.copyShow>
-        handleCopy,
-        </#if>
-        <#if table.editShow>
-        handleEdit,
-        </#if>
-        <#if table.deleteShow>
-        handleDelete,
-        handleBatchDelete,
-        </#if>
-        handleSuccess,
-      };
-      </#if>
-    },
-  });
+function onDel(row?: any) {
+  let ids: string[] = []
+  if (row) {
+    ids.push(row.id)
+  }
+  else {
+    ids = data.value.batch.selectionDataList.map(item => item.id ?? '')
+  }
+  ElMessageBox.confirm(`确认删除数量「${r"${"}ids.length}」吗？`, '确认信息').then(() => {
+    crud${table.entityName}.remove(ids).then(() => {
+      getDataList()
+      ElMessage.success({
+        message: t('common.tips.deleteSuccess'),
+        center: true,
+      })
+    })
+  }).catch(() => {
+  })
+}
 </script>
+
+<template>
+  <div :class="{ 'absolute-container': data.tableAutoHeight }">
+    <page-header :title="t('system.area.table.title')" />
+    <page-main>
+      <search-bar
+        :fold="data.searchFold"
+        :show-toggle="false"
+      >
+        <template #default="{ fold }">
+          <el-form class="search-form" :model="data.search" size="default" inline-message label-width="120" label-suffix="：">
+            <el-row>
+            <#list fields as field>
+              <#if field.isQuery && !field.isLogicDeleteField>
+              <el-col :span="6">
+                <el-form-item class="el-row" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')">
+                  <<#if field.component?starts_with("Api")>${field.component}<#elseif field.component?ends_with("TimePicker")>ElTimePicker<#elseif field.component?ends_with("Picker")>ElDatePicker<#elseif field.component=="IconPicker">${field.component}<#elseif field.component=="InputTextArea" || field.component == "InputPassword" >ElInput<#else>El${field.component}</#if> v-model="data.search.${field.javaField}"
+                    <#if field.component=="InputTextArea">
+                    type="textarea"
+                    <#elseif field.component=="InputPassword">
+                    type="password"
+                    </#if>
+                    <#if field.javaType =="LocalDateTime">
+                    type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
+                    <#elseif field.javaType =="LocalDate">
+                    type="date" value-format="YYYY-MM-DD"
+                    <#elseif field.javaType =="LocalTime">
+                    format="HH:mm:ss"
+                    <#elseif field.enumStr?? && field.enumStr?trim != ''>
+  <#--                     生成的 EnumEnum 常量不存在时，请自行在 EnumEnum 中添加: ${field.javaType} = '${field.javaType}',-->
+  <#--                     请确保后端方法：OauthGeneralController#findEnumListByType 能扫描到后端的枚举类： ${field.javaType}，否则无法回显！-->
+  <#--                     ...enumDef.componentProps(${table.plusApplicationName?cap_first}EnumEnum.${field.javaType}),-->
+                    v-bind="enumComponentProps('${field.javaType}')"
+                    :placeholder="t('common.chooseText')"
+                    <#elseif field.dictType?? && field.dictType?trim != ''>
+                      <#if field.dictType?contains('"')>
+                    v-bind="dictComponentProps('${field.dictType}')"
+                    :placeholder="t('common.chooseText')"
+                      <#else>
+                        <#assign dotIndex=field.dictType?last_index_of('.') + 1 />
+                        <#assign dt=field.dictType?substring(dotIndex?number) />
+  <#--                      // 建议将魔法数参数移动到 DictEnum 中，并添加为: ${field.dictType!?replace(".","_")} = '${dt!?upper_case}';-->
+  <#--                      // '${dt!?upper_case}' 需要与 后端DictType类中的参数 以及 def_dict表中的key字段 保持一致，否则无法回显！-->
+  <#--                      // ...dictDef.componentProps(${table.plusApplicationName?cap_first}DictEnum.${field.dictType!?replace(".","_")}),-->
+                    v-bind="dictComponentProps('${dt!?upper_case}')"
+                    :placeholder="t('common.chooseText')"
+                      </#if>
+                    <#else>
+                    :placeholder="t('common.inputText')"
+                    </#if>
+                  <#if field.javaType == "Boolean" && field.component == 'RadioGroup'>
+                  >
+                    <el-radio v-for="(item, index) in yesOrNoEnum.enum()" :key="index" :label="item.value">
+                      {{ item.label }}
+                    </el-radio>
+                  </El${field.component}>
+                  <#else>
+                  />
+                  </#if>
+                </el-form-item>
+              </el-col>
+              </#if>
+            </#list>
+              <el-col :span="6">
+                <el-form-item v-show="!fold" :label="t('kpu.common.createdTime')">
+                  <el-date-picker
+                    v-model="data.search.daterange"
+                    :default-time="[
+                      new Date(2000, 1, 1, 0, 0, 0),
+                      new Date(2000, 2, 1, 23, 59, 59),
+                    ]"
+                    size="default"
+                    range-separator=":"
+                    style="width: 250px;"
+                    type="daterange"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item>
+                  <el-button type="primary" @click="currentChange()">
+                    <template #icon>
+                      <svg-icon name="ep:search" />
+                    </template>
+                    {{ t('common.queryText') }}
+                  </el-button>
+                  <el-button type="primary" @click="resetQuery()">
+                    {{ t('common.resetText') }}
+                  </el-button>
+                  <el-button type="primary" link @click="data.searchFold = !fold">
+                    <template #icon>
+                      <svg-icon :name="fold ? 'i-ep:caret-bottom' : 'i-ep:caret-top'" />
+                    </template>
+                    {{ fold ? t('component.form.unfold') : t('component.form.putAway') }}
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </template>
+      </search-bar>
+      <el-divider border-style="dashed" />
+      <el-space wrap>
+        <el-button type="primary" size="default" @click="onAdd">
+          <template #icon>
+            <svg-icon name="ep:plus" />
+          </template>
+          {{ t('common.title.add') }}
+        </el-button>
+        <el-button size="default" :disabled="!data.batch.selectionDataList.length" type="danger" @click="onDel()">
+          <template #icon>
+            <svg-icon name="ep:delete" />
+          </template>
+          {{ t('common.title.delete') }}
+        </el-button>
+      </el-space>
+      <ElTable
+        ref="table" v-loading="data.loading" class="list-table" height="100%" :data="data.dataList" border stripe
+        highlight-current-row @sort-change="sortChange" @selection-change="data.batch.selectionDataList = $event"
+      >
+        <el-table-column v-if="data.batch.enable" type="selection" align="center" fixed />
+        <el-table-column align="center" :label="t('component.table.index')" width="100">
+          <template #default="{ $index }">
+            {{ (pagination.size * (pagination.page - 1)) + $index + 1 }}
+          </template>
+        </el-table-column>
+      <#list fields as field>
+        <#if field.isList && !field.isLogicDeleteField>
+        <el-table-column key="${field.javaField}" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')"<#if field.echoStr?? && field.echoStr?trim != ''> prop="echoMap.${field.javaField}"<#else> prop="${field.javaField}"</#if><#if field.width?? && field.width?trim != ''> width="${field.width}"</#if><#if field.indexHelpMessage?? && field.indexHelpMessage?trim != ''> helpMessage="${field.indexHelpMessage}"</#if> align="center" />
+        </#if>
+      </#list>
+        <el-table-column :label="t('kpu.common.createdTime')" prop="createdTime" width="180" sortable="custom" align="center" />
+        <el-table-column :label="t('common.column.action')" width="250" align="center" fixed="right">
+          <template #default="scope">
+            <el-button type="primary" size="small" plain @click="onView(scope.row)">
+              {{ t('common.title.view') }}
+            </el-button>
+            <el-button type="primary" size="small" plain @click="onEdit(scope.row)">
+              {{ t('common.title.edit') }}
+            </el-button>
+            <el-button type="danger" size="small" plain @click="onDel(scope.row)">
+              {{ t('common.title.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </ElTable>
+      <el-pagination :current-page="pagination.page" :total="pagination.total" :page-size="pagination.size" :page-sizes="pagination.sizes" :layout="pagination.layout" :hide-on-single-page="false" class="pagination" background @size-change="sizeChange" @current-change="currentChange" />
+    </page-main>
+    <FormMode v-if="['dialog', 'drawer'].includes(data.formMode)" :id="data.formModeProps.id" v-model="data.formModeProps.visible" :type="data.formModeProps.type" :mode="data.formMode" @success="getDataList" />
+  </div>
+</template>
+
+<style lang="scss" scoped>
+  .el-pagination {
+    margin-top: 20px;
+  }
+  .absolute-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .page-header {
+      margin-bottom: 0;
+    }
+    .page-main {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      .search-container {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .page-main {
+    .search-form {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: -18px;
+      :deep(.el-col) {
+        flex: 1 1 300px;
+        &:last-child {
+          margin-left: auto;
+          .el-form-item__content {
+            justify-content: flex-end;
+          }
+        }
+      }
+
+    }
+    .el-divider {
+      margin-inline:-20px;width: calc(100% + 40px);
+    }
+  }
+</style>

@@ -8,9 +8,9 @@ import { RequestEnum } from '@/enums/httpEnum'
 import type { PageParams, PageResult } from '@/api/model/baseModel'
 
 const MODULAR = '${table.entityName?uncap_first}'
-const ServicePrefix = '/${table.serviceName}'
+const ServicePrefix = ''
 
-export const Api = {
+export const Api: Record<string, any> = {
   Page: { url: `${r"${"}ServicePrefix}/${r"${MODULAR}"}/page`, method: RequestEnum.POST } as AxiosRequestConfig,
 <#if table.addShow || table.copyShow>
   Save: { url: `${r"${"}ServicePrefix}/${r"${MODULAR}"}`, method: RequestEnum.POST } as AxiosRequestConfig,

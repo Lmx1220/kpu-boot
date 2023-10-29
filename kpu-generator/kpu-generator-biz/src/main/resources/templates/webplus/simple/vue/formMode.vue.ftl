@@ -23,7 +23,7 @@ const emits = defineEmits<{
 }>()
 
 defineOptions({
-    name: 'FormMode',
+  name: 'FormMode',
 })
 
 const myVisible = computed({
@@ -60,7 +60,12 @@ function onCancel() {
   <div>
     <el-dialog
       v-if="props.mode === 'dialog'" v-model="myVisible" :close-on-click-modal="false" :title="title"
-      append-to-body destroy-on-close width="600px"
+      append-to-body destroy-on-close
+    <#if table.tplType == TPL_MAIN_SUB>
+      width="70%"
+      <#else>
+      width="50%"
+    </#if>
     >
       <DetailForm ref="form" v-bind="$props" />
       <template #footer>
