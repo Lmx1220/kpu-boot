@@ -25,3 +25,4 @@ docker run --name redis -p 6379:6379 \
 -v /Users/lmx/Documents/ConfigTool/redis/redis.conf:/etc/redis/redis.conf -d redis \
 redis-server /etc/redis/redis.conf
 ```
+2
