@@ -1,3 +1,4 @@
+<#assign authCode = "${table.plusApplicationName}:${table.plusModuleName?replace("/", ":")}:${table.entityName?uncap_first}"/>
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
 import type { Ref } from 'vue'
@@ -6,7 +7,7 @@ import type { VxeGridInstance, VxeGridListeners, VxeGridProps, VxeTablePropTypes
 import { columns, customFormSchemaRules, formItems } from './${sub.table.entityName?uncap_first}.data'
 import { ActionEnum, VALIDATE_API } from '@/enums/commonEnum'
 import { getValidateRuleObj } from '@/api/modules/common/formValidateService'
-import { Api, page as pageRequest } from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
+import { Api, page as pageRequest } from '@/api/modules/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}'
 
 const { t } = useI18n()
 const ${table.subJavaFieldName} = ref<string>('')
@@ -177,6 +178,7 @@ defineExpose({
 <template>
   <div class="kpu-j-vxe-table">
     <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
+    <#if table.viewShow>
       <template #operate="{ row }">
         <el-popconfirm
           icon-color="#626AEF"
@@ -184,14 +186,13 @@ defineExpose({
           @confirm="removeRowEvent(row)"
         >
           <template #reference>
-            <el-button
-              circle
-            >
+            <el-button<#if table.deleteAuth?? && table.deleteAuth != ''> v-auth="'${authCode}:delete'"</#if> :title="t('common.title.view')" circle>
               <svg-icon name="ep:delete" />
             </el-button>
           </template>
         </el-popconfirm>
       </template>
+    </#if>
     </vxe-grid>
   </div>
 </template>

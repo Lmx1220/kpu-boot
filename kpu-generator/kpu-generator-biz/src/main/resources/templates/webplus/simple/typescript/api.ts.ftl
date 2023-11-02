@@ -8,6 +8,7 @@ import { RequestEnum } from '@/enums/httpEnum'
 import type { PageParams, PageResult } from '@/api/model/baseModel'
 
 const MODULAR = '${table.entityName?uncap_first}'
+<#--开启微服网关需要设置/${table.plusApplicationName}-->
 const ServicePrefix = ''
 
 export const Api: Record<string, any> = {

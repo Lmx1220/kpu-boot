@@ -78,7 +78,7 @@ public class SourceCodeUtils {
         map.put("parent", genTable.getParent());
         map.put("utilParent", genTable.getParent());
         map.put("moduleName", genTable.getModuleName());
-        map.put("plusName",StrHelper.convertUriToCamelCase(genTable.getPlusModuleName()));
+        map.put("plusName",StrHelper.convertUriToCamelCase(genTable.getPlusApplicationName()+"/"+genTable.getPlusModuleName()));
         // 导包信息
         Map<String, Object> packageMap = PackageUtils.getPackage(genTable, generatorConfig);
         map.put("package", packageMap);

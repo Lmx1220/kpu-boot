@@ -1,3 +1,4 @@
+<#assign i18n = "${table.plusApplicationName}.${table.plusModuleName?replace('/', '.')}.${table.entityName?uncap_first}">
 <script lang="ts" setup>
 import { omit } from 'lodash-es'
 import { useI18n } from 'vue-i18n'
@@ -95,7 +96,7 @@ const title = computed(() => {
 
 <template>
   <div :class="{ 'absolute-container': data.tableAutoHeight }">
-    <page-header :title="t('system.area.table.title')" />
+    <page-header :title="t('${i18n}.table.title')" />
     <div class="page-main">
       <LayoutContainer hide-left-side-toggle left-side-width="50%">
         <template #leftSide>
@@ -120,7 +121,7 @@ const title = computed(() => {
           </div>
           <div v-show="!data.formModeProps.type" class="container">
             <div class="empty">
-              请在左侧点击选择{{ t('system.area.table.title') }}
+              请在左侧点击选择{{ t('${i18n}.table.title') }}
             </div>
           </div>
         </template>

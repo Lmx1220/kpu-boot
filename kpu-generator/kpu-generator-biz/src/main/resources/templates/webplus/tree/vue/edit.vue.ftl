@@ -1,3 +1,4 @@
+<#assign i18n = "${table.plusApplicationName}.${table.plusModuleName?replace('/', '.')}.${table.entityName?uncap_first}">
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { cloneDeep } from 'lodash-es'
@@ -9,7 +10,7 @@ import { ActionEnum, VALIDATE_API } from '@/enums/commonEnum'
 import yesOrNoEnum from '@/enums/common/yesOrNoEnum'
 import { enumComponentProps, dictComponentProps } from '@/util/common'
 import type { FormConfig } from '#/global'
-import crud${table.entityName}, { Api } from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
+import crud${table.entityName}, { Api } from '@/api/modules/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}'
 
 export interface Props {
   id?: string
@@ -111,7 +112,7 @@ defineExpose({
       <#list fields as field>
         <#if field.isEdit && !field.isLogicDeleteField>
         <el-col>
-          <el-form-item prop="${field.javaField}" :label="t('${table.plusModuleName}.${table.entityName?uncap_first}.${field.javaField}')">
+          <el-form-item prop="${field.javaField}" :label="t('${i18n}.${field.javaField}')">
             <<#if field.component?starts_with("Api")>${field.component}<#elseif field.component?ends_with("TimePicker")>ElTimePicker<#elseif field.component?ends_with("Picker")>ElDatePicker<#elseif field.component=="IconPicker">${field.component}<#elseif field.component=="InputTextArea" || field.component == "InputPassword" >ElInput<#else>El${field.component}</#if> v-model="data.form.${field.javaField}"
               <#if field.component=="InputTextArea">
               type="textarea"

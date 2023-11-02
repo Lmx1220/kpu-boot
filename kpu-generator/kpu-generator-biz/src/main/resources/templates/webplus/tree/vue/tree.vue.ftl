@@ -1,9 +1,11 @@
+<#assign authCode = "${table.plusApplicationName}:${table.plusModuleName?replace('/', ':')}:${table.entityName?uncap_first}"/>
+<#assign i18n = "${table.plusApplicationName}.${table.plusModuleName?replace('/', '.')}.${table.entityName?uncap_first}">
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { eachTree, findNodeByKey } from '@/util/helper/treeHelper'
-import crud${table.entityName} from '@/api/modules/${table.plusModuleName}/${table.entityName?uncap_first}'
+import crud${table.entityName} from '@/api/modules/${table.plusApplicationName}/${table.plusModuleName}/${table.entityName?uncap_first}'
 import BasicTree from '@/components/BasicTree/index.vue'
 
 const emits = defineEmits<{
@@ -118,16 +120,26 @@ defineExpose({
 
 <template>
   <el-space alignment="center" style="margin-bottom: 8px;" wrap>
-    <el-button type="primary" @click="onAdd()">
+  <#if table.addShow>
+    <el-button<#if table.addAuth?? && table.addAuth != '' > v-auth="'${authCode}:add'"</#if> type="primary" @click="onAdd()">
+      <template #icon>
+        <svg-icon name="ep:plus" />
+      </template>
       {{ t('common.title.addRoot') }}
     </el-button>
-    <el-button :disabled="!dataTree.batch.selectionDataList.length" type="primary" @click="onDel()">
+  </#if>
+  <#if table.deleteShow>
+    <el-button<#if table.deleteAuth?? && table.deleteAuth != '' > v-auth="'${authCode}:delete'"</#if> type="primary" @click="onDel()">
+      <template #icon>
+        <svg-icon name="ep:plus" />
+      </template>
       {{ t('common.title.delete') }}
     </el-button>
+  </#if>
   </el-space>
   <BasicTree
     ref="treeRef"
-    :title="t('system.area.table.title')"
+    :title="t('${i18n}.table.title')"
     toolbar
     checkable
     search
@@ -138,17 +150,25 @@ defineExpose({
     @select="handleSelect"
     @change="onCheckChange"
   >
+  <#if table.viewShow || table.editShow || table.deleteShow>
     <template #action="{ data }">
-      <el-button text @click.stop="onAdd(data)">
+    <#if table.addShow>
+      <el-button<#if table.addAuth?? && table.addAuth != ''> v-auth="'${authCode}:view'"</#if> text @click.stop="onAdd(data)">
         {{ t('common.title.add') }}
       </el-button>
-      <el-button text @click.stop="onEdit(data)">
+    </#if>
+    <#if table.addShow>
+      <el-button<#if table.editAuth?? && table.editAuth != ''> v-auth="'${authCode}:edit'"</#if> text @click.stop="onEdit(data)">
         {{ t('common.title.edit') }}
       </el-button>
-      <el-button text @click.stop="onDel(data)">
+    </#if>
+    <#if table.addShow>
+      <el-button<#if table.deleteAuth?? && table.deleteAuth != ''> v-auth="'${authCode}:delete'"</#if> text @click.stop="onDel(data)">
         {{ t('common.title.delete') }}
       </el-button>
+    </#if>
     </template>
+  </#if>
   </BasicTree>
 </template>
 
