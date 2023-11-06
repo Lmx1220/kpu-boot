@@ -1,7 +1,7 @@
-export default {
-  object: '${table.swaggerComment!}',
-  table: { title: '${table.swaggerComment!}列表' },
+{
+  "object": "${table.swaggerComment!}",
+  table: { title: "${table.swaggerComment!}列表" },
 <#list allFields as field>
-  ${field.javaField}: '${field.swaggerComment!}',
+  "${field.javaField}": "${field.swaggerComment!}",
 </#list>
 }
