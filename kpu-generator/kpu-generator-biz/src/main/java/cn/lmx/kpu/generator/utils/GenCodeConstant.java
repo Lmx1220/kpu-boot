@@ -90,11 +90,11 @@ public interface GenCodeConstant {
     /**
      * 多语言英文
      */
-    String TEMPLATE_WEB_PRO_SIMPLE_LANG_EN = "/templates/webplus/simple/typescript/langEn.ts.ftl";
+    String TEMPLATE_WEB_PRO_SIMPLE_LANG_EN = "/templates/webplus/simple/typescript/langEn.json.ftl";
     /**
      * 多语言中文
      */
-    String TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH = "/templates/webplus/simple/typescript/langZh.ts.ftl";
+    String TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH = "/templates/webplus/simple/typescript/langZh.json.ftl";
     /**
      * 单表 formMode
      */

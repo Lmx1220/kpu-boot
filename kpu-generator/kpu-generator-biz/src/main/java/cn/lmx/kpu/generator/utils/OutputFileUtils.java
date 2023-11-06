@@ -91,10 +91,10 @@ public class OutputFileUtils {
                 frontOutputFile = StrUtil.format("src/api/modules/{}/{}/model/{}Model.ts", plusApplicationName, plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_EN:
-                frontOutputFile = StrUtil.format("src/locales/lang/en/{}/{}/{}.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/locales/lang/en/{}/{}/{}.json", plusApplicationName, plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_LANG_ZH:
-                frontOutputFile = StrUtil.format("src/locales/lang/zh-cn/{}/{}/{}.ts", plusApplicationName, plusModuleName, entityName);
+                frontOutputFile = StrUtil.format("src/locales/lang/zh-cn/{}/{}/{}.json", plusApplicationName, plusModuleName, entityName);
                 break;
             case GenCodeConstant.TEMPLATE_WEB_PRO_SIMPLE_FORM_MODE:
                 frontOutputFile = StrUtil.format("src/views/{}/{}/{}/components/FormMode/index.vue", plusApplicationName, plusModuleName, entityName);

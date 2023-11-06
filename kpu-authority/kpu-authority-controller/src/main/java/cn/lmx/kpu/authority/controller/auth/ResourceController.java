@@ -8,6 +8,7 @@ import cn.lmx.basic.annotation.log.SysLog;
 import cn.lmx.basic.annotation.security.PreAuth;
 import cn.lmx.basic.base.R;
 import cn.lmx.basic.base.controller.SuperCacheController;
+import cn.lmx.basic.base.entity.Entity;
 import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.dozer.DozerUtils;
 import cn.lmx.basic.interfaces.echo.EchoService;
@@ -22,10 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -150,6 +148,18 @@ public class ResourceController extends SuperCacheController<ResourceService, Lo
         ResourceResultVO resultVO = BeanPlusUtil.toBean(superService.getByIdCache(id), getResultVOClass());
         resultVO.setAuths(superService.findAuthByParentId(resultVO.getId()));
         return R.success(resultVO);
+    }
+    @Override
+    @SysLog("'查询:' + #id")
+    public R<ResourceResultVO> getDetail(@RequestParam("id") Long id) {
+        Entity entity = getSuperService().getById(id);
+        ResourceResultVO resultVO = BeanPlusUtil.toBean(entity, getResultVOClass());
+        resultVO.setAuths(superService.findAuthByParentId(resultVO.getId()));
+        EchoService echoService = getEchoService();
+        if (echoService != null) {
+            echoService.action(resultVO);
+        }
+        return success(resultVO);
     }
 
     /**
