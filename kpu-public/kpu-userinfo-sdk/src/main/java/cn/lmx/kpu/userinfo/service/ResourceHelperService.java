@@ -3,7 +3,9 @@ package cn.lmx.kpu.userinfo.service;
 import cn.hutool.core.collection.CollUtil;
 import cn.lmx.basic.cache.repository.CacheOps;
 import cn.lmx.basic.context.ContextUtil;
+import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.model.cache.CacheKey;
+import cn.lmx.basic.utils.StrPool;
 import cn.lmx.kpu.common.cache.auth.ResourceCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserAuthCacheKeyBuilder;
 import cn.lmx.kpu.common.cache.auth.UserResourceCacheKeyBuilder;
@@ -50,7 +52,9 @@ public class ResourceHelperService {
     public List<SysResource> findVisibleAuth(ResourceQueryDTO resource) {
         ContextUtil.setDatabaseBase();
         CacheKey userResourceKey = new UserAuthCacheKeyBuilder().key(resource.getUserId());
-
+        if (resource.getUserId().equals(StrPool.ADMIN_ID)){
+            return menuHelperMapper.selectList(Wraps.<SysResource>lbQ().eq(SysResource::getResourceType, 30));
+        }
         List<SysResource> visibleResource = new ArrayList<>();
         List<Long> list = cacheOps.get(userResourceKey, k -> {
             visibleResource.addAll(menuHelperMapper.findVisibleAuth(resource));

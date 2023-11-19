@@ -12,10 +12,7 @@ import cn.lmx.basic.database.mybatis.conditions.Wraps;
 import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.model.cache.CacheKey;
 import cn.lmx.basic.model.cache.CacheKeyBuilder;
-import cn.lmx.basic.utils.ArgumentAssert;
-import cn.lmx.basic.utils.BeanPlusUtil;
-import cn.lmx.basic.utils.DefValueHelper;
-import cn.lmx.basic.utils.TreeUtil;
+import cn.lmx.basic.utils.*;
 import cn.lmx.kpu.authority.dao.auth.ResourceMapper;
 import cn.lmx.kpu.authority.dto.auth.AuthDto;
 import cn.lmx.kpu.authority.dto.auth.ResourceTreeVO;
@@ -79,7 +76,10 @@ public class ResourceManagerImpl extends SuperCacheManagerImpl<ResourceMapper, R
     public List<Resource> findVisibleResource(String group, Long userId) {
         CacheKey userResourceKey = new UserResourceCacheKeyBuilder().key(userId);
         List<Resource> visibleResource = new ArrayList<>();
-
+        if (userId.equals(StrPool.ADMIN_ID)) {
+            visibleResource.addAll(baseMapper.selectList(Wraps.<Resource>lbQ().in(Resource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.VIEW.getCode()).orderByAsc(Resource::getSortValue)));
+            return menuListFilterGroup(group, visibleResource);
+        }
         List<Long> list = cacheOps.get(userResourceKey, k -> {
             log.debug("userResourceKey={}", userResourceKey.getKey());
             visibleResource.addAll(baseMapper.findVisibleResource(userId));
