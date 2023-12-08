@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>cn.lmx.kpu</groupId>
+        <artifactId>kpu-dependencies-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../kpu-dependencies-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>kpu-msg</artifactId>
+    <name>${project.artifactId}</name>
+    <description>消息服务</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>kpu-sms-controller</module>
+        <module>kpu-sms-biz</module>
+        <module>kpu-msg-entity</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.lmx.kpu</groupId>
+                <artifactId>kpu-msg-entity</artifactId>
+                <version>${kpu-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lmx.kpu</groupId>
+                <artifactId>kpu-sms-biz</artifactId>
+                <version>${kpu-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lmx.kpu</groupId>
+                <artifactId>kpu-sms-controller</artifactId>
+                <version>${kpu-project.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    
+</project>
