@@ -110,7 +110,7 @@ public class OrgServiceImpl extends SuperCacheServiceImpl<OrgManager, Long, Org,
     @Transactional(readOnly = true)
     @Override
     public Map<Serializable, Object> findByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findOrg(ids), Org::getId, org -> org);
+        return CollHelper.uniqueIndex(findOrg(ids).stream().filter(Objects::nonNull).collect(Collectors.toList()), Org::getId, org -> org);
     }
 
 
