@@ -54,7 +54,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
             return R.fail(CAPTCHA_ERROR.build("请输入验证码"));
         }
         CacheKey cacheKey = new CaptchaCacheKeyBuilder().key(key);
-        String code = cacheOps.get(cacheKey);
+        String code = (String) cacheOps.get(cacheKey).getValue();
         if (StrUtil.isEmpty(code)) {
             return R.fail(CAPTCHA_ERROR.build("验证码已过期"));
         }

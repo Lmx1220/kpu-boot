@@ -47,7 +47,7 @@ public class OnlineServiceImpl implements OnlineService {
         List<String> keys = cacheOps.scan(pattern);
 
         return keys.stream()
-                .map(key -> (Online) cacheOps.get(key))
+                .map(key -> (Online) cacheOps.get(key).getValue())
                 .filter(ObjectUtil::isNotEmpty).filter(item ->
                         StrUtil.isEmpty(nickName) || StrUtil.contains(item.getNickName(), nickName)
                 ).collect(Collectors.toList());
@@ -116,7 +116,7 @@ public class OnlineServiceImpl implements OnlineService {
     }
 
     private void evictPreviousToken(CacheKey key) {
-        Online online = cacheOps.get(key, false);
+        Online online = (Online) cacheOps.get(key, false).getValue();
         if (online != null && StrUtil.isNotEmpty(online.getToken())) {
             String previousToken = online.getToken();
             // TOKEN_USER_ID:{token} === T

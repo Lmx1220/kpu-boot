@@ -84,7 +84,7 @@ public class ResourceManagerImpl extends SuperCacheManagerImpl<ResourceMapper, R
             log.debug("userResourceKey={}", userResourceKey.getKey());
             visibleResource.addAll(baseMapper.findVisibleResource(userId));
             return visibleResource.stream().map(Resource::getId).collect(Collectors.toList());
-        });
+        }).getValue();
         log.debug("visibleResource={}", visibleResource.size());
         if (!visibleResource.isEmpty()) {
             visibleResource.forEach(this::setCache);

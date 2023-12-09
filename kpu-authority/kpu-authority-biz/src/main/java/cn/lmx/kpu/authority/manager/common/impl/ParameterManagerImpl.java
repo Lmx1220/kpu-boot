@@ -114,7 +114,7 @@ public class ParameterManagerImpl extends SuperManagerImpl<ParameterMapper, Para
             return parameter == null ? defVal : parameter.getValue();
         };
         CacheKey cacheKey = new ParameterKeyCacheKeyBuilder().key(key);
-        return cacheOps.get(cacheKey, loader);
+        return cacheOps.get(cacheKey, loader).getValue();
     }
 
     @Override

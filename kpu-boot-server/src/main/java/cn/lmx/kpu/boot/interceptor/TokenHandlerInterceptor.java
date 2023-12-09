@@ -111,7 +111,7 @@ public class TokenHandlerInterceptor implements AsyncHandlerInterceptor {
             // 5，验证 是否在其他设备登录或被挤下线
             String newToken = JwtUtil.getToken(token);
             CacheKey cacheKey = new TokenUserIdCacheKeyBuilder().key(newToken);
-            String tokenCache = cacheOps.get(cacheKey);
+            String tokenCache = (String) cacheOps.get(cacheKey).getValue();
 
             if (StrUtil.isEmpty(tokenCache)) {
                 log.error("token is empty");

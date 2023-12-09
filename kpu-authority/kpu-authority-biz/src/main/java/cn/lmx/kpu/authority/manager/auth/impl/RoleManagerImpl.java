@@ -108,7 +108,7 @@ public class RoleManagerImpl extends SuperCacheManagerImpl<RoleMapper, Role> imp
         List<Long> list = cacheOps.get(cacheKey, k -> {
             roleList.addAll(baseMapper.findRoleByUserId(userId));
             return roleList.stream().map(Role::getId).collect(Collectors.toList());
-        });
+        }).getValue();
 
         if (!roleList.isEmpty()) {
             roleList.forEach(this::setCache);

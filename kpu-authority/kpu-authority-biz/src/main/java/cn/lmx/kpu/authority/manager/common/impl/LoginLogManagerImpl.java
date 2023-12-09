@@ -149,27 +149,27 @@ public class LoginLogManagerImpl extends SuperManagerImpl<LoginLogMapper, LoginL
     @Override
     public Long getTotalLoginPv() {
         CacheKey loginLogTotalKey = TotalLoginPvCacheKeyBuilder.build();
-        return Convert.toLong(cacheOps.get(loginLogTotalKey, key -> this.baseMapper.getTotalLoginPv()), 0L);
+        return Convert.toLong(cacheOps.get(loginLogTotalKey, key -> this.baseMapper.getTotalLoginPv()).getValue(), 0L);
     }
 
     @Override
     public Long getTodayLoginPv() {
         LocalDate now = LocalDate.now();
         CacheKey loginLogTodayKey = TodayLoginPvCacheKeyBuilder.build(now);
-        return Convert.toLong(cacheOps.get(loginLogTodayKey, k -> this.baseMapper.getTodayLoginPv(now.format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT)))), 0L);
+        return Convert.toLong(cacheOps.get(loginLogTodayKey, k -> this.baseMapper.getTodayLoginPv(now.format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT)))).getValue(), 0L);
     }
 
     @Override
     public Long getTotalLoginIv() {
         CacheKey key = TotalLoginIvCacheKeyBuilder.build();
-        return Convert.toLong(cacheOps.get(key, k -> this.baseMapper.getTotalLoginIv()), 0L);
+        return Convert.toLong(cacheOps.get(key, k -> this.baseMapper.getTotalLoginIv()).getValue(), 0L);
     }
 
     @Override
     public Long getTodayLoginIv() {
         LocalDate now = LocalDate.now();
         CacheKey loginLogTodayIpKey = TodayLoginIvCacheKeyBuilder.build(now);
-        return Convert.toLong(cacheOps.get(loginLogTodayIpKey, k -> this.baseMapper.getTodayLoginIv(now.format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT)))), 0L);
+        return Convert.toLong(cacheOps.get(loginLogTodayIpKey, k -> this.baseMapper.getTodayLoginIv(now.format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT)))).getValue(), 0L);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class LoginLogManagerImpl extends SuperManagerImpl<LoginLogMapper, LoginL
                 kv.put("count", String.valueOf(item.get("NUM")));
                 return kv;
             }).collect(Collectors.toList());
-        });
+        }).getValue();
     }
 
     @Override
@@ -199,7 +199,7 @@ public class LoginLogManagerImpl extends SuperManagerImpl<LoginLogMapper, LoginL
                 kv.put("count", String.valueOf(item.get("NUM")));
                 return kv;
             }).collect(Collectors.toList());
-        });
+        }).getValue();
     }
 
     @Override
@@ -214,7 +214,7 @@ public class LoginLogManagerImpl extends SuperManagerImpl<LoginLogMapper, LoginL
                 kv.put("count", String.valueOf(item.get("NUM")));
                 return kv;
             }).collect(Collectors.toList());
-        });
+        }).getValue();
     }
 
     @Override

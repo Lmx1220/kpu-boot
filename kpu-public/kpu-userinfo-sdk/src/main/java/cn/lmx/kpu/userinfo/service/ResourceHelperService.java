@@ -59,7 +59,7 @@ public class ResourceHelperService {
         List<Long> list = cacheOps.get(userResourceKey, k -> {
             visibleResource.addAll(menuHelperMapper.findVisibleAuth(resource));
             return visibleResource.stream().map(SysResource::getId).collect(Collectors.toList());
-        });
+        }).getValue();
 
         if (visibleResource.isEmpty() && CollUtil.isNotEmpty(list)) {
             visibleResource.addAll(menuHelperMapper.selectBatchIds(list));
