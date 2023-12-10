@@ -157,7 +157,7 @@ kpu:
         base-package: cn.lmx.kpu.tenant.controller
       msg:
         title: 消息服务
-        base-package: cn.lmx.kpu.msg.controller;cn.lmx.kpu.sms.controller
+        base-package: cn.lmx.kpu.msg.controller;cn.lmx.kpu.msg.controller
       generator:
         title: 代码生成器服务
         base-package: cn.lmx.kpu.generator.controller

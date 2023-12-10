@@ -15,8 +15,8 @@
     <description>消息服务</description>
     <packaging>pom</packaging>
     <modules>
-        <module>kpu-sms-controller</module>
-        <module>kpu-sms-biz</module>
+        <module>kpu-msg-controller</module>
+        <module>kpu-msg-biz</module>
         <module>kpu-msg-entity</module>
     </modules>
     <dependencyManagement>
@@ -28,12 +28,12 @@
             </dependency>
             <dependency>
                 <groupId>cn.lmx.kpu</groupId>
-                <artifactId>kpu-sms-biz</artifactId>
+                <artifactId>kpu-msg-biz</artifactId>
                 <version>${kpu-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.lmx.kpu</groupId>
-                <artifactId>kpu-sms-controller</artifactId>
+                <artifactId>kpu-msg-controller</artifactId>
                 <version>${kpu-project.version}</version>
             </dependency>
 

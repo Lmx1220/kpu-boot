@@ -18,10 +18,10 @@
     <logger name="cn.lmx.kpu.msg.service" additivity="true" level="${log.level.service}">
         <appender-ref ref="SERVICE_APPENDER"/>
     </logger>
-    <logger name="cn.lmx.kpu.sms.controller" additivity="true" level="${log.level.controller}">
+    <logger name="cn.lmx.kpu.msg.controller" additivity="true" level="${log.level.controller}">
         <appender-ref ref="CONTROLLER_APPENDER"/>
     </logger>
-    <logger name="cn.lmx.kpu.sms.service" additivity="true" level="${log.level.service}">
+    <logger name="cn.lmx.kpu.msg.service" additivity="true" level="${log.level.service}">
         <appender-ref ref="SERVICE_APPENDER"/>
     </logger>
     <logger name="cn.lmx.kpu.file.controller" additivity="true" level="${log.level.controller}">

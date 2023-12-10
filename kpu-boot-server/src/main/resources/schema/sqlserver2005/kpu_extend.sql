@@ -107,7 +107,7 @@ EXEC sp_addextendedproperty 'MS_Description', '业务ID', 'SCHEMA', dbo, 'table'
 EXEC sp_addextendedproperty 'MS_Description', '业务类型;
 #MsgBizType{USER_LOCK:账号锁定;USER_REG:账号申请;WORK_APPROVAL:考勤审批;}', 'SCHEMA', dbo, 'table', e_msg, 'column', biz_type;
 EXEC sp_addextendedproperty 'MS_Description', '消息类型;
-#MsgType{WAIT:待办;NOTIFY:通知;PUBLICITY:公告;WARN:预警;}', 'SCHEMA', dbo, 'table', e_msg, 'column', msg_type;
+#MsgTemplateTypeEnum{WAIT:待办;NOTIFY:通知;PUBLICITY:公告;WARN:预警;}', 'SCHEMA', dbo, 'table', e_msg, 'column', msg_type;
 EXEC sp_addextendedproperty 'MS_Description', '标题', 'SCHEMA', dbo, 'table', e_msg, 'column', title;
 EXEC sp_addextendedproperty 'MS_Description', '内容', 'SCHEMA', dbo, 'table', e_msg, 'column', content;
 EXEC sp_addextendedproperty 'MS_Description', '发布人', 'SCHEMA', dbo, 'table', e_msg, 'column', author;

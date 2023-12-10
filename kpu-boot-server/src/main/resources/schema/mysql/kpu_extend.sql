@@ -97,7 +97,7 @@ CREATE TABLE `e_msg`
     `id`               bigint(20)  NOT NULL COMMENT 'ID',
     `biz_id`           varchar(64)  DEFAULT '' COMMENT '业务ID',
     `biz_type`         varchar(64)  DEFAULT '' COMMENT '业务类型 \n#MsgBizType{USER_LOCK:账号锁定;USER_REG:账号申请;WORK_APPROVAL:考勤审批;}',
-    `msg_type`         varchar(20) NOT NULL COMMENT '消息类型 \n#MsgType{WAIT:待办;NOTIFY:通知;PUBLICITY:公告;WARN:预警;}',
+    `msg_type`         varchar(20) NOT NULL COMMENT '消息类型 \n#MsgTemplateTypeEnum{WAIT:待办;NOTIFY:通知;PUBLICITY:公告;WARN:预警;}',
     `title`            varchar(255) DEFAULT '' COMMENT '标题',
     `content`          text COMMENT '内容',
     `author`           varchar(50)  DEFAULT '' COMMENT '发布人',

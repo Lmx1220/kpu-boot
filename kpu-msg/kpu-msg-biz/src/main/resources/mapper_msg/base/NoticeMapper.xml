@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lmx.kpu.msg.mapper.NoticeMapper">
+    <!--
+    代码生成器 by 2023-12-10 18:14:10
+    自定义sql建议在base文件夹同级新建ext文件夹，并新建同名且同namespace的xml进行编写。方便修改字段时，重新生成此文件。
+-->
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="cn.lmx.kpu.msg.entity.Notice">
+                    <id column="id" property="id"/>
+                        <result column="author" property="author"/>
+                        <result column="auto_read" property="autoRead"/>
+                        <result column="biz_id" property="bizId"/>
+                        <result column="biz_type" property="bizType"/>
+                        <result column="content" property="content"/>
+                        <result column="url" property="url"/>
+                        <result column="title" property="title"/>
+                        <result column="target" property="target"/>
+                        <result column="remind_mode" property="remindMode"/>
+                        <result column="recipient_id" property="recipientId"/>
+                        <result column="msg_id" property="msgId"/>
+                        <result column="read_time" property="readTime"/>
+                        <result column="is_read" property="isRead"/>
+                        <result column="is_handle" property="isHandle"/>
+                        <result column="handle_time" property="handleTime"/>
+                        <result column="created_org_id" property="createdOrgId"/>
+                        <result column="created_time" property="createdTime"/>
+                        <result column="created_by" property="createdBy"/>
+                        <result column="updated_time" property="updatedTime"/>
+                        <result column="updated_by" property="updatedBy"/>
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+            id, author, auto_read, biz_id, biz_type, content, 
+        url, title, target, remind_mode, recipient_id, msg_id, 
+        read_time, is_read, is_handle, handle_time, created_org_id, created_time, 
+        created_by, updated_time, updated_by
+        </sql>
+
+</mapper>

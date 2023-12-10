@@ -1,0 +1,79 @@
+package cn.lmx.kpu.msg.vo.result;
+
+import cn.hutool.core.map.MapUtil;
+import cn.lmx.basic.base.entity.Entity;
+import cn.lmx.basic.interfaces.echo.EchoVO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Map;
+
+/**
+ * <p>
+ * 表单查询方法返回值VO
+ * 接口执行日志记录
+ * </p>
+ *
+ * @author lmx
+ * @date 2023-12-10 18:14:10
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@ApiModel(value = "InterfaceLoggingResultVO", description = "接口执行日志记录")
+public class InterfaceLoggingResultVO extends Entity<Long> implements Serializable, EchoVO {
+
+    private static final long serialVersionUID = 1L;
+
+    private Map<String, Object> echoMap = MapUtil.newHashMap();
+
+    @ApiModelProperty(value = "ID")
+    private Long id;
+
+    /**
+    * 接口日志ID
+    */
+    @ApiModelProperty(value = "接口日志ID")
+    private Long logId;
+    /**
+    * 业务ID
+    */
+    @ApiModelProperty(value = "业务ID")
+    private Long bizId;
+    /**
+    * 请求参数
+    */
+    @ApiModelProperty(value = "请求参数")
+    private String params;
+    /**
+    * 接口返回
+    */
+    @ApiModelProperty(value = "接口返回")
+    private String result;
+    /**
+    * 执行状态
+    */
+    @ApiModelProperty(value = "执行状态")
+    private Boolean status;
+    /**
+    * 异常信息
+    */
+    @ApiModelProperty(value = "异常信息")
+    private String errorMsg;
+    /**
+    * 执行时间
+    */
+    @ApiModelProperty(value = "执行时间")
+    private LocalDateTime execTime;
+
+
+
+}
