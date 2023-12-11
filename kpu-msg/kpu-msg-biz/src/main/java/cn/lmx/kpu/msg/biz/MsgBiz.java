@@ -65,6 +65,10 @@ public class MsgBiz {
     }
 
     private MsgTemplate validAndInit(MsgSendVO data) {
+        ArgumentAssert.notEmpty(data.getRecipientList(), "请填写消息收人");
+        MsgTemplate msgTemplate = msgTemplateService.getByCode(data.getTemplateCode());
+        ArgumentAssert.notNull(msgTemplate, "请先保存消息模板");
+        return msgTemplate;
     }
 
     public Boolean publish(MsgPublishVO data, SysUser sysUser) {
