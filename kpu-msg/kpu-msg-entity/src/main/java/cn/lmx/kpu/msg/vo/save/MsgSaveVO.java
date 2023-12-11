@@ -2,6 +2,7 @@ package cn.lmx.kpu.msg.vo.save;
 
 import cn.lmx.kpu.msg.enumeration.MsgBizType;
 import cn.lmx.kpu.msg.enumeration.MsgTemplateTypeEnum;
+import cn.lmx.kpu.msg.enumeration.SourceType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

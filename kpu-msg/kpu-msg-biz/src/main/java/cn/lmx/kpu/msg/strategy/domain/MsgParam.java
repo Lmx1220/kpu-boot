@@ -1,10 +1,10 @@
 package cn.lmx.kpu.msg.strategy.domain;
 
 import cn.lmx.kpu.file.entity.Appendix;
-import cn.lmx.kpu.msg.entity.ExtendMsg;
-import cn.lmx.kpu.msg.entity.ExtendMsgRecipient;
 import cn.lmx.kpu.msg.entity.Msg;
+import cn.lmx.kpu.msg.entity.MsgRecipient;
 import cn.lmx.kpu.msg.entity.MsgTemplate;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -15,11 +15,16 @@ import java.util.Map;
  * @date 2023/11/19  18:09
  */
 // 入参是调用脚本时自动传入的参数
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder
 public class MsgParam {
     /** 消息内容 */
-    private ExtendMsg extendMsg;
+    private Msg msg;
     /** 消息接收人 */
-    private List<ExtendMsgRecipient> recipientList;
+    private List<MsgRecipient> recipientList;
     /** 采用的消息模板 */
     private MsgTemplate extendMsgTemplate;
     /** 接口需要使用的动态参数 */

@@ -1,6 +1,9 @@
 package cn.lmx.kpu.model.constant;
 
 public interface EchoDictType {
+    interface Base {
+
+    }
     //  @kpu.generator auto insert EchoDictType
 
     interface Tenant {
