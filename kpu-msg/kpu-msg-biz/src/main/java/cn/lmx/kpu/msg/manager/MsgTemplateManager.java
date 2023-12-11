@@ -15,6 +15,7 @@ import cn.lmx.kpu.msg.entity.MsgTemplate;
  */
 public interface MsgTemplateManager extends SuperManager<MsgTemplate> {
 
+    MsgTemplate getByCode(String templateCode);
 }
 
 

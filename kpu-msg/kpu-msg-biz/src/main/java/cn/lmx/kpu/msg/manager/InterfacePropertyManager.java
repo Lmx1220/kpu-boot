@@ -3,6 +3,8 @@ package cn.lmx.kpu.msg.manager;
 import cn.lmx.basic.base.manager.SuperManager;
 import cn.lmx.kpu.msg.entity.InterfaceProperty;
 
+import java.util.Map;
+
 /**
  * <p>
  * 通用业务接口
@@ -15,6 +17,7 @@ import cn.lmx.kpu.msg.entity.InterfaceProperty;
  */
 public interface InterfacePropertyManager extends SuperManager<InterfaceProperty> {
 
+    Map<String, Object> listByInterfaceId(Long id);
 }
 
 

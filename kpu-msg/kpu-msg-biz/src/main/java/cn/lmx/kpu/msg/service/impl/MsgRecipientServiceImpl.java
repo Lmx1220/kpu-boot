@@ -13,6 +13,8 @@ import cn.lmx.kpu.msg.vo.update.MsgRecipientUpdateVO;
 import cn.lmx.kpu.msg.vo.result.MsgRecipientResultVO;
 import cn.lmx.kpu.msg.vo.query.MsgRecipientPageQuery;
 
+import java.util.List;
+
 /**
  * <p>
  * 业务实现类
@@ -31,6 +33,10 @@ public class MsgRecipientServiceImpl extends SuperServiceImpl<MsgRecipientManage
     MsgRecipientUpdateVO, MsgRecipientPageQuery, MsgRecipientResultVO> implements MsgRecipientService {
 
 
+    @Override
+    public List<MsgRecipient> listByMsgId(Long id) {
+        return getSuperManager().listByMsgId(id);
+    }
 }
 
 

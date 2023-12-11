@@ -13,6 +13,8 @@ import cn.lmx.kpu.msg.vo.update.InterfacePropertyUpdateVO;
 import cn.lmx.kpu.msg.vo.result.InterfacePropertyResultVO;
 import cn.lmx.kpu.msg.vo.query.InterfacePropertyPageQuery;
 
+import java.util.Map;
+
 /**
  * <p>
  * 业务实现类
@@ -31,6 +33,10 @@ public class InterfacePropertyServiceImpl extends SuperServiceImpl<InterfaceProp
     InterfacePropertyUpdateVO, InterfacePropertyPageQuery, InterfacePropertyResultVO> implements InterfacePropertyService {
 
 
+    @Override
+    public Map<String, Object> listByInterfaceId(Long id) {
+        return getSuperManager().listByInterfaceId(id);
+    }
 }
 
 

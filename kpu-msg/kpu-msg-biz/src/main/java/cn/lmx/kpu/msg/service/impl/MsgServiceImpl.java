@@ -15,6 +15,7 @@ import cn.lmx.kpu.common.constant.JobConstant;
 import cn.lmx.kpu.common.dto.XxlJobInfoVO;
 import cn.lmx.kpu.model.entity.base.SysUser;
 import cn.lmx.kpu.msg.entity.MsgRecipient;
+import cn.lmx.kpu.msg.entity.MsgTemplate;
 import cn.lmx.kpu.msg.entity.Notice;
 import cn.lmx.kpu.msg.enumeration.MsgTemplateTypeEnum;
 import cn.lmx.kpu.msg.enumeration.SourceType;
@@ -64,7 +65,7 @@ public class MsgServiceImpl extends SuperServiceImpl<MsgManager, Long, Msg, MsgS
     private final NoticeManager noticeManager;
 
     @Override
-    public Boolean send(MsgSendVO data, SysUser sysUser) {
+    public Boolean send(MsgSendVO data, MsgTemplate msgTemplate, SysUser sysUser){
         Msg msg = new Msg();
         //1， 初始化默认参数
         msg.setStatus(TaskStatus.WAITING);

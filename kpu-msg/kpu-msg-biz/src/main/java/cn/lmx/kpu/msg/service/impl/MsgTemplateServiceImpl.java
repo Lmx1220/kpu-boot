@@ -31,6 +31,10 @@ public class MsgTemplateServiceImpl extends SuperServiceImpl<MsgTemplateManager,
     MsgTemplateUpdateVO, MsgTemplatePageQuery, MsgTemplateResultVO> implements MsgTemplateService {
 
 
+    @Override
+    public MsgTemplate getByCode(String templateCode) {
+        return getSuperManager().getByCode(templateCode);
+    }
 }
 
 

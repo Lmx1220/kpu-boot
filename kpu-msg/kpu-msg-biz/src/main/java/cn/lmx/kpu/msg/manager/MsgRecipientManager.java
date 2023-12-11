@@ -3,6 +3,8 @@ package cn.lmx.kpu.msg.manager;
 import cn.lmx.basic.base.manager.SuperManager;
 import cn.lmx.kpu.msg.entity.MsgRecipient;
 
+import java.util.List;
+
 /**
  * <p>
  * 通用业务接口
@@ -15,6 +17,7 @@ import cn.lmx.kpu.msg.entity.MsgRecipient;
  */
 public interface MsgRecipientManager extends SuperManager<MsgRecipient> {
 
+    List<MsgRecipient> listByMsgId(Long id);
 }
 
 

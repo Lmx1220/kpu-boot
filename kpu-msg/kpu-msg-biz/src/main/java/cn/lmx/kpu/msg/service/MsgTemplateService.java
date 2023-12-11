@@ -21,6 +21,7 @@ import cn.lmx.kpu.msg.vo.query.MsgTemplatePageQuery;
 public interface MsgTemplateService extends SuperService<Long, MsgTemplate, MsgTemplateSaveVO,
     MsgTemplateUpdateVO, MsgTemplatePageQuery, MsgTemplateResultVO> {
 
+    MsgTemplate getByCode(String templateCode);
 }
 
 

@@ -3,6 +3,7 @@ package cn.lmx.kpu.msg.service;
 import cn.lmx.basic.base.service.SuperService;
 import cn.lmx.kpu.model.entity.base.SysUser;
 import cn.lmx.kpu.msg.entity.Msg;
+import cn.lmx.kpu.msg.entity.MsgTemplate;
 import cn.lmx.kpu.msg.strategy.domain.MsgPublishVO;
 import cn.lmx.kpu.msg.strategy.domain.MsgSendVO;
 import cn.lmx.kpu.msg.vo.save.MsgSaveVO;
@@ -25,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MsgService extends SuperService<Long, Msg, MsgSaveVO,
     MsgUpdateVO, MsgPageQuery, MsgResultVO> {
 
-    Boolean send(MsgSendVO data, SysUser sysUser);
+    Boolean send(MsgSendVO data, MsgTemplate msgTemplate, SysUser sysUser);
 
     MsgResultVO getResulByI(Long id);
 

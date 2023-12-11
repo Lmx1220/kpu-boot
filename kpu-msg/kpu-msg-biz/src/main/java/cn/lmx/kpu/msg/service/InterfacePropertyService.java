@@ -7,6 +7,8 @@ import cn.lmx.kpu.msg.vo.update.InterfacePropertyUpdateVO;
 import cn.lmx.kpu.msg.vo.result.InterfacePropertyResultVO;
 import cn.lmx.kpu.msg.vo.query.InterfacePropertyPageQuery;
 
+import java.util.Map;
+
 
 /**
  * <p>
@@ -21,6 +23,7 @@ import cn.lmx.kpu.msg.vo.query.InterfacePropertyPageQuery;
 public interface InterfacePropertyService extends SuperService<Long, InterfaceProperty, InterfacePropertySaveVO,
     InterfacePropertyUpdateVO, InterfacePropertyPageQuery, InterfacePropertyResultVO> {
 
+    Map<String, Object> listByInterfaceId(Long id);
 }
 
 

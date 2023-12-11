@@ -7,6 +7,8 @@ import cn.lmx.kpu.msg.vo.update.MsgRecipientUpdateVO;
 import cn.lmx.kpu.msg.vo.result.MsgRecipientResultVO;
 import cn.lmx.kpu.msg.vo.query.MsgRecipientPageQuery;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -21,6 +23,7 @@ import cn.lmx.kpu.msg.vo.query.MsgRecipientPageQuery;
 public interface MsgRecipientService extends SuperService<Long, MsgRecipient, MsgRecipientSaveVO,
     MsgRecipientUpdateVO, MsgRecipientPageQuery, MsgRecipientResultVO> {
 
+    List<MsgRecipient> listByMsgId(Long id);
 }
 
 
