@@ -126,6 +126,10 @@
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-client</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>okhttp</artifactId>
+                    <groupId>com.squareup.okhttp</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- ********************** plugin ********************** -->

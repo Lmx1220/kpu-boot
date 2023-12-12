@@ -30,16 +30,11 @@
             <artifactId>kpu-file-controller</artifactId>
             <version>${kpu-project.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>cn.lmx.kpu</groupId>-->
-        <!--            <artifactId>kpu-msg-controller</artifactId>-->
-        <!--            <version>${kpu-project.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.lmx.kpu</groupId>-->
-        <!--            <artifactId>kpu-sms-controller</artifactId>-->
-        <!--            <version>${kpu-project.version}</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-msg-controller</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
         <dependency>
             <groupId>cn.lmx.kpu</groupId>
             <artifactId>kpu-oauth-controller</artifactId>

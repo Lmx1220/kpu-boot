@@ -1,9 +1,12 @@
 package cn.lmx.kpu.msg.event.listener;
 
+import cn.lmx.kpu.msg.biz.MsgBiz;
+import cn.lmx.kpu.msg.event.MsgSendEvent;
 import cn.lmx.kpu.msg.event.model.MsgEventVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +20,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class MsgSendListener {
-
+    private final MsgBiz msgBiz;
     @Async
-    @EventListener({MsgEventVo.class})
-    public void saveSysLog(MsgEventVo event) {
+    @Order
+    @EventListener({MsgSendEvent.class})
+    public void saveSysLog(MsgSendEvent event) {
+        MsgEventVo source = (MsgEventVo) event.getSource();
+        msgBiz.execSend(source.getMsgId());
 
     }
 }

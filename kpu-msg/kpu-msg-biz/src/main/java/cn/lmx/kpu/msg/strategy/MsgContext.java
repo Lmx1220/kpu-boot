@@ -3,22 +3,17 @@ package cn.lmx.kpu.msg.strategy;
 
 import cn.lmx.basic.utils.SpringUtils;
 import cn.lmx.kpu.msg.entity.*;
-import cn.lmx.kpu.msg.entity.Template;
 import cn.lmx.kpu.msg.enumeration.InterfaceExecModeEnum;
 import cn.lmx.kpu.msg.glue.GlueFactory;
 import cn.lmx.kpu.msg.mapper.MsgTemplateMapper;
-import cn.lmx.kpu.msg.mapper.TaskMapper;
-import cn.lmx.kpu.msg.mapper.TemplateMapper;
 import cn.lmx.kpu.msg.strategy.domain.MsgParam;
 import cn.lmx.kpu.msg.strategy.domain.MsgResult;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import cn.lmx.basic.utils.ArgumentAssert;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 短信发送上下文
@@ -29,16 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 
 public class MsgContext {
-
-    private final TaskMapper msgTaskMapper;
-    private final MsgTemplateMapper msgTemplateMapper;
-
-    public MsgContext(
-            TaskMapper msgTaskMapper,
-            MsgTemplateMapper msgTemplateMapper) {
-        this.msgTaskMapper = msgTaskMapper;
-        this.msgTemplateMapper = msgTemplateMapper;
-    }
 
     /**
      * 根据任务id发送短信

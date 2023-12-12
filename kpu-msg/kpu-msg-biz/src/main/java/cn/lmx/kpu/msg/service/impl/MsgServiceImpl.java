@@ -65,8 +65,10 @@ public class MsgServiceImpl extends SuperServiceImpl<MsgManager, Long, Msg, MsgS
     private final NoticeManager noticeManager;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean send(MsgSendVO data, MsgTemplate msgTemplate, SysUser sysUser){
         Msg msg = new Msg();
+        msg.setType(msgTemplate.getType());
         //1， 初始化默认参数
         msg.setStatus(TaskStatus.WAITING);
         if (msg.getId() == null){

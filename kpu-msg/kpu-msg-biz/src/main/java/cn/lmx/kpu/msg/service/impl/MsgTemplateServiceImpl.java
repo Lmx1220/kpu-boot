@@ -32,8 +32,8 @@ public class MsgTemplateServiceImpl extends SuperServiceImpl<MsgTemplateManager,
 
 
     @Override
-    public MsgTemplate getByCode(String templateCode) {
-        return getSuperManager().getByCode(templateCode);
+    public MsgTemplate getByCode(String code) {
+        return getSuperManager().getByCode(code);
     }
 }
 

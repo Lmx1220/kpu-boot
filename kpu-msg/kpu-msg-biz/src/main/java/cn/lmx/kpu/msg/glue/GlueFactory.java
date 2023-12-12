@@ -3,7 +3,6 @@ package cn.lmx.kpu.msg.glue;
 
 import cn.lmx.kpu.msg.glue.impl.SpringGlueFactory;
 import cn.lmx.kpu.msg.strategy.MsgStrategy;
-import com.xxl.job.core.handler.IJobHandler;
 import groovy.lang.GroovyClassLoader;
 import lombok.SneakyThrows;
 

@@ -46,10 +46,10 @@ public class MsgTemplateResultVO extends Entity<Long> implements Serializable, E
     @ApiModelProperty(value = "接口ID")
     private Long interfaceId;
     /**
-    * 消息类型;[01-短信 02-邮件 03-站内信];@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.MSG_TEMPLATE_TYPE)
+    * 消息类型;[01-短信 02-邮件 03-站内信];@Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.MSG_TEMPLATE_TYPE)
     */
     @ApiModelProperty(value = "消息类型")
-    @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.MSG_TEMPLATE_TYPE)
+    @Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.MSG_TEMPLATE_TYPE)
     private String type;
     /**
     * 模板标识
@@ -102,10 +102,10 @@ public class MsgTemplateResultVO extends Entity<Long> implements Serializable, E
     @ApiModelProperty(value = "备注")
     private String remarks;
     /**
-    * 打开方式;@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_TARGET)[01-页面 02-弹窗 03-新开窗口]
+    * 打开方式;@Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.NOTICE_TARGET)[01-页面 02-弹窗 03-新开窗口]
     */
     @ApiModelProperty(value = "打开方式")
-    @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_TARGET)
+    @Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.NOTICE_TARGET)
     private String target;
     /**
     * 自动已读
@@ -113,10 +113,10 @@ public class MsgTemplateResultVO extends Entity<Long> implements Serializable, E
     @ApiModelProperty(value = "自动已读")
     private Boolean autoRead;
     /**
-    * 提醒方式;@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)[01-待办 02-预警 03-提醒]
+    * 提醒方式;@Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)[01-待办 02-预警 03-提醒]
     */
     @ApiModelProperty(value = "提醒方式")
-    @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)
+    @Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)
     private String remindMode;
     /**
     * 跳转地址

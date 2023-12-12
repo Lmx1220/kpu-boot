@@ -35,7 +35,7 @@ public class InterfacePropertyManagerImpl extends SuperManagerImpl<InterfaceProp
         Map<String, Object> params = MapUtil.newHashMap();
 
         List<InterfaceProperty> interfaceProperties = getBaseMapper().selectList(new LbqWrapper<InterfaceProperty>().eq(InterfaceProperty::getInterfaceId, id).orderByAsc(InterfaceProperty::getSortValue));
-        if (interfaceProperties != null && !interfaceProperties.isEmpty()) {
+        if (interfaceProperties == null || interfaceProperties.isEmpty()) {
             return params;
         } else {
 

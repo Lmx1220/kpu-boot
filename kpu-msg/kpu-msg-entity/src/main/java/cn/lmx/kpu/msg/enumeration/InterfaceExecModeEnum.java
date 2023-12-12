@@ -39,15 +39,15 @@ public enum InterfaceExecModeEnum implements BaseEnum {
     /**
      * 根据当前枚举的name匹配
      */
-    public static MsgBizType match(String val, MsgBizType def) {
-        return Stream.of(values()).parallel().filter(item -> item.name().equalsIgnoreCase(val)).findAny().orElse(def);
+    public static InterfaceExecModeEnum match(String val, InterfaceExecModeEnum interfaceExecModeEnum) {
+        return Stream.of(values()).parallel().filter(item -> item.name().equalsIgnoreCase(val)).findAny().orElse(interfaceExecModeEnum);
     }
 
-    public static MsgBizType get(String val) {
+    public static InterfaceExecModeEnum get(String val) {
         return match(val, null);
     }
 
-    public boolean eq(MsgBizType val) {
+    public boolean eq(InterfaceExecModeEnum val) {
         return val != null && eq(val.name());
     }
 

@@ -25,9 +25,9 @@ import cn.lmx.kpu.msg.mapper.MsgTemplateMapper;
 public class MsgTemplateManagerImpl extends SuperManagerImpl<MsgTemplateMapper, MsgTemplate> implements MsgTemplateManager {
 
     @Override
-    public MsgTemplate getByCode(String templateCode) {
+    public MsgTemplate getByCode(String code) {
 
-        return getSuperMapper().selectOne( Wraps.<MsgTemplate>lbQ().eq(MsgTemplate::getTemplateCode, templateCode).last("limit 1"));
+        return getSuperMapper().selectOne( Wraps.<MsgTemplate>lbQ().eq(MsgTemplate::getCode, code).last("limit 1"));
     }
 }
 

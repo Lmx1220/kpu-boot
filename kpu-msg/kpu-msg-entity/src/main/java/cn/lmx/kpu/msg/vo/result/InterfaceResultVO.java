@@ -51,10 +51,10 @@ public class InterfaceResultVO extends Entity<Long> implements Serializable, Ech
     @ApiModelProperty(value = "接口名称")
     private String name;
     /**
-    * 执行方式;@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.INTERFACE_EXEC_MODE)[01-实现类 02-脚本]
+    * 执行方式;@Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.INTERFACE_EXEC_MODE)[01-实现类 02-脚本]
     */
     @ApiModelProperty(value = "执行方式")
-    @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.INTERFACE_EXEC_MODE)
+    @Echo(api = EchoApi.DICT_ITEM_CLASS, dictType = EchoDictType.Base.INTERFACE_EXEC_MODE)
     private String execMode;
     /**
     * 实现脚本

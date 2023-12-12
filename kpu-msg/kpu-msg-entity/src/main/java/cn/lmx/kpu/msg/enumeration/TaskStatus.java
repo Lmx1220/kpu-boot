@@ -27,21 +27,23 @@ public enum TaskStatus implements BaseEnum {
     /**
      * DRAFT
      */
-    DRAFT("草稿"),
+    DRAFT("01","草稿"),
     /**
      * WAITING
      */
-    WAITING("等待执行"),
+    WAITING("02","等待执行"),
     /**
      * SUCCESS
      */
-    SUCCESS("执行成功"),
+    SUCCESS("03","执行成功"),
     /**
      * FAIL
      */
-    FAIL("执行失败"),
+    FAIL("04","执行失败"),
     ;
 
+    @ApiModelProperty(value = "编码")
+    private String code;
     @ApiModelProperty(value = "描述")
     private String desc;
 
@@ -63,13 +65,13 @@ public enum TaskStatus implements BaseEnum {
     @Override
     @ApiModelProperty(value = "name", allowableValues = "WAITING,SUCCESS,FAIL", example = "WAITING")
     public String getCode() {
-        return this.name();
+        return this.code;
     }
 
     @Override
     @ApiModelProperty(value = "数据库中的值")
     public String getValue() {
-        return this.name();
+        return this.getCode();
     }
 
 }

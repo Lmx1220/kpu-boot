@@ -8,7 +8,6 @@ import cn.lmx.kpu.msg.entity.Interface;
 import cn.lmx.kpu.msg.entity.Msg;
 import cn.lmx.kpu.msg.entity.MsgRecipient;
 import cn.lmx.kpu.msg.entity.MsgTemplate;
-import cn.lmx.kpu.msg.event.MsgSendEvent;
 import cn.lmx.kpu.msg.service.*;
 import cn.lmx.kpu.msg.strategy.MsgContext;
 import cn.lmx.kpu.msg.strategy.domain.MsgPublishVO;

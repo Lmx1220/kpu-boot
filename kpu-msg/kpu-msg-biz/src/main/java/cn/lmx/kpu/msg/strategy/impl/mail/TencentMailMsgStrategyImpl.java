@@ -3,7 +3,6 @@ package cn.lmx.kpu.msg.strategy.impl.mail;
 import cn.lmx.basic.jackson.JsonUtil;
 import cn.lmx.basic.model.Kv;
 import cn.lmx.kpu.msg.enumeration.ProviderType;
-import cn.lmx.kpu.msg.mapper.TaskMapper;
 import cn.lmx.kpu.msg.strategy.MsgStrategy;
 import cn.lmx.kpu.msg.strategy.domain.MsgParam;
 import cn.lmx.kpu.msg.strategy.domain.MsgResult;
