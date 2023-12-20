@@ -26,6 +26,7 @@ import cn.lmx.kpu.msg.manager.MsgRecipientManager;
 import cn.lmx.kpu.msg.manager.NoticeManager;
 import cn.lmx.kpu.msg.strategy.domain.MsgPublishVO;
 import cn.lmx.kpu.msg.strategy.domain.MsgSendVO;
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,9 @@ public class MsgServiceImpl extends SuperServiceImpl<MsgManager, Long, Msg, MsgS
     @Transactional(rollbackFor = Exception.class)
     public Boolean send(MsgSendVO data, MsgTemplate msgTemplate, SysUser sysUser){
         Msg msg = new Msg();
+                BeanUtil.copyProperties(data, msg);
+        msg.setTemplateCode(msgTemplate.getCode());
+        msg.setParams(JSONObject.toJSONString(data.getParamList()));
         msg.setType(msgTemplate.getType());
         //1， 初始化默认参数
         msg.setStatus(TaskStatus.WAITING);

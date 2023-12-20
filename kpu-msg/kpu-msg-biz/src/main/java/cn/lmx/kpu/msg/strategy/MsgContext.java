@@ -72,8 +72,6 @@ public class MsgContext {
             result = msgStrategy.exec(msgParam);
         }
 
-
-        result.getResult();
         return  true ;
     }
 }

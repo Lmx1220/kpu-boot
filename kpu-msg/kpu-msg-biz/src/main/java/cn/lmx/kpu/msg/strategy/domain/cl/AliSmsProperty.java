@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class AliSmsProperty extends BaseProperty {
 
-    private final static String DEF_END_POINT = "http://smsv3.bj.baidubce.com";
+    private final static String DEF_END_POINT = "dysmsapi.aliyuncs.com";
     /**
      * accessKeyId
      */
@@ -20,11 +20,15 @@ public class AliSmsProperty extends BaseProperty {
     /**
      * secretKey
      */
-    private String secretKey;
+    private String accessKeySecret;
     /**
      * 域名
      */
     private String endPoint;
+    /**
+     * 区域
+     */
+    private String regionId;
 
     // 校验参数是否合法
     @Override
@@ -34,7 +38,7 @@ public class AliSmsProperty extends BaseProperty {
             endPoint = DEF_END_POINT;
         }
         ArgumentAssert.notEmpty(accessKeyId, "accessKeyId 不能为空");
-        ArgumentAssert.notEmpty(secretKey, "secretKey 不能为空");
+        ArgumentAssert.notEmpty(accessKeySecret, "accessKeySecret 不能为空");
         return true;
     }
 }
