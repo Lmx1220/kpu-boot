@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>cn.lmx</groupId>
+    <groupId>cn.lmx.basic</groupId>
     <artifactId>kpu-boot</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0.0-java17</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>kpu-boot</description>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
+    <modules>
+        <!-- @kpu.generator auto insert root.pom.xml -->
+        <module>kpu-dependencies-parent</module>
+        <module>kpu-public</module>
+        <module>kpu-base</module>
+        <module>kpu-oauth</module>
+        <module>kpu-system</module>
+        <module>kpu-generator</module>
+        <module>kpu-boot-server</module>
+    </modules>
 </project>

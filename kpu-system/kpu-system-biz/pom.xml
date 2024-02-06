@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>kpu-system</artifactId>
+        <groupId>cn.lmx.kpu</groupId>
+        <version>2.0.0-java17</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>kpu-system-biz</artifactId>
+    <name>${project.artifactId}</name>
+    <description>系统服务-业务模块</description>
+    <dependencies>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-system-entity</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-common-api</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-file-sdk</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-echo-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-mq-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-databases</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.lmx.basic</groupId>
+            <artifactId>kpu-mvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+        </dependency>
+
+        <!-- @RefreshScope 需要使用 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

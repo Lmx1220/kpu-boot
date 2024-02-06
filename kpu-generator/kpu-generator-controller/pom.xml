@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>kpu-generator</artifactId>
+        <groupId>cn.lmx.kpu</groupId>
+        <version>2.0.0-java17</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>kpu-generator-controller</artifactId>
+    <name>${project.artifactId}</name>
+    <description>在线代码生成器模块-控制器模块</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-generator-biz</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.lmx.kpu</groupId>
+            <artifactId>kpu-oauth-userinfo</artifactId>
+            <version>${kpu-project.version}</version>
+        </dependency>
+
+    </dependencies>
+</project>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!-- logback/defaults-prod.xml 文件位于kpu-util/kpu-log-starter/src/main/resources -->
+    <include resource="logback/defaults-prod.xml"/>
+
+    <!-- 基础服务 -->
+    <logger name="cn.lmx.kpu.base.controller" additivity="true" level="${log.level.controller}">
+        <appender-ref ref="ASYNC_CONTROLLER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.base.service" additivity="true" level="${log.level.service}">
+        <appender-ref ref="ASYNC_SERVICE_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.base.mapper" additivity="false" level="${log.level.mapper}">
+        <appender-ref ref="ASYNC_MAPPER_APPENDER"/>
+    </logger>
+    <!-- 文件服务 -->
+    <logger name="cn.lmx.kpu.file.controller" additivity="true" level="${log.level.controller}">
+        <appender-ref ref="ASYNC_CONTROLLER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.file.service" additivity="true" level="${log.level.service}">
+        <appender-ref ref="ASYNC_SERVICE_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.file.mapper" additivity="false" level="${log.level.mapper}">
+        <appender-ref ref="ASYNC_MAPPER_APPENDER"/>
+    </logger>
+
+    <!-- 租户服务 -->
+    <logger name="cn.lmx.kpu.system.controller" additivity="true" level="${log.level.controller}">
+        <appender-ref ref="ASYNC_CONTROLLER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.system.service" additivity="true" level="${log.level.service}">
+        <appender-ref ref="ASYNC_SERVICE_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.system.mapper" additivity="false" level="${log.level.mapper}">
+        <appender-ref ref="ASYNC_MAPPER_APPENDER"/>
+    </logger>
+
+    <!-- 认证服务 -->
+    <logger name="cn.lmx.kpu.oauth.controller" additivity="true" level="${log.level.controller}">
+        <appender-ref ref="ASYNC_CONTROLLER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.oauth.mapper" additivity="false" level="${log.level.mapper}">
+        <appender-ref ref="ASYNC_MAPPER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.oauth" additivity="true" level="${log.level.service}">
+        <appender-ref ref="ASYNC_SERVICE_APPENDER"/>
+    </logger>
+
+    <!-- 消息服务 -->
+    <logger name="cn.lmx.kpu.msg.controller" additivity="true" level="${log.level.controller}">
+        <appender-ref ref="ASYNC_CONTROLLER_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.msg.service" additivity="true" level="${log.level.service}">
+        <appender-ref ref="ASYNC_SERVICE_APPENDER"/>
+    </logger>
+    <logger name="cn.lmx.kpu.msg.mapper" additivity="false" level="${log.level.mapper}">
+        <appender-ref ref="ASYNC_MAPPER_APPENDER"/>
+    </logger>
+</included>
