@@ -36,62 +36,72 @@ import static com.baomidou.mybatisplus.annotation.SqlCondition.EQUAL;
 @TableName("c_notice")
 public class Notice extends Entity<Long> {
     private static final long serialVersionUID = 1L;
-
     /**
-     * 发布人
+     * 消息ID
      */
-    @TableField(value = "author", condition = EQUAL)
-    private Long author;
-    /**
-     * 自动已读
-     */
-    @TableField(value = "auto_read", condition = EQUAL)
-    private Boolean autoRead;
+    @TableField(value = "msg_id", condition = LIKE)
+    private Long msgId;
     /**
      * 业务ID
      */
-    @TableField(value = "biz_id", condition = EQUAL)
-    private Long bizId;
+    @TableField(value = "biz_id", condition = LIKE)
+    private String bizId;
     /**
      * 业务类型
      */
     @TableField(value = "biz_type", condition = LIKE)
     private String bizType;
     /**
-     * 内容
+     * 接收人
      */
-    @TableField(value = "content", condition = LIKE)
-    private String content;
+    @TableField(value = "recipient_id", condition = EQUAL)
+    private Long recipientId;
     /**
-     * 处理地址
+     * 提醒方式;
+     *
+     * @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)
+     * [01-待办 02-预警 03-提醒]
      */
-    @TableField(value = "url", condition = LIKE)
-    private String url;
+    @TableField(value = "remind_mode")
+    private String remindMode;
     /**
      * 标题
      */
     @TableField(value = "title", condition = LIKE)
     private String title;
     /**
-     * 打开方式
+     * 内容
      */
-    @TableField(value = "target", condition = LIKE)
+    @TableField(value = "content", condition = LIKE)
+    private String content;
+    /**
+     * 发布人
+     */
+    @TableField(value = "author", condition = LIKE)
+    private String author;
+    /**
+     * 处理地址
+     */
+    @TableField(value = "url", condition = LIKE)
+    private String url;
+    /**
+     * 打开方式;
+     *
+     * @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_TARGET)
+     * [01-页面 02-弹窗 03-新开窗口]
+     */
+    @TableField(value = "target_")
     private String target;
     /**
-     * 提醒方式
+     * 自动已读
      */
-    @TableField(value = "remind_mode", condition = LIKE)
-    private String remindMode;
+    @TableField(value = "auto_read", condition = EQUAL)
+    private Boolean autoRead;
     /**
-     * 接收人
+     * 处理时间
      */
-    @TableField(value = "recipient_id", condition = EQUAL)
-    private Long recipientId;
-    /**
-     * 消息ID
-     */
-    @TableField(value = "msg_id", condition = EQUAL)
-    private Long msgId;
+    @TableField(value = "handle_time", condition = EQUAL)
+    private LocalDateTime handleTime;
     /**
      * 读取时间
      */
@@ -108,16 +118,9 @@ public class Notice extends Entity<Long> {
     @TableField(value = "is_handle", condition = EQUAL)
     private Boolean isHandle;
     /**
-     * 处理时间
-     */
-    @TableField(value = "handle_time", condition = EQUAL)
-    private LocalDateTime handleTime;
-    /**
      * 所属组织
      */
     @TableField(value = "created_org_id", condition = EQUAL)
     private Long createdOrgId;
-
-
 
 }

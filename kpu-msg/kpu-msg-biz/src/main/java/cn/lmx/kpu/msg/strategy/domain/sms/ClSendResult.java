@@ -1,10 +1,10 @@
-package cn.lmx.kpu.msg.strategy.domain.cl;
+package cn.lmx.kpu.msg.strategy.domain.sms;
 
 import lombok.Data;
 
 /**
- * @author zuihou
- * @date 2021/7/15 16:13
+ * @author lmx
+ * @date 2023/11/19  18:40
  */
 @Data
 public class ClSendResult {
@@ -14,4 +14,5 @@ public class ClSendResult {
     private String msgId;
     private String time;
     private String errorMsg;
+
 }

@@ -15,6 +15,28 @@ import cn.lmx.kpu.msg.entity.InterfaceLog;
  */
 public interface InterfaceLogManager extends SuperManager<InterfaceLog> {
 
+    /***
+     * 根据接口ID查询接口执行日志
+     * @param interfaceId
+     * @return
+     */
+    InterfaceLog getByInterfaceId(Long interfaceId);
+
+    /**
+     * 递增成功次数
+     *
+     * @param id 日志ID
+     * @return
+     */
+    void incrSuccessCount(Long id);
+
+    /**
+     * 递增失败次数
+     *
+     * @param id 日志ID
+     * @return
+     */
+    void incrFailCount(Long id);
 }
 
 

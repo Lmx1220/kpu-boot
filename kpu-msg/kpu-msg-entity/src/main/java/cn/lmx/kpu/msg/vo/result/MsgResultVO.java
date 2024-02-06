@@ -48,7 +48,7 @@ public class MsgResultVO extends Entity<Long> implements Serializable, EchoVO {
     * 业务ID
     */
     @ApiModelProperty(value = "业务ID")
-    private String bizId;
+    private Long bizId;
     /**
     * 业务类型 
      * #MsgBizType{USER_LOCK:账号锁定;USER_REG:账号申请;WORK_APPROVAL:考勤审批;}
@@ -92,7 +92,7 @@ public class MsgResultVO extends Entity<Long> implements Serializable, EchoVO {
     * 参数
     */
     @ApiModelProperty(value = "参数")
-    private String params;
+    private String param;
     /**
     * 执行状态
     */
@@ -102,7 +102,7 @@ public class MsgResultVO extends Entity<Long> implements Serializable, EchoVO {
     * 提醒方式
     */
     @ApiModelProperty(value = "提醒方式")
-    private String remindModel;
+    private String remindMode;
     /**
     * 发送时间
     */

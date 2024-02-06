@@ -2,7 +2,10 @@ package cn.lmx.kpu.msg.mapper;
 
 import cn.lmx.basic.base.mapper.SuperMapper;
 import cn.lmx.kpu.msg.entity.InterfaceLog;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,6 +20,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InterfaceLogMapper extends SuperMapper<InterfaceLog> {
 
+    /**
+     * 递增成功次数
+     *
+     * @param id  日志ID
+     * @param now 当前时间
+     * @return
+     */
+    int incrSuccessCount(@Param("id") Long id, @Param("now") LocalDateTime now);
+
+    /**
+     * 递增失败次数
+     *
+     * @param id  日志ID
+     * @param now 当前时间
+     * @return
+     */
+    int incrFailCount(@Param("id") Long id, @Param("now") LocalDateTime now);
 }
 
 

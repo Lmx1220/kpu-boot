@@ -3,11 +3,13 @@ package cn.lmx.kpu.msg.glue;
 
 import cn.lmx.kpu.msg.glue.impl.SpringGlueFactory;
 import cn.lmx.kpu.msg.strategy.MsgStrategy;
+import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
-import lombok.SneakyThrows;
+import org.codehaus.groovy.runtime.InvokerHelper;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 /**
@@ -19,11 +21,18 @@ import java.util.concurrent.ConcurrentMap;
 public class GlueFactory {
 
 
-    private static GlueFactory glueFactory = new GlueFactory();
-    public static GlueFactory getInstance(){
+    private final static ConcurrentMap<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
+    private static GlueFactory glueFactory = new SpringGlueFactory();
+    /**
+     * groovy class loader
+     */
+    private final GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
+
+    public static GlueFactory getInstance() {
         return glueFactory;
     }
-    public static void refreshInstance(int type){
+
+    public static void refreshInstance(int type) {
         if (type == 0) {
             glueFactory = new GlueFactory();
         } else if (type == 1) {
@@ -31,47 +40,57 @@ public class GlueFactory {
         }
     }
 
-
     /**
-     * groovy class loader
-     */
-    private GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-    private ConcurrentMap<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
-
-    /**
-     * load new instance, prototype
+     * 加载groovy脚本，并实例化
      *
-     * @param codeSource
+     * @param script groovy脚本
      * @return
      * @throws Exception
      */
-    @SneakyThrows
-    public MsgStrategy loadNewInstance(String codeSource){
-        if (codeSource!=null && codeSource.trim().length()>0) {
-            Class<?> clazz = getCodeSourceClass(codeSource);
+    public MsgStrategy loadNewInstance(String script) throws Exception {
+        if (script != null && script.trim().length() > 0) {
+            Class<?> clazz = getCodeSourceClass(script);
             if (clazz != null) {
-                Object instance = clazz.newInstance();
-                if (instance!=null) {
-                    if (instance instanceof MsgStrategy) {
-                        this.injectService(instance);
-                        return (MsgStrategy) instance;
-                    } else {
-                        throw new IllegalArgumentException(">>>>>>>>>>> xxl-glue, loadNewInstance error, "
-                                + "cannot convert from instance["+ instance.getClass() +"] to IJobHandler");
-                    }
+                Object instance = clazz.getDeclaredConstructor().newInstance();
+                if (instance instanceof MsgStrategy) {
+                    MsgStrategy inst = (MsgStrategy) instance;
+                    this.injectService(inst);
+                    return inst;
+                } else {
+                    throw new IllegalArgumentException("glue 加载失败，"
+                            + "无法将实例转换 [" + instance.getClass() + "] 为 MsgStrategy");
                 }
             }
         }
-        throw new IllegalArgumentException(">>>>>>>>>>> xxl-glue, loadNewInstance error, instance is null");
+        throw new IllegalArgumentException("脚本不能为空");
     }
-    private Class<?> getCodeSourceClass(String codeSource){
+
+    /**
+     *  执行脚本
+     * @param script script
+     * @param params  params
+     * @return java.lang.Object
+     * @author lmx
+     * @date 2024/2/5 19:38
+     */
+    public Object exeGroovyScript(String script, Map<String, Object> params) {
+        if (script != null && script.trim().length() > 0) {
+            Class<?> clazz = getCodeSourceClass(script);
+            if (clazz != null) {
+                return InvokerHelper.createScript(clazz, new Binding(params)).run();
+            }
+        }
+        throw new IllegalArgumentException("脚本不能为空");
+    }
+
+    private Class<?> getCodeSourceClass(String codeSource) {
         try {
             // md5
             byte[] md5 = MessageDigest.getInstance("MD5").digest(codeSource.getBytes());
             String md5Str = new BigInteger(1, md5).toString(16);
 
             Class<?> clazz = CLASS_CACHE.get(md5Str);
-            if(clazz == null){
+            if (clazz == null) {
                 clazz = groovyClassLoader.parseClass(codeSource);
                 CLASS_CACHE.putIfAbsent(md5Str, clazz);
             }
@@ -82,7 +101,7 @@ public class GlueFactory {
     }
 
     /**
-     * inject service of bean field
+     * 注入bean字段
      *
      * @param instance
      */

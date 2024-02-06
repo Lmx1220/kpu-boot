@@ -61,7 +61,7 @@ public class InterfaceLogging extends Entity<Long> {
      * 执行状态
      */
     @TableField(value = "status", condition = EQUAL)
-    private Boolean status;
+    private String status;
     /**
      * 异常信息
      */

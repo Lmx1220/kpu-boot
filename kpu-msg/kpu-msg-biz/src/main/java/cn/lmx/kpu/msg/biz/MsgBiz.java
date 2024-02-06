@@ -1,6 +1,7 @@
 package cn.lmx.kpu.msg.biz;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.exception.BizException;
 import cn.lmx.basic.utils.ArgumentAssert;
 import cn.lmx.kpu.model.entity.base.SysUser;
@@ -10,8 +11,9 @@ import cn.lmx.kpu.msg.entity.MsgRecipient;
 import cn.lmx.kpu.msg.entity.MsgTemplate;
 import cn.lmx.kpu.msg.service.*;
 import cn.lmx.kpu.msg.strategy.MsgContext;
-import cn.lmx.kpu.msg.strategy.domain.MsgPublishVO;
-import cn.lmx.kpu.msg.strategy.domain.MsgSendVO;
+
+import cn.lmx.kpu.msg.vo.update.MsgPublishVO;
+import cn.lmx.kpu.msg.vo.update.MsgSendVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,8 +33,8 @@ import static cn.lmx.basic.exception.code.ExceptionCode.BASE_VALID_PARAM;
 @Slf4j
 @RequiredArgsConstructor
 public class MsgBiz {
-    private final MsgService msgService;
 
+    private final MsgService msgService;
     private final MsgTemplateService msgTemplateService;
     private final InterfaceService interfaceService;
     private final InterfacePropertyService interfacePropertyService;
@@ -47,45 +49,88 @@ public class MsgBiz {
      * @return
      */
     public boolean execSend(Long id) {
-        Msg msg = msgService.getById(id);
-        ArgumentAssert.notNull(msg, "请先保存消息");
-        MsgTemplate msgTemplate = msgTemplateService.getByCode(msg.getTemplateCode());
+        Msg extendMsg = msgService.getById(id);
+        ArgumentAssert.notNull(extendMsg, "请先保存消息");
 
-        ArgumentAssert.notNull(msgTemplate, "请先保存消息模板");
-        Interface byId = interfaceService.getById(msgTemplate.getInterfaceId());
-        ArgumentAssert.notNull(byId, "请配置接口：{}", msgTemplate.getType());
-        Map<String,Object> propertyParams= interfacePropertyService.listByInterfaceId(byId.getId());
-       List<MsgRecipient> recipientList =msgRecipientService.listByMsgId(id);
-       return msgContext.execSend(msg,msgTemplate,recipientList,byId,propertyParams);
+        // 先查租户库，在查默认库
+        MsgTemplate extendMsgTemplate = msgTemplateService.getByCode(extendMsg.getTemplateCode());
+        ArgumentAssert.notNull(extendMsgTemplate, "请配置消息模板");
+
+        Interface defInterface = interfaceService.getById(extendMsgTemplate.getInterfaceId());
+        ArgumentAssert.notNull(defInterface, "请配置消息接口：{}", extendMsgTemplate.getType());
+        // 先查租户库，在查默认库
+        Map<String, Object> propertyParams = interfacePropertyService.listByInterfaceId(defInterface.getId());
+        List<MsgRecipient> recipientList = msgRecipientService.listByMsgId(id);
+
+        return msgContext.execSend(extendMsg, extendMsgTemplate, recipientList, defInterface, propertyParams);
     }
-    public boolean sendByTemplate(MsgSendVO data, SysUser sysUser) {
+    /**
+     * 发送消息
+     *
+     * @param data
+     * @return
+     */
+    public Boolean sendByTemplate(MsgSendVO data, SysUser sysUser) {
         MsgTemplate msgTemplate = validAndInit(data);
-        return msgService.send(data,msgTemplate,sysUser);
+        return msgService.send(data, msgTemplate, sysUser);
     }
 
-    private MsgTemplate validAndInit(MsgSendVO data) {
-        ArgumentAssert.notEmpty(data.getRecipientList(), "请填写消息收人");
-        MsgTemplate msgTemplate = msgTemplateService.getByCode(data.getTemplateCode());
-        ArgumentAssert.notNull(msgTemplate, "请先保存消息模板");
+    /**
+     * 验证数据，并初始化数据
+     */
+    private MsgTemplate validAndInit(MsgSendVO msgSaveVO) {
+        ArgumentAssert.notEmpty(msgSaveVO.getTemplateCode(), "请选择消息模板");
+
+        MsgTemplate msgTemplate = null;
+        if (StrUtil.isNotEmpty(msgSaveVO.getTemplateCode())) {
+            msgTemplate = msgTemplateService.getByCode(msgSaveVO.getTemplateCode());
+        }
+        ArgumentAssert.notNull(msgTemplate, "请选择正确的消息模板");
+
+        //1，验证必要参数
+        ArgumentAssert.notEmpty(msgSaveVO.getRecipientList(), "请填写消息接收人");
+
+        // 验证定时发送的时间，至少大于（当前时间+5分钟） ，是为了防止 定时调度或者是保存数据跟不上
+        if (msgSaveVO.getSendTime() != null) {
+            boolean flag = LocalDateTime.now().plusMinutes(4).isBefore(msgSaveVO.getSendTime());
+            ArgumentAssert.isTrue(flag, "定时发送时间至少在当前时间的5分钟之后");
+        }
+
+        if (CollUtil.isEmpty(msgSaveVO.getRecipientList())) {
+            throw new BizException(BASE_VALID_PARAM.getCode(), "接收人不能为空");
+        }
+
         return msgTemplate;
     }
-
+    /**
+     * 发布消息
+     *
+     * @param data    data
+     * @param sysUser sysUser
+     * @return java.lang.Boolean
+     * @author lmx
+     * @date 2023/12/10  22:56
+     */
     public Boolean publish(MsgPublishVO data, SysUser sysUser) {
-        ArgumentAssert.notEmpty(data.getRecipientList(), "请填写消息收人");
+        //1，验证必要参数
+        ArgumentAssert.notEmpty(data.getRecipientList(), "请填写消息接收人");
         ArgumentAssert.notEmpty(data.getTitle(), "请填写标题");
         ArgumentAssert.notEmpty(data.getContent(), "请填写内容");
 
-        //
-        if (data.getSendTime() !=null){
-            boolean flg = LocalDateTime.now().plusMinutes(4).isBefore(data.getSendTime());
-            ArgumentAssert.isTrue(flg, "定时发送时间至少在当前时间的5分钟后");
+        // 验证定时发送的时间，至少大于（当前时间+5分钟） ，是为了防止 定时调度或者是保存数据跟不上
+        if (data.getSendTime() != null) {
+            boolean flag = LocalDateTime.now().plusMinutes(4).isBefore(data.getSendTime());
+            ArgumentAssert.isTrue(flag, "定时发送时间至少在当前时间的5分钟之后");
         }
-        if (CollUtil.isEmpty(data.getRecipientList())){
-            throw new BizException(BASE_VALID_PARAM.getCode(),"接受人不能为空");
+
+        if (CollUtil.isEmpty(data.getRecipientList())) {
+            throw new BizException(BASE_VALID_PARAM.getCode(), "接收人不能为空");
         }
-        if (data.getContent().length() > 2147483647){
-            throw new BizException(BASE_VALID_PARAM.getCode(),"发送内容不能超过2147483647");
+
+        if (data.getContent().length() > 2147483647) {
+            throw new BizException(BASE_VALID_PARAM.getCode(), "发送内容不能超过2147483647字");
         }
-        return msgService.publish(data,sysUser);
+
+        return msgService.publish(data, sysUser);
     }
 }

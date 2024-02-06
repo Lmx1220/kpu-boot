@@ -17,9 +17,9 @@
                         <result column="content" property="content"/>
                         <result column="author" property="author"/>
                         <result column="channel" property="channel"/>
-                        <result column="params" property="params"/>
+                        <result column="param" property="param"/>
                         <result column="status" property="status"/>
-                        <result column="remind_model" property="remindModel"/>
+                        <result column="remind_mode" property="remindMode"/>
                         <result column="send_time" property="sendTime"/>
                         <result column="created_time" property="createdTime"/>
                         <result column="created_by" property="createdBy"/>
@@ -30,7 +30,7 @@
         <!-- 通用查询结果列 -->
         <sql id="Base_Column_List">
             id, biz_id, biz_type, type, template_code, title, 
-        content, author, channel, params, status, remind_model, 
+        content, author, channel, param, status, remind_mode,
         send_time, created_time, created_by, updated_time, updated_by
         </sql>
 

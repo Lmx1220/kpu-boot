@@ -40,7 +40,7 @@ public class NoticeUpdateVO implements Serializable {
      * 发布人
      */
     @ApiModelProperty(value = "发布人")
-    private Long author;
+    private String author;
     /**
      * 自动已读
      */

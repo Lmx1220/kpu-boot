@@ -4,6 +4,10 @@ package cn.lmx.kpu.msg.strategy;
 import cn.hutool.core.util.StrUtil;
 import cn.lmx.basic.jackson.JsonUtil;
 import cn.lmx.basic.model.Kv;
+import cn.lmx.kpu.common.utils.FreeMarkerUtil;
+import cn.lmx.kpu.msg.entity.Msg;
+import cn.lmx.kpu.msg.entity.MsgTemplate;
+import cn.lmx.kpu.msg.glue.GlueFactory;
 import cn.lmx.kpu.msg.strategy.domain.MsgParam;
 import cn.lmx.kpu.msg.strategy.domain.MsgResult;
 
@@ -21,13 +25,10 @@ import java.util.Map;
  */
 public interface MsgStrategy {
     /**
-     * 发送短信
-     *
-     * @param msgParam 短信任务
-     * @return 任务id
+     * 解析参数
+     * @param param param
+     * @return
      */
-    MsgResult exec(MsgParam msgParam);
-
     default Map<String, String> parseParam(String param) {
         Map<String, String> map = new LinkedHashMap<>();
         if (StrUtil.isNotEmpty(param)) {
@@ -37,5 +38,56 @@ public interface MsgStrategy {
             }
         }
         return map;
+    }
+
+    /**
+     * 替换变量
+     * @param extendMsg extendMsg
+     * @param extendMsgTemplate extendMsgTemplate
+     * @return
+     */
+    default MsgResult replaceVariable(Msg extendMsg, MsgTemplate extendMsgTemplate) {
+        String script = extendMsgTemplate.getScript();
+        String templateContent = extendMsgTemplate.getContent();
+        String templateTitle = extendMsgTemplate.getTitle();
+        Map<String, Object> params = new LinkedHashMap<>();
+        if (StrUtil.isNotEmpty(extendMsg.getParam())) {
+            List<Kv> list = JsonUtil.parseArray(extendMsg.getParam(), Kv.class);
+            for (Kv kv : list) {
+                params.put(kv.getKey(), kv.getValue());
+            }
+        }
+        Map<String, Object> resultParams = params;
+        String title = templateTitle;
+        String content = templateContent;
+        if (StrUtil.isNotEmpty(script)) {
+            resultParams = (Map<String, Object>) GlueFactory.getInstance().exeGroovyScript(script, params);
+        }
+        if (StrUtil.isNotEmpty(templateTitle)) {
+            title = FreeMarkerUtil.generateString(templateTitle, resultParams);
+        }
+        if (StrUtil.isNotEmpty(templateContent)) {
+            content = FreeMarkerUtil.generateString(templateContent, resultParams);
+        }
+
+        return MsgResult.builder().title(title).content(content).build();
+    }
+
+    /**
+     * 执行发送
+     * @param msgParam
+     * @return
+     * @throws Exception
+     */
+    MsgResult exec(MsgParam msgParam) throws Exception;
+
+    /**
+     * 是否执行成功
+     *
+     * @param result 执行函数的返回值
+     * @return
+     */
+    default boolean isSuccess(MsgResult result) {
+        return true;
     }
 }

@@ -89,6 +89,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+        </dependency>
+        
         <!-- 第三方短信：百度云 -->
         <dependency>
             <groupId>com.baidubce</groupId>

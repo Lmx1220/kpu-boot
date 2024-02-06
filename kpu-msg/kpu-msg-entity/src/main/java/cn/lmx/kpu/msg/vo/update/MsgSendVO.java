@@ -1,11 +1,11 @@
-package cn.lmx.kpu.msg.strategy.domain;
+package cn.lmx.kpu.msg.vo.update;
 
 import cn.lmx.basic.model.Kv;
 import cn.lmx.kpu.msg.vo.save.MsgRecipientSaveVO;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -15,13 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author lmx
- * @version v1.0.0
- * @date 2023/12/10  19:24
+ * <p>
+ * 表单修改方法VO
+ * 消息
+ * </p>
+ *
+ * @author zuihou
+ * @date 2022-07-10 11:41:17
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
+@Accessors(chain = true)
+@EqualsAndHashCode
 @Builder
+@ApiModel(value = "消息发送",description = "消息发送")
 public class MsgSendVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +49,7 @@ public class MsgSendVO implements Serializable {
      */
     @ApiModelProperty(value = "参数")
     private List<Kv> paramList;
+
 
     /**
      * 发送时间

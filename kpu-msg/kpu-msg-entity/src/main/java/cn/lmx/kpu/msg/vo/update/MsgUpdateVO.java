@@ -44,7 +44,7 @@ public class MsgUpdateVO implements Serializable {
      */
     @ApiModelProperty(value = "业务ID")
     @Size(max = 64, message = "业务ID长度不能超过{max}")
-    private String bizId;
+    private Long bizId;
     /**
      * 业务类型 
      * #MsgBizType{USER_LOCK:账号锁定;USER_REG:账号申请;WORK_APPROVAL:考勤审批;}
@@ -93,7 +93,7 @@ public class MsgUpdateVO implements Serializable {
      */
     @ApiModelProperty(value = "参数")
     @Size(max = 500, message = "参数长度不能超过{max}")
-    private String params;
+    private String param;
     /**
      * 执行状态
      */
@@ -105,7 +105,7 @@ public class MsgUpdateVO implements Serializable {
      */
     @ApiModelProperty(value = "提醒方式")
     @Size(max = 2, message = "提醒方式长度不能超过{max}")
-    private String remindModel;
+    private String remindMode;
     /**
      * 发送时间
      */

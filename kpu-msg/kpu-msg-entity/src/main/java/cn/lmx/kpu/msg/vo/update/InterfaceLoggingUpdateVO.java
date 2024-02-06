@@ -63,7 +63,7 @@ public class InterfaceLoggingUpdateVO implements Serializable {
      * 执行状态
      */
     @ApiModelProperty(value = "执行状态")
-    private Boolean status;
+    private String status;
     /**
      * 异常信息
      */

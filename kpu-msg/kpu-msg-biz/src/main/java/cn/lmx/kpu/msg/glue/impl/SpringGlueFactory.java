@@ -1,6 +1,7 @@
 package cn.lmx.kpu.msg.glue.impl;
 
 
+import cn.lmx.basic.utils.SpringUtils;
 import cn.lmx.kpu.msg.glue.GlueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,22 +22,22 @@ import java.lang.reflect.Modifier;
  * @version v1.0.0
  * @date 2023/12/11  23:18
  */
-public class SpringGlueFactory extends GlueFactory implements ApplicationContextAware {
-    private static Logger logger = LoggerFactory.getLogger(SpringGlueFactory.class);
+public class SpringGlueFactory extends GlueFactory {
+    private static final Logger logger = LoggerFactory.getLogger(SpringGlueFactory.class);
 
-    private ApplicationContext applicationContext;
 
     /**
      * inject action of spring
+     *
      * @param instance
      */
     @Override
-    public void injectService(Object instance){
-        if (instance==null) {
+    public void injectService(Object instance) {
+        if (instance == null) {
             return;
         }
 
-        if (applicationContext == null) {
+        if (SpringUtils.getApplicationContext() == null) {
             return;
         }
 
@@ -52,40 +53,34 @@ public class SpringGlueFactory extends GlueFactory implements ApplicationContext
             if (AnnotationUtils.getAnnotation(field, Resource.class) != null) {
                 try {
                     Resource resource = AnnotationUtils.getAnnotation(field, Resource.class);
-                    if (resource.name()!=null && resource.name().length()>0){
-                        fieldBean = applicationContext.getBean(resource.name());
+                    if (resource != null && resource.name() != null && resource.name().length() > 0) {
+                        fieldBean = SpringUtils.getBean(resource.name());
                     } else {
-                        fieldBean = applicationContext.getBean(field.getName());
+                        fieldBean = SpringUtils.getBean(field.getName());
                     }
                 } catch (Exception e) {
                 }
-                if (fieldBean==null ) {
-                    fieldBean = applicationContext.getBean(field.getType());
+                if (fieldBean == null) {
+                    fieldBean = SpringUtils.getBean(field.getType());
                 }
             } else if (AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
                 Qualifier qualifier = AnnotationUtils.getAnnotation(field, Qualifier.class);
-                if (qualifier!=null && qualifier.value()!=null && qualifier.value().length()>0) {
-                    fieldBean = applicationContext.getBean(qualifier.value());
+                if (qualifier != null && qualifier.value() != null && qualifier.value().length() > 0) {
+                    fieldBean = SpringUtils.getBean(qualifier.value());
                 } else {
-                    fieldBean = applicationContext.getBean(field.getType());
+                    fieldBean = SpringUtils.getBean(field.getType());
                 }
             }
 
-            if (fieldBean!=null) {
+            if (fieldBean != null) {
                 field.setAccessible(true);
                 try {
                     field.set(instance, fieldBean);
-                } catch (IllegalArgumentException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (IllegalAccessException e) {
+                } catch (IllegalArgumentException | IllegalAccessException e) {
                     logger.error(e.getMessage(), e);
                 }
             }
         }
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 }

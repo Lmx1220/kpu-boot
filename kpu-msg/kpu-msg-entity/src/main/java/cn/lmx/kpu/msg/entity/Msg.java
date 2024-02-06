@@ -40,68 +40,82 @@ public class Msg extends Entity<Long> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 业务ID
+     * 消息模板;
+     * #extend_msg_template
      */
-    @TableField(value = "biz_id", condition = LIKE)
-    private String bizId;
+    @TableField(value = "template_code", condition = EQUAL)
+    private String templateCode;
     /**
-     * 业务类型 
-     * #MsgBizType{USER_LOCK:账号锁定;USER_REG:账号申请;WORK_APPROVAL:考勤审批;}
+     * 消息类型;
+     * [01-短信 02-邮件 03-站内信];
+     *
+     * @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.MSG_TEMPLATE_TYPE)
      */
-    @TableField(value = "biz_type", condition = EQUAL)
-    private MsgBizType bizType;
-    /**
-     * 消息类型 
-     * #MsgTemplateTypeEnum{WAIT:待办;NOTIFY:通知;PUBLICITY:公告;WARN:预警;}
-     */
-    @TableField(value = "type", condition = EQUAL)
+    @TableField(value = "type", condition = LIKE)
     private String type;
     /**
-     * 消息模板
+     * 执行状态;
+     * #TaskStatus{DRAFT:草稿;WAITING:等待执行;SUCCESS:执行成功;FAIL:执行失败}
      */
-    @TableField(value = "template_code", condition = LIKE)
-    private String templateCode;
+    @TableField(value = "status", condition = EQUAL)
+    private TaskStatus status;
+    /**
+     * 发送渠道;
+     * #SourceType{APP:应用;SERVICE:服务}
+     */
+    @TableField(value = "channel", condition = EQUAL)
+    private SourceType channel;
+    /**
+     * 参数;
+     * <p>
+     * 需要封装为[{{‘key’:'', ’value’:''}, {'key2':'', 'value2':''}]格式
+     */
+    @TableField(value = "param", condition = LIKE)
+    private String param;
     /**
      * 标题
      */
     @TableField(value = "title", condition = LIKE)
     private String title;
     /**
-     * 内容
+     * 发送内容;
+     * <p>
+     * 需要封装正确格式化: 您好，张三，您有一个新的快递。
      */
     @TableField(value = "content", condition = LIKE)
     private String content;
-    /**
-     * 发布人
-     */
-    @TableField(value = "author", condition = LIKE)
-    private String author;
-    /**
-     * 发送渠道,可用值:APP,SERVICE
-     */
-    @TableField(value = "channel", condition = LIKE)
-    private SourceType channel;
-    /**
-     * 参数
-     */
-    @TableField(value = "params", condition = LIKE)
-    private String params;
-    /**
-     * 执行状态
-     */
-    @TableField(value = "status", condition = LIKE)
-    private TaskStatus status;
-    /**
-     * 提醒方式
-     */
-    @TableField(value = "remind_model", condition = LIKE)
-    private String remindModel;
     /**
      * 发送时间
      */
     @TableField(value = "send_time", condition = EQUAL)
     private LocalDateTime sendTime;
+    /**
+     * 业务ID
+     */
+    @TableField(value = "biz_id", condition = EQUAL)
+    private Long bizId;
+    /**
+     * 业务类型
+     */
+    @TableField(value = "biz_type", condition = LIKE)
+    private String bizType;
+    /**
+     * 发布人姓名
+     */
+    @TableField(value = "author", condition = LIKE)
+    private String author;
 
+    /**
+     * 提醒方式;
+     *
+     * @Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.NOTICE_REMIND_MODE)
+     * [01-待办 02-预警 03-提醒]
+     */
+    @TableField(value = "remind_mode", condition = LIKE)
+    private String remindMode;
+    /**
+     * 所属组织
+     */
+    @TableField(value = "created_org_id", condition = EQUAL)
     private Long createdOrgId;
-
 }

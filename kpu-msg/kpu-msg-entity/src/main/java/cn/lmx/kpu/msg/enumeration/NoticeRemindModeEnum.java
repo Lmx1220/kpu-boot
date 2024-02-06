@@ -3,10 +3,12 @@ package cn.lmx.kpu.msg.enumeration;
 import cn.lmx.basic.interfaces.BaseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -15,26 +17,26 @@ import lombok.NoArgsConstructor;
  * </p>
  *
  * @author lmx
- * @date 2023-12-10 18:14:10
+ * @date 2023/11/19  18:40
  */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "MsgTemplateTypeEnum", description = "消息类型  #MsgTemplateTypeEnum{WAIT:待办-枚举")
-public enum MsgTemplateTypeEnum implements BaseEnum {
+@ApiModel(description = "消息类型-枚举")
+public enum NoticeRemindModeEnum implements BaseEnum {
 
     /**
-     * TO_DO="短信"
+     * TO_DO="待办"
      */
-    SMS("01", "短信"),
+    TO_DO("01", "待办"),
     /**
-     * WARN="邮件"
+     * WARN="预警"
      */
-    MAIL("02", "邮件"),
+    EARLY_WARNING("02", "预警"),
     /**
-     * NOTIFY="站内信"
+     * NOTIFY="提醒"
      */
-    NOTICE("03", "站内信"),
+    NOTICE("03", "提醒"),
     ;
 
     private String value;
@@ -45,15 +47,15 @@ public enum MsgTemplateTypeEnum implements BaseEnum {
     /**
      * 根据当前枚举的name匹配
      */
-    public static MsgTemplateTypeEnum match(String val, MsgTemplateTypeEnum def) {
+    public static NoticeRemindModeEnum match(String val, NoticeRemindModeEnum def) {
         return Stream.of(values()).parallel().filter(item -> item.name().equalsIgnoreCase(val)).findAny().orElse(def);
     }
 
-    public static MsgTemplateTypeEnum get(String val) {
+    public static NoticeRemindModeEnum get(String val) {
         return match(val, null);
     }
 
-    public boolean eq(MsgTemplateTypeEnum val) {
+    public boolean eq(NoticeRemindModeEnum val) {
         return val != null && eq(val.name());
     }
 

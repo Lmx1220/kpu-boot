@@ -3,6 +3,8 @@ package cn.lmx.kpu.msg.strategy.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * @author lmx
@@ -11,10 +13,14 @@ import lombok.Data;
  */
 // 出参是脚本需要返回的，并且需要将3个参数都返回
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
+@Accessors(chain = true)
 public class MsgResult {
-    /** 消息标题 */
+    /**
+     * 消息标题
+     */
     private String title;
     /** 消息内容 */
     private String content;
