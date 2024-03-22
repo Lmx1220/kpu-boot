@@ -58,16 +58,21 @@ public class ResourceController {
     @Operation(summary = "查询用户可用的所有资源", description = "根据员工ID和应用ID查询员工在某个应用下可用的资源")
     @GetMapping("/visible/resource")
     public R<VisibleResourceVO> visible(@Parameter(hidden = true) @LoginUser SysUser sysUser,
+//                                        @RequestParam(value = "type", required = false) ClientTypeEnum type,
                                         @RequestParam(value = "employeeId", required = false) Long employeeId,
-                                        @RequestParam(value = "applicationId", required = false) Long applicationId) {
+                                        @RequestParam(value = "applicationId", required = false) Long applicationId,
+                                        @RequestParam(value = "subGroup", required = false) String subGroup){
         if (employeeId == null || employeeId <= 0) {
             employeeId = sysUser.getEmployeeId();
         }
         return R.success(VisibleResourceVO.builder()
+                .enabled(ignoreProperties.getAuthEnabled())
+                .caseSensitive(ignoreProperties.getCaseSensitive())
                 .roleList(Collections.singletonList("PT_ADMIN"))
                 .resourceList(oauthResourceBiz.findVisibleResource(employeeId, applicationId))
-                .caseSensitive(ignoreProperties.getCaseSensitive())
-                .enabled(ignoreProperties.getAuthEnabled())
+                .routerList(
+                        applicationId == null ? oauthResourceBiz.findAllVisibleRouter(employeeId, subGroup) : oauthResourceBiz.findVisibleRouter(applicationId, employeeId, subGroup)
+                )
                 .build());
     }
 

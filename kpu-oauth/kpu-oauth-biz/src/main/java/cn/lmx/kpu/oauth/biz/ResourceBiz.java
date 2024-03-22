@@ -127,7 +127,7 @@ public class ResourceBiz {
 
             RouterMeta meta = new RouterMeta();
             meta.setTitle(defApplication.getName());
-            meta.setHideMenu(false);
+            meta.setSidebar(false);
             // 是否所有的子都是视图
             meta.setHideChildrenInMenu(false);
 
@@ -277,17 +277,9 @@ public class ResourceBiz {
                 meta.setTitle(item.getName());
             }
             meta.setIcon(item.getIcon());
-            if (ResourceOpenWithEnum.INNER_CHAIN.eq(item.getOpenWith())) {
-                //  是否内嵌页面
-                meta.setFrameSrc(item.getComponent());
-                item.setComponent(BizConstant.IFRAME);
-            } else if (ResourceOpenWithEnum.OUTER_CHAIN.eq(item.getOpenWith())) {
-                // 是否外链
-                item.setComponent(BizConstant.IFRAME);
-            }
 
             // 视图需要隐藏
-            meta.setHideMenu(item.getIsHidden() != null ? item.getIsHidden() : false);
+            meta.setSidebar(item.getIsHidden() != null ? item.getIsHidden() : false);
 
             // 是否所有的子都是视图
             meta.setHideChildrenInMenu(hideChildrenInMenu(item.getChildren()));

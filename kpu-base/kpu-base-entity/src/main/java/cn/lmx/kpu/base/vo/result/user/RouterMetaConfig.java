@@ -26,18 +26,25 @@ public class RouterMetaConfig implements Serializable {
 
     /** 属性名配置字段 */
     private String titleKey = "title";
+    private String i18nKey = "i18n";
     private String iconKey = "icon";
-    private String ignoreKeepAliveKey = "ignoreKeepAlive";
-    private String affixKey = "affix";
-    private String frameSrcKey = "frameSrc";
-    private String transitionNameKey = "transitionName";
-    private String hideBreadcrumbKey = "hideBreadcrumb";
-    private String carryParamKey = "carryParam";
-    private String currentActiveMenuKey = "currentActiveMenu";
-    private String hideTabKey = "hideTab";
-    private String hideMenuKey = "hideMenu";
+    private String activeIconKey = "activeIcon";
+    private String defaultOpenedKey = "defaultOpened";
+    private String permanentKey = "permanent";
+    private String sidebarKey = "sidebar";
+    private String activeMenuKey = "activeMenu";
+    private String signleMenuKey = "signleMenu";
+    private String breadcrumbKey = "breadcrumb";
+    private String cacheKey = "cache";
+    private String noCacheKey = "noCache";
+    private String badgeKey = "badge";
+    private String newWindowKey = "newWindow";
+    private String linkKey = "link";
+    private String iframeKey = "iframe";
+    private String copyrightKey = "copyright";
+    private String paddingBottomKey = "paddingBottom";
+    private String whiteListKey = "whiteList";
+
     private String hideChildrenInMenuKey = "hideChildrenInMenu";
-    private String typeKey = "type";
-    private String contentKey = "content";
-    private String dotKey = "dot";
+
 }

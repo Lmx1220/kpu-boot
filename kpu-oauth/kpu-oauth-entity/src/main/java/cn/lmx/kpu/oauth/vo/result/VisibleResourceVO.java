@@ -1,5 +1,6 @@
 package cn.lmx.kpu.oauth.vo.result;
 
+import cn.lmx.kpu.base.vo.result.user.VueRouter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,9 @@ public class VisibleResourceVO implements Serializable {
     private Boolean caseSensitive;
     @Schema(description = "拥有的资源编码")
     private List<String> resourceList;
+    @Schema(description = "拥有的菜单路由")
+    private List<VueRouter> routerList;
     @Schema(description = "拥有的角色编码")
     private List<String> roleList;
+
 }
