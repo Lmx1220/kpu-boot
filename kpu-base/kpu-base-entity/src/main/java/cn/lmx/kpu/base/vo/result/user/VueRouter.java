@@ -34,8 +34,10 @@ public class VueRouter extends TreeEntity<VueRouter, Long> implements EchoVO {
     private Map<String, Object> echoMap = MapUtil.newHashMap();
     @Schema(description = "路径")
     private String path;
-    @Schema(description = "菜单名称")
+    @Schema(description = "组件名称")
     private String name;
+    @JsonIgnore
+    private String title;
     @Schema(description = "组件")
     private String component;
     @Schema(description = "重定向")

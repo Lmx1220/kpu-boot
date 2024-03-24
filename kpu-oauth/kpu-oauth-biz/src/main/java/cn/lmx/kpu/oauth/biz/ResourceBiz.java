@@ -89,7 +89,7 @@ public class ResourceBiz {
     public List<VueRouter> findAllVisibleRouter(Long employeeId, String subGroup) {
         List<DefResource> list;
         boolean isAdmin = baseRoleService.checkRole(employeeId, RoleConstant.TENANT_ADMIN);
-        List<String> menuCodes = Collections.singletonList(ResourceTypeEnum.MENU.getCode());
+        List<String> menuCodes = CollUtil.newArrayList(ResourceTypeEnum.MENU.getCode(),ResourceTypeEnum.VIEW.getCode());
 
         List<DefApplication> applicationList = defApplicationService.list(Wraps.<DefApplication>lbQ().orderByAsc(DefApplication::getSortValue));
         List<VueRouter> treeList = new ArrayList<>();
@@ -127,6 +127,7 @@ public class ResourceBiz {
 
             RouterMeta meta = new RouterMeta();
             meta.setTitle(defApplication.getName());
+            defApplication.setName("");
             meta.setSidebar(false);
             // 是否所有的子都是视图
             meta.setHideChildrenInMenu(false);
@@ -274,7 +275,7 @@ public class ResourceBiz {
                 meta = new RouterMeta();
             }
             if (StrUtil.isEmpty(meta.getTitle())) {
-                meta.setTitle(item.getName());
+                meta.setTitle(item.getTitle());
             }
             meta.setIcon(item.getIcon());
 

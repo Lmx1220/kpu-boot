@@ -51,6 +51,8 @@ public class DefResource extends TreeEntity<DefResource, Long> {
 
     @TableField(value = "name", condition = LIKE)
     private String name;
+    @TableField(value = "title", condition = LIKE)
+    private String title;
 
     /**
      * 类型;[20-菜单 40-按钮 50-字段 06-数据]@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.System.RESOURCE_TYPE)

@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="cn.lmx.kpu.system.entity.application.DefResource">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
         <result column="sort_value" jdbcType="INTEGER" property="sortValue"/>
         <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
@@ -38,7 +39,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        ,name,parent_id,sort_value,created_by,created_time,updated_by,updated_time,
+        ,title,name,parent_id,sort_value,created_by,created_time,updated_by,updated_time,
         application_id, code, resource_type, describe_, open_with, path, component, redirect, icon, is_general, is_hidden, state, sub_group,
         field_is_secret, field_is_edit, data_scope, custom_class, is_def, meta_json, tree_grade, tree_path
     </sql>

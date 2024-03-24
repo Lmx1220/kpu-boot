@@ -42,8 +42,10 @@ public class DefResourceResultVO extends TreeEntity<DefResourceResultVO, Long> i
     private static final long serialVersionUID = 1L;
     @Builder.Default
     private Map<String, Object> echoMap = new HashMap<>();
-    @Schema(description = "名称")
+    @Schema(description = "组件名称")
     protected String name;
+    @Schema(description = "标题")
+    protected String title;
     @Schema(description = "父ID")
     protected Long parentId;
     @Schema(description = "排序号")
